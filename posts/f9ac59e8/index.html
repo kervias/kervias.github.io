@@ -412,10 +412,10 @@
   <div class="popular-posts-header">相关文章</div>
   <ul class="popular-posts">
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\posts\3b3b119c\" rel="bookmark">unix网络编程2-IPC-0-前言</a></div>
+      <div class="popular-posts-title"><a href="\posts\c4f5fabe\" rel="bookmark">unix网络编程2-IPC-1-简介</a></div>
     </li>
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\posts\c4f5fabe\" rel="bookmark">unix网络编程2-IPC-1-简介</a></div>
+      <div class="popular-posts-title"><a href="\posts\3b3b119c\" rel="bookmark">unix网络编程2-IPC-0-前言</a></div>
     </li>
   </ul>
 
@@ -566,6 +566,19 @@
 
 
 <script>
+NexT.utils.loadComments('.utterances-container', () => {
+  const script = document.createElement('script');
+  script.src = 'https://utteranc.es/client.js';
+  script.setAttribute('repo', "kerviasx/blog-ustterance-comments");
+  script.setAttribute('issue-term', "title");
+  script.setAttribute('theme', "github-light");
+  script.crossOrigin = 'anonymous';
+  script.async = true;
+  document.querySelector('.utterances-container').appendChild(script);
+});
+</script>
+
+<script>
   var disqus_config = function() {
     this.page.url = "https://blog.kervias.com/posts/f9ac59e8/";
     this.page.identifier = "posts/f9ac59e8/";
@@ -584,19 +597,6 @@
       (d.head || d.body).appendChild(s);
     }
   });
-</script>
-
-<script>
-NexT.utils.loadComments('.utterances-container', () => {
-  const script = document.createElement('script');
-  script.src = 'https://utteranc.es/client.js';
-  script.setAttribute('repo', "kerviasx/blog-ustterance-comments");
-  script.setAttribute('issue-term', "title");
-  script.setAttribute('theme', "github-light");
-  script.crossOrigin = 'anonymous';
-  script.async = true;
-  document.querySelector('.utterances-container').appendChild(script);
-});
 </script>
 
 </body>
