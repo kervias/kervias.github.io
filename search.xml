@@ -1,6 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Caddy安装和常用命令</title>
+    <url>/posts/d392dh/</url>
+    <content><![CDATA[<blockquote>
+<p>记录Caddy的相关内容</p>
+</blockquote>
+<span id="more"></span>
+<p><code>实验环境</code>：Centos7</p>
+<h2 id="1-安装"><a href="#1-安装" class="headerlink" title="1. 安装"></a>1. 安装</h2><h3 id="centos"><a href="#centos" class="headerlink" title="centos"></a>centos</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo yum install epel-release <span class="comment">#添加源</span></span><br><span class="line">yum -y install caddy</span><br></pre></td></tr></table></figure>
+
+<h3 id="ubuntu16-04"><a href="#ubuntu16-04" class="headerlink" title="ubuntu16.04+"></a>ubuntu16.04+</h3><ul>
+<li>安装和配置<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl https://getcaddy.com | bash</span><br><span class="line">sudo mkdir /etc/caddy</span><br><span class="line">sudo chown -R root:www-data /etc/caddy</span><br><span class="line">sudo mkdir /etc/ssl/caddy</span><br><span class="line">sudo chown -R www-data:root /etc/ssl/caddy</span><br><span class="line">sudo chmod 0770 /etc/ssl/caddy</span><br><span class="line">sudo touch /etc/caddy/Caddyfile</span><br><span class="line">sudo mkdir /var/www</span><br><span class="line">sudo chown www-data: /var/www</span><br></pre></td></tr></table></figure></li>
+<li>添加caddy到service<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim /lib/systemd/system/caddy.service</span><br></pre></td></tr></table></figure>
+用vim将下面内容写入到文件中<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="section">[Unit]</span></span><br><span class="line"><span class="attr">Description</span>=Caddy HTTP/<span class="number">2</span> web server</span><br><span class="line"><span class="attr">Documentation</span>=https://caddyserver.com/docs</span><br><span class="line"><span class="attr">After</span>=network-<span class="literal">on</span>line.target</span><br><span class="line"><span class="attr">Wants</span>=network-<span class="literal">on</span>line.target</span><br><span class="line"></span><br><span class="line"><span class="section">[Service]</span></span><br><span class="line"><span class="attr">Restart</span>=<span class="literal">on</span>-failure</span><br><span class="line"><span class="attr">StartLimitInterval</span>=<span class="number">86400</span></span><br><span class="line"><span class="attr">StartLimitBurst</span>=<span class="number">5</span></span><br><span class="line"></span><br><span class="line"><span class="attr">User</span>=www-data</span><br><span class="line"><span class="attr">Group</span>=www-data</span><br><span class="line"><span class="comment">; Letsencrypt-issued certificates will be written to this directory.</span></span><br><span class="line"><span class="attr">Environment</span>=CADDYPATH=/etc/ssl/caddy</span><br><span class="line"></span><br><span class="line"><span class="attr">ExecStart</span>=/usr/local/bin/caddy -log stdout -agree=<span class="literal">true</span> -conf=/etc/caddy/Caddyfile -root=/var/tmp</span><br><span class="line"><span class="attr">ExecReload</span>=/bin/kill -USR1 <span class="variable">$MAINPID</span></span><br><span class="line"></span><br><span class="line"><span class="attr">LimitNOFILE</span>=<span class="number">1048576</span></span><br><span class="line"><span class="attr">LimitNPROC</span>=<span class="number">64</span></span><br><span class="line"></span><br><span class="line"><span class="attr">PrivateTmp</span>=<span class="literal">true</span></span><br><span class="line"><span class="attr">PrivateDevices</span>=<span class="literal">true</span></span><br><span class="line"><span class="attr">ProtectHome</span>=<span class="literal">true</span></span><br><span class="line"><span class="attr">ProtectSystem</span>=full</span><br><span class="line"><span class="attr">ReadWriteDirectories</span>=/etc/ssl/caddy</span><br><span class="line"></span><br><span class="line"><span class="comment">; The following additional security directives only work with systemd v229 or later.</span></span><br><span class="line"><span class="comment">; They further retrict privileges that can be gained by caddy. Uncomment if you like.</span></span><br><span class="line"><span class="comment">; Note that you may have to add capabilities required by any plugins in use.</span></span><br><span class="line"><span class="comment">;CapabilityBoundingSet=CAP_NET_BIND_SERVICE</span></span><br><span class="line"><span class="comment">;AmbientCapabilities=CAP_NET_BIND_SERVICE</span></span><br><span class="line"><span class="comment">;NoNewPrivileges=true</span></span><br><span class="line"><span class="section">[Install]</span></span><br><span class="line"><span class="attr">WantedBy</span>=multi-user.target</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="2-配置文件默认路径"><a href="#2-配置文件默认路径" class="headerlink" title="2. 配置文件默认路径"></a>2. 配置文件默认路径</h2><figure class="highlight awk"><table><tr><td class="code"><pre><span class="line"><span class="regexp">/etc/</span>caddy<span class="regexp">/conf.d/</span>Caddyfile.conf</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-配置文件格式模板"><a href="#3-配置文件格式模板" class="headerlink" title="3.配置文件格式模板"></a>3.配置文件格式模板</h2><ul>
+<li>注意符号后面含有<code>空格</code></li>
+<li>以下配置主要支持在本地某个端口含有服务，将端口与域名映射起来</li>
+</ul>
+<figure class="highlight vim"><table><tr><td class="code"><pre><span class="line">http<span class="variable">s:</span>//blog.xxx.xx &#123;</span><br><span class="line"> gzip</span><br><span class="line"> tls xxx@gmail.<span class="keyword">com</span></span><br><span class="line"> proxy / localhos<span class="variable">t:2888</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中：</p>
+<ol>
+<li>注意网址替换为自己的网址</li>
+<li>邮箱是用于SSL证书注册邮箱</li>
+<li>2888为端口号，需要替换为服务对应的端口号</li>
+</ol>
+]]></content>
+      <categories>
+        <category>工具</category>
+      </categories>
+      <tags>
+        <tag>命令总结</tag>
+        <tag>caddy</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>CentOS 7安装fail2ban+Firewall防止SSH爆破与CC攻击</title>
     <url>/posts/191dc2a0/</url>
     <content><![CDATA[<blockquote>
@@ -66,43 +105,59 @@
       </tags>
   </entry>
   <entry>
-    <title>Caddy安装和常用命令</title>
-    <url>/posts/d392dh/</url>
+    <title>Centos7使用rclone挂载谷歌团队盘</title>
+    <url>/posts/45226759/</url>
     <content><![CDATA[<blockquote>
-<p>记录Caddy的相关内容</p>
+<p>国外服务器文件上传和下载有时很慢，本地与服务器直接传输文件效率很低，这里通过将国外云盘作为中转的方式包含很多优点。</p>
 </blockquote>
 <span id="more"></span>
-<p><code>实验环境</code>：Centos7</p>
-<h2 id="1-安装"><a href="#1-安装" class="headerlink" title="1. 安装"></a>1. 安装</h2><h3 id="centos"><a href="#centos" class="headerlink" title="centos"></a>centos</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo yum install epel-release <span class="comment">#添加源</span></span><br><span class="line">yum -y install caddy</span><br></pre></td></tr></table></figure>
+<p>主要优势如下：</p>
+<ul>
+<li>国外服务器与国外云盘之间文件传输效率高</li>
+<li>本地与国外云盘之间文件传输可以通过xx工具提高下载速度</li>
+<li>大容量云盘可以存储大量数据（谷歌团队盘有1PB空间）</li>
+</ul>
+<p>首先非常感谢参考博客：<a href="https://omo.moe/archives/103/">https://omo.moe/archives/103/</a></p>
+<h2 id="安装环境配置"><a href="#安装环境配置" class="headerlink" title="安装环境配置"></a>安装环境配置</h2><p>在服务器执行以下命令，安装环境</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum -y install epel-release</span><br><span class="line">yum -y install wget unzip screen fuse fuse-devel</span><br><span class="line">wget https://downloads.rclone.org/rclone-current-linux-amd64.zip</span><br><span class="line">unzip rclone-current-linux-amd64.zip</span><br><span class="line">chmod 0755 ./rclone-*/rclone</span><br><span class="line">cp ./rclone-*/rclone /usr/bin/</span><br><span class="line">rm -rf ./rclone-*</span><br></pre></td></tr></table></figure>
 
-<h3 id="ubuntu16-04"><a href="#ubuntu16-04" class="headerlink" title="ubuntu16.04+"></a>ubuntu16.04+</h3><ul>
-<li>安装和配置<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl https://getcaddy.com | bash</span><br><span class="line">sudo mkdir /etc/caddy</span><br><span class="line">sudo chown -R root:www-data /etc/caddy</span><br><span class="line">sudo mkdir /etc/ssl/caddy</span><br><span class="line">sudo chown -R www-data:root /etc/ssl/caddy</span><br><span class="line">sudo chmod 0770 /etc/ssl/caddy</span><br><span class="line">sudo touch /etc/caddy/Caddyfile</span><br><span class="line">sudo mkdir /var/www</span><br><span class="line">sudo chown www-data: /var/www</span><br></pre></td></tr></table></figure></li>
-<li>添加caddy到service<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim /lib/systemd/system/caddy.service</span><br></pre></td></tr></table></figure>
-用vim将下面内容写入到文件中<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="section">[Unit]</span></span><br><span class="line"><span class="attr">Description</span>=Caddy HTTP/<span class="number">2</span> web server</span><br><span class="line"><span class="attr">Documentation</span>=https://caddyserver.com/docs</span><br><span class="line"><span class="attr">After</span>=network-<span class="literal">on</span>line.target</span><br><span class="line"><span class="attr">Wants</span>=network-<span class="literal">on</span>line.target</span><br><span class="line"></span><br><span class="line"><span class="section">[Service]</span></span><br><span class="line"><span class="attr">Restart</span>=<span class="literal">on</span>-failure</span><br><span class="line"><span class="attr">StartLimitInterval</span>=<span class="number">86400</span></span><br><span class="line"><span class="attr">StartLimitBurst</span>=<span class="number">5</span></span><br><span class="line"></span><br><span class="line"><span class="attr">User</span>=www-data</span><br><span class="line"><span class="attr">Group</span>=www-data</span><br><span class="line"><span class="comment">; Letsencrypt-issued certificates will be written to this directory.</span></span><br><span class="line"><span class="attr">Environment</span>=CADDYPATH=/etc/ssl/caddy</span><br><span class="line"></span><br><span class="line"><span class="attr">ExecStart</span>=/usr/local/bin/caddy -log stdout -agree=<span class="literal">true</span> -conf=/etc/caddy/Caddyfile -root=/var/tmp</span><br><span class="line"><span class="attr">ExecReload</span>=/bin/kill -USR1 <span class="variable">$MAINPID</span></span><br><span class="line"></span><br><span class="line"><span class="attr">LimitNOFILE</span>=<span class="number">1048576</span></span><br><span class="line"><span class="attr">LimitNPROC</span>=<span class="number">64</span></span><br><span class="line"></span><br><span class="line"><span class="attr">PrivateTmp</span>=<span class="literal">true</span></span><br><span class="line"><span class="attr">PrivateDevices</span>=<span class="literal">true</span></span><br><span class="line"><span class="attr">ProtectHome</span>=<span class="literal">true</span></span><br><span class="line"><span class="attr">ProtectSystem</span>=full</span><br><span class="line"><span class="attr">ReadWriteDirectories</span>=/etc/ssl/caddy</span><br><span class="line"></span><br><span class="line"><span class="comment">; The following additional security directives only work with systemd v229 or later.</span></span><br><span class="line"><span class="comment">; They further retrict privileges that can be gained by caddy. Uncomment if you like.</span></span><br><span class="line"><span class="comment">; Note that you may have to add capabilities required by any plugins in use.</span></span><br><span class="line"><span class="comment">;CapabilityBoundingSet=CAP_NET_BIND_SERVICE</span></span><br><span class="line"><span class="comment">;AmbientCapabilities=CAP_NET_BIND_SERVICE</span></span><br><span class="line"><span class="comment">;NoNewPrivileges=true</span></span><br><span class="line"><span class="section">[Install]</span></span><br><span class="line"><span class="attr">WantedBy</span>=multi-user.target</span><br></pre></td></tr></table></figure>
+<h2 id="身份认证"><a href="#身份认证" class="headerlink" title="身份认证"></a>身份认证</h2><p>执行命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">rclone config</span><br></pre></td></tr></table></figure>
 
+<p>如下图，name为最后挂载的盘名。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/20200401105136.png"></p>
+<p>如下图，可以看到可以选择各种网盘进行挂载，这里选择第13个<code>google drive</code>(具体序号需联系实际)</p>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/20200401105448.png"></p>
+<p>如下图，配置<code>权限</code>等功能，主要看英文介绍，图中空白处直接按确认选择默认</p>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/20200401105741.png"></p>
+<p>如下图，将链接复制到浏览器打开，获取<code>认证码</code>。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/20200401110051.png"></p>
+<p>选择Team Drive的编号，最后退出</p>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/20200401110457.png"></p>
+<h2 id="挂载云盘"><a href="#挂载云盘" class="headerlink" title="挂载云盘"></a>挂载云盘</h2><ul>
+<li><p>在服务器创建目录，用于目录映射</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mkdir /root/Gdrive</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>输入以下命令，需要注意参数</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">rclone mount wellod:folder /root/Gdrive --allow-other --allow-non-empty --vfs-cache-mode writes &amp;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><code>wellod:floder</code>：wellod为第一步中输入的name, folder为云盘中的文件夹名</li>
+<li><code>/root/Gdrive</code>：服务器相对于云盘的映射地址</li>
+</ol>
+</li>
+<li><p>查看挂载是否成功</p>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/20200401111343.png"></p>
+<p>成功就如上图所示。</p>
+</li>
+<li><p>文件上传和下载</p>
+<p>使用<code>cp</code>命令即可，也可以使用<code>rclone copy</code>等命令操作。</p>
 </li>
 </ul>
-<h2 id="2-配置文件默认路径"><a href="#2-配置文件默认路径" class="headerlink" title="2. 配置文件默认路径"></a>2. 配置文件默认路径</h2><figure class="highlight awk"><table><tr><td class="code"><pre><span class="line"><span class="regexp">/etc/</span>caddy<span class="regexp">/conf.d/</span>Caddyfile.conf</span><br></pre></td></tr></table></figure>
-
-<h2 id="3-配置文件格式模板"><a href="#3-配置文件格式模板" class="headerlink" title="3.配置文件格式模板"></a>3.配置文件格式模板</h2><ul>
-<li>注意符号后面含有<code>空格</code></li>
-<li>以下配置主要支持在本地某个端口含有服务，将端口与域名映射起来</li>
-</ul>
-<figure class="highlight vim"><table><tr><td class="code"><pre><span class="line">http<span class="variable">s:</span>//blog.xxx.xx &#123;</span><br><span class="line"> gzip</span><br><span class="line"> tls xxx@gmail.<span class="keyword">com</span></span><br><span class="line"> proxy / localhos<span class="variable">t:2888</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>其中：</p>
-<ol>
-<li>注意网址替换为自己的网址</li>
-<li>邮箱是用于SSL证书注册邮箱</li>
-<li>2888为端口号，需要替换为服务对应的端口号</li>
-</ol>
 ]]></content>
       <categories>
-        <category>工具</category>
+        <category>linux</category>
       </categories>
-      <tags>
-        <tag>命令总结</tag>
-        <tag>caddy</tag>
-      </tags>
   </entry>
   <entry>
     <title>Cron表达式</title>
@@ -234,59 +289,58 @@
       </categories>
   </entry>
   <entry>
-    <title>Centos7使用rclone挂载谷歌团队盘</title>
-    <url>/posts/45226759/</url>
+    <title>Halo博客H2数据库查询</title>
+    <url>/posts/2d3051dc/</url>
     <content><![CDATA[<blockquote>
-<p>国外服务器文件上传和下载有时很慢，本地与服务器直接传输文件效率很低，这里通过将国外云盘作为中转的方式包含很多优点。</p>
+<p>记录一下Halo博客中如何操作H2数据库。</p>
 </blockquote>
 <span id="more"></span>
-<p>主要优势如下：</p>
+<h1 id="0-Halo博客数据库文件路径"><a href="#0-Halo博客数据库文件路径" class="headerlink" title="0. Halo博客数据库文件路径"></a>0. Halo博客数据库文件路径</h1><p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162738.png"></p>
+<h1 id="1-使用Halo提供的h2-console"><a href="#1-使用Halo提供的h2-console" class="headerlink" title="1. 使用Halo提供的h2-console"></a>1. 使用Halo提供的h2-console</h1><h2 id="1-1-打开h2-console功能"><a href="#1-1-打开h2-console功能" class="headerlink" title="1.1 打开h2-console功能"></a>1.1 打开h2-console功能</h2><pre><code> 修改Halo博客的配置文件(~/.halo/application.yaml)，具体如下图
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162751.png"></p>
+<pre>
+1. 将false改为true
+2. 设置完毕后重启容器
+</pre>
+<h2 id="1-2-访问网址"><a href="#1-2-访问网址" class="headerlink" title="1.2 访问网址"></a>1.2 访问网址</h2><pre><code> 网址：博客域名/h2-console
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162807.png"></p>
+<p>需要注意一下<code>JDBC URL</code>的填写，用户名和密码在配置文件中已有说明</p>
+<h2 id="1-3-测试"><a href="#1-3-测试" class="headerlink" title="1.3 测试"></a>1.3 测试</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> MENUS </span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162838.png"></p>
+<h1 id="2-在本地主机上使用数据库可视化工具"><a href="#2-在本地主机上使用数据库可视化工具" class="headerlink" title="2. 在本地主机上使用数据库可视化工具"></a>2. 在本地主机上使用数据库可视化工具</h1><blockquote>
+<p>在使用jdbc驱动版本选择时有坑，下面本人提供了一个版本，测试可用</p>
+</blockquote>
+<h2 id="2-1-工具介绍"><a href="#2-1-工具介绍" class="headerlink" title="2.1 工具介绍"></a>2.1 工具介绍</h2><pre><code>DBeaver 6.3.3(网址：https://dbeaver.io/)
+</code></pre>
+<h2 id="2-2-jdbc驱动jar包"><a href="#2-2-jdbc驱动jar包" class="headerlink" title="2.2 jdbc驱动jar包"></a>2.2 jdbc驱动jar包</h2><pre><code>下载下来，后面需要用到
+</code></pre>
+<p>/upload/2020/1/h2-2019-03-13-d5148978df7745808925f6f2ec3671b8.zip</p>
+<h2 id="2-3-创建数据库连接"><a href="#2-3-创建数据库连接" class="headerlink" title="2.3 创建数据库连接"></a>2.3 创建数据库连接</h2><ul>
+<li>新建数据库连接</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162902.png"></p>
 <ul>
-<li>国外服务器与国外云盘之间文件传输效率高</li>
-<li>本地与国外云盘之间文件传输可以通过xx工具提高下载速度</li>
-<li>大容量云盘可以存储大量数据（谷歌团队盘有1PB空间）</li>
-</ul>
-<p>首先非常感谢参考博客：<a href="https://omo.moe/archives/103/">https://omo.moe/archives/103/</a></p>
-<h2 id="安装环境配置"><a href="#安装环境配置" class="headerlink" title="安装环境配置"></a>安装环境配置</h2><p>在服务器执行以下命令，安装环境</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum -y install epel-release</span><br><span class="line">yum -y install wget unzip screen fuse fuse-devel</span><br><span class="line">wget https://downloads.rclone.org/rclone-current-linux-amd64.zip</span><br><span class="line">unzip rclone-current-linux-amd64.zip</span><br><span class="line">chmod 0755 ./rclone-*/rclone</span><br><span class="line">cp ./rclone-*/rclone /usr/bin/</span><br><span class="line">rm -rf ./rclone-*</span><br></pre></td></tr></table></figure>
-
-<h2 id="身份认证"><a href="#身份认证" class="headerlink" title="身份认证"></a>身份认证</h2><p>执行命令：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">rclone config</span><br></pre></td></tr></table></figure>
-
-<p>如下图，name为最后挂载的盘名。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/20200401105136.png"></p>
-<p>如下图，可以看到可以选择各种网盘进行挂载，这里选择第13个<code>google drive</code>(具体序号需联系实际)</p>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/20200401105448.png"></p>
-<p>如下图，配置<code>权限</code>等功能，主要看英文介绍，图中空白处直接按确认选择默认</p>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/20200401105741.png"></p>
-<p>如下图，将链接复制到浏览器打开，获取<code>认证码</code>。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/20200401110051.png"></p>
-<p>选择Team Drive的编号，最后退出</p>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/20200401110457.png"></p>
-<h2 id="挂载云盘"><a href="#挂载云盘" class="headerlink" title="挂载云盘"></a>挂载云盘</h2><ul>
-<li><p>在服务器创建目录，用于目录映射</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mkdir /root/Gdrive</span><br></pre></td></tr></table></figure>
+<li><p>选择H2 embedded<br><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162924.png"></p>
 </li>
-<li><p>输入以下命令，需要注意参数</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">rclone mount wellod:folder /root/Gdrive --allow-other --allow-non-empty --vfs-cache-mode writes &amp;</span><br></pre></td></tr></table></figure>
-
-<ol>
-<li><code>wellod:floder</code>：wellod为第一步中输入的name, folder为云盘中的文件夹名</li>
-<li><code>/root/Gdrive</code>：服务器相对于云盘的映射地址</li>
-</ol>
-</li>
-<li><p>查看挂载是否成功</p>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/20200401111343.png"></p>
-<p>成功就如上图所示。</p>
-</li>
-<li><p>文件上传和下载</p>
-<p>使用<code>cp</code>命令即可，也可以使用<code>rclone copy</code>等命令操作。</p>
+<li><p>选择db文件<br><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162943.png"></p>
 </li>
 </ul>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415163001.png"></p>
+<p><strong>注意将后面的.mv.db删除掉</strong><br>用户名和密码就是配置文件中的H2用户名和密码</p>
+<h2 id="2-6-编辑驱动设置"><a href="#2-6-编辑驱动设置" class="headerlink" title="2.6 编辑驱动设置"></a>2.6 编辑驱动设置</h2><p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415163038.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415163114.png"></p>
+<h2 id="2-5-连接"><a href="#2-5-连接" class="headerlink" title="2.5 连接"></a>2.5 连接</h2><p>创建连接完毕后，连接数据库<br>可以看出Public中的存在的表<br><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415163139.png"></p>
+<h2 id="2-6-测试"><a href="#2-6-测试" class="headerlink" title="2.6 测试"></a>2.6 测试</h2><p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415163152.png"></p>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>博客</category>
       </categories>
+      <tags>
+        <tag>halo</tag>
+      </tags>
   </entry>
   <entry>
     <title>Git常用命令总结</title>
@@ -371,6 +425,72 @@
       </tags>
   </entry>
   <entry>
+    <title>Halo博客修改密码</title>
+    <url>/posts/f2aea09c/</url>
+    <content><![CDATA[<blockquote>
+<p>记录halo博客控制台登录密码的修改和halo博客h2数据库的密码修改</p>
+</blockquote>
+<span id="more"></span>
+<p>:gem: 环境说明：</p>
+<pre><code>halo版本v1.2
+docker部署
+</code></pre>
+<h1 id="1-配置h2-console"><a href="#1-配置h2-console" class="headerlink" title="1. 配置h2-console"></a>1. 配置h2-console</h1><pre><code> 修改博客配置文件，如下图方框内所示，将false改为true
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162347.png"></p>
+<pre><code>修改完毕之后，重启docker服务
+</code></pre>
+<h1 id="2-登录h2-console"><a href="#2-登录h2-console" class="headerlink" title="2. 登录h2-console"></a>2. 登录h2-console</h1><pre><code>访问网址：博客域名/h2-console
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162403.png"></p>
+<pre><code>需要注意图中·JDBC URL·路径。
+用户名密码就是配置文件中的用户名和密码，这里分别为admin和123456
+</code></pre>
+<h1 id="3-修改密码"><a href="#3-修改密码" class="headerlink" title="3. 修改密码"></a>3. 修改密码</h1><blockquote>
+<p>这里主要记录两个密码的修改，一个是控制台密码，另一个是数据库密码</p>
+</blockquote>
+<h2 id="3-1-控制台密码"><a href="#3-1-控制台密码" class="headerlink" title="3.1 控制台密码"></a>3.1 控制台密码</h2><blockquote>
+<p>这里是通过修改数据库的方式修改密码，比较麻烦。其实可以直接登录控制台修改密码就行了。</p>
+</blockquote>
+<ul>
+<li><p>查看用户名</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> USERS</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162519.png"></p>
+</li>
+<li><p>根据用户名修改密码</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">update USERS <span class="keyword">set</span> PASSWORD<span class="operator">=</span><span class="string">&#x27;newpsd&#x27;</span> <span class="keyword">where</span> USERNAME<span class="operator">=</span><span class="string">&#x27;xxxxx&#x27;</span> <span class="operator">/</span><span class="operator">/</span> xxxx就是你的用户名, newpsd是新密码</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<hr>
+<p>:warning: <code>注意这里密码应采用Bcrypt密文方式设置</code> :warning:<br>例：将密码abcdef使用Bcrypt加密</p>
+<ul>
+<li>网址：<a href="https://www.jisuan.mobi/p163u3BN66Hm6JWx.html">https://www.jisuan.mobi/p163u3BN66Hm6JWx.html</a></li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162547.png"></p>
+<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">update</span> USERS set PASSWORD=&#x27;$<span class="number">2</span>a$<span class="number">10</span>$<span class="number">8</span>lFd<span class="number">0</span>fpD<span class="number">61</span>VsfknGZUDyo.RV<span class="number">0</span>zpkSSXSyTqgM<span class="number">1</span>P<span class="number">3</span>qzN<span class="number">8</span>Mmb<span class="number">3</span>yPRQm&#x27; where USERNAME=&#x27;xxxxx&#x27;</span><br></pre></td></tr></table></figure>
+<hr>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162605.png"></p>
+<pre><code>到此密码就修改完成，这里不需要再重启服务了。
+</code></pre>
+<h2 id="3-2-数据库密码"><a href="#3-2-数据库密码" class="headerlink" title="3.2 数据库密码"></a>3.2 数据库密码</h2><p>这里的密码不用加密</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">user</span> admin <span class="keyword">set</span> password <span class="string">&#x27;abcdef&#x27;</span> <span class="operator">/</span><span class="operator">/</span>修改admin用户密码为abcdef</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162624.png"></p>
+<p>:point_right: 执行上述执行后，按照下列步骤操作：</p>
+<ul>
+<li>停止docker的halo容器服务<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker ps -a //查看当前halo容器对应的ID</span><br><span class="line">docker stop HALO_ID //停止halo服务</span><br></pre></td></tr></table></figure></li>
+<li>修改配置文件中H2数据库密码, 并关闭h2-console功能（修改true为false）</li>
+<li>启动docker的halo容器服务<figure class="highlight arduino"><table><tr><td class="code"><pre><span class="line">docker stop HALO_ID <span class="comment">//启动halo服务</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+]]></content>
+      <categories>
+        <category>博客</category>
+      </categories>
+      <tags>
+        <tag>halo</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Halo博客服务器迁移</title>
     <url>/posts/e2efb148/</url>
     <content><![CDATA[<blockquote>
@@ -438,123 +558,77 @@
       </tags>
   </entry>
   <entry>
-    <title>Halo博客修改密码</title>
-    <url>/posts/f2aea09c/</url>
+    <title>LeetCode-001-两数之和</title>
+    <url>/posts/a239384e/</url>
     <content><![CDATA[<blockquote>
-<p>记录halo博客控制台登录密码的修改和halo博客h2数据库的密码修改</p>
+<p>题目链接：<a href="https://leetcode-cn.com/problems/two-sum/">https://leetcode-cn.com/problems/two-sum/</a></p>
 </blockquote>
 <span id="more"></span>
-<p>:gem: 环境说明：</p>
-<pre><code>halo版本v1.2
-docker部署
-</code></pre>
-<h1 id="1-配置h2-console"><a href="#1-配置h2-console" class="headerlink" title="1. 配置h2-console"></a>1. 配置h2-console</h1><pre><code> 修改博客配置文件，如下图方框内所示，将false改为true
-</code></pre>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162347.png"></p>
-<pre><code>修改完毕之后，重启docker服务
-</code></pre>
-<h1 id="2-登录h2-console"><a href="#2-登录h2-console" class="headerlink" title="2. 登录h2-console"></a>2. 登录h2-console</h1><pre><code>访问网址：博客域名/h2-console
-</code></pre>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162403.png"></p>
-<pre><code>需要注意图中·JDBC URL·路径。
-用户名密码就是配置文件中的用户名和密码，这里分别为admin和123456
-</code></pre>
-<h1 id="3-修改密码"><a href="#3-修改密码" class="headerlink" title="3. 修改密码"></a>3. 修改密码</h1><blockquote>
-<p>这里主要记录两个密码的修改，一个是控制台密码，另一个是数据库密码</p>
-</blockquote>
-<h2 id="3-1-控制台密码"><a href="#3-1-控制台密码" class="headerlink" title="3.1 控制台密码"></a>3.1 控制台密码</h2><blockquote>
-<p>这里是通过修改数据库的方式修改密码，比较麻烦。其实可以直接登录控制台修改密码就行了。</p>
-</blockquote>
-<ul>
-<li><p>查看用户名</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> USERS</span><br></pre></td></tr></table></figure>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162519.png"></p>
-</li>
-<li><p>根据用户名修改密码</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">update USERS <span class="keyword">set</span> PASSWORD<span class="operator">=</span><span class="string">&#x27;newpsd&#x27;</span> <span class="keyword">where</span> USERNAME<span class="operator">=</span><span class="string">&#x27;xxxxx&#x27;</span> <span class="operator">/</span><span class="operator">/</span> xxxx就是你的用户名, newpsd是新密码</span><br></pre></td></tr></table></figure>
 
-</li>
+<blockquote>
+<p>难度：简单</p>
+</blockquote>
+<h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h3><p>给定一个整数数组 <code>nums</code> 和一个目标值 <code>target</code>，请你在该数组中找出和为目标值的那 <strong>两个</strong> 整数，并返回他们的数组下标。</p>
+<p>你可以假设每种输入只会对应一个答案。但是，你不能重复利用这个数组中同样的元素。</p>
+<p><strong>示例</strong>:</p>
+<blockquote>
+<p>给定 nums = [2, 7, 11, 15], target = 9</p>
+<p>因为 nums[<strong>0</strong>] + nums[<strong>1</strong>] = 2 + 7 = 9<br>所以返回 [<strong>0, 1</strong>]</p>
+</blockquote>
+<h3 id="个人题解"><a href="#个人题解" class="headerlink" title="个人题解"></a>个人题解</h3><ul>
+<li>使用C++的<code>map</code>，键： <code>target - 遍历过的元素值</code>  值：<code>遍历过的元素值索引</code></li>
+<li>时间复杂度 <code>O(nlogn)</code></li>
+<li>空间复杂度<code>O(n)</code></li>
+<li>C++中<code>map</code>使用红黑树实现，<code>hash_map</code>使用哈希表实现，<code>hash_map</code>相对来说查找元素更快</li>
 </ul>
-<hr>
-<p>:warning: <code>注意这里密码应采用Bcrypt密文方式设置</code> :warning:<br>例：将密码abcdef使用Bcrypt加密</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">twoSum</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">        map&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; numMap;</span><br><span class="line">        vector&lt;<span class="keyword">int</span>&gt; v;</span><br><span class="line">        <span class="keyword">int</span> t,i;</span><br><span class="line">        i = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span> it = nums.<span class="built_in">begin</span>(); it != nums.<span class="built_in">end</span>(); it++)</span><br><span class="line">        &#123;</span><br><span class="line">            t = target - *it;</span><br><span class="line">            <span class="keyword">if</span>(numMap.<span class="built_in">find</span>(*it) != numMap.<span class="built_in">end</span>())  <span class="comment">// 之前有元素 + *it = target</span></span><br><span class="line">            &#123;</span><br><span class="line">                v.<span class="built_in">push_back</span>(numMap[*it]);</span><br><span class="line">                v.<span class="built_in">push_back</span>(i);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                numMap[t] = i;</span><br><span class="line">            &#125;</span><br><span class="line">            i++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> v;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="官方题解"><a href="#官方题解" class="headerlink" title="官方题解"></a>官方题解</h3><h4 id="方法一：暴力法"><a href="#方法一：暴力法" class="headerlink" title="方法一：暴力法"></a>方法一：暴力法</h4><p>暴力法很简单，遍历每个元素 x，并查找是否存在一个值与 target−x 相等的目标元素。</p>
 <ul>
-<li>网址：<a href="https://www.jisuan.mobi/p163u3BN66Hm6JWx.html">https://www.jisuan.mobi/p163u3BN66Hm6JWx.html</a></li>
+<li>Java</li>
 </ul>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162547.png"></p>
-<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">update</span> USERS set PASSWORD=&#x27;$<span class="number">2</span>a$<span class="number">10</span>$<span class="number">8</span>lFd<span class="number">0</span>fpD<span class="number">61</span>VsfknGZUDyo.RV<span class="number">0</span>zpkSSXSyTqgM<span class="number">1</span>P<span class="number">3</span>qzN<span class="number">8</span>Mmb<span class="number">3</span>yPRQm&#x27; where USERNAME=&#x27;xxxxx&#x27;</span><br></pre></td></tr></table></figure>
-<hr>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162605.png"></p>
-<pre><code>到此密码就修改完成，这里不需要再重启服务了。
-</code></pre>
-<h2 id="3-2-数据库密码"><a href="#3-2-数据库密码" class="headerlink" title="3.2 数据库密码"></a>3.2 数据库密码</h2><p>这里的密码不用加密</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">user</span> admin <span class="keyword">set</span> password <span class="string">&#x27;abcdef&#x27;</span> <span class="operator">/</span><span class="operator">/</span>修改admin用户密码为abcdef</span><br></pre></td></tr></table></figure>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162624.png"></p>
-<p>:point_right: 执行上述执行后，按照下列步骤操作：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] twoSum(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> target) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = i + <span class="number">1</span>; j &lt; nums.length; j++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (nums[j] == target - nums[i]) &#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>[] &#123; i, j &#125;;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;No two sum solution&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>复杂度分析：</strong></p>
 <ul>
-<li>停止docker的halo容器服务<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker ps -a //查看当前halo容器对应的ID</span><br><span class="line">docker stop HALO_ID //停止halo服务</span><br></pre></td></tr></table></figure></li>
-<li>修改配置文件中H2数据库密码, 并关闭h2-console功能（修改true为false）</li>
-<li>启动docker的halo容器服务<figure class="highlight arduino"><table><tr><td class="code"><pre><span class="line">docker stop HALO_ID <span class="comment">//启动halo服务</span></span><br></pre></td></tr></table></figure></li>
+<li>时间复杂度：<code>O(n^2)</code><br>对于每个元素，我们试图通过遍历数组的其余部分来寻找它所对应的目标元素，这将耗费 O(n)的时间。因此时间复杂度为 <code>O(n^2)</code>。</li>
+<li>空间复杂度：<code>O(1)</code>。</li>
+</ul>
+<h4 id="方法二：两遍哈希表"><a href="#方法二：两遍哈希表" class="headerlink" title="方法二：两遍哈希表"></a>方法二：两遍哈希表</h4><p>为了对运行时间复杂度进行优化，我们需要一种更有效的方法来检查数组中是否存在目标元素。如果存在，我们需要找出它的索引。保持数组中的每个元素与其索引相互对应的最好方法是什么？哈希表。</p>
+<p>通过以空间换取速度的方式，我们可以将查找时间从 O(n) 降低到 O(1)。哈希表正是为此目的而构建的，它支持以 <em>近似</em> 恒定的时间进行快速查找。我用“近似”来描述，是因为一旦出现冲突，查找用时可能会退化到 O(n)。但只要你仔细地挑选哈希函数，在哈希表中进行查找的用时应当被摊销为 O(1)。</p>
+<p>一个简单的实现使用了两次迭代。在第一次迭代中，我们将每个元素的值和它的索引添加到表中。然后，在第二次迭代中，我们将检查每个元素所对应的目标元素<code>target−nums[i]</code>是否存在于表中。注意，该目标元素不能是 <code>nums[i]</code> 本身！</p>
+<ul>
+<li>Java</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] twoSum(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> target) &#123;</span><br><span class="line">        Map&lt;Integer, Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">            map.put(nums[i], i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">            <span class="keyword">int</span> complement = target - nums[i];</span><br><span class="line">            <span class="keyword">if</span> (map.containsKey(complement) &amp;&amp; map.get(complement) != i) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>[] &#123; i, map.get(complement) &#125;;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;No two sum solution&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>复杂度分析：</strong></p>
+<ul>
+<li>时间复杂度：<code>O(n) </code><br>我们把包含有 n个元素的列表遍历两次。由于哈希表将查找时间缩短到 O(1) ，所以时间复杂度为 O(n)。</li>
+<li>空间复杂度：<code>O(n) </code><br>所需的额外空间取决于哈希表中存储的元素数量，该表中存储了 n个元素。</li>
+</ul>
+<h4 id="方法三：一遍哈希表"><a href="#方法三：一遍哈希表" class="headerlink" title="方法三：一遍哈希表"></a>方法三：一遍哈希表</h4><p>事实证明，我们可以一次完成。在进行迭代并将元素插入到表中的同时，我们还会回过头来检查表中是否已经存在当前元素所对应的目标元素。如果它存在，那我们已经找到了对应解，并立即将其返回。</p>
+<ul>
+<li>Java</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] twoSum(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> target) &#123;</span><br><span class="line">        Map&lt;Integer, Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">            <span class="keyword">int</span> complement = target - nums[i];</span><br><span class="line">            <span class="keyword">if</span> (map.containsKey(complement)) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>[] &#123; map.get(complement), i &#125;;</span><br><span class="line">            &#125;</span><br><span class="line">            map.put(nums[i], i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;No two sum solution&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p><strong>复杂度分析：</strong></p>
+<ul>
+<li>时间复杂度：<code>O(n)</code>，<br>我们只遍历了包含有 n 个元素的列表一次。在表中进行的每次查找只花费 O(1)的时间。</li>
+<li>空间复杂度：<code>O(n)</code>，<br>所需的额外空间取决于哈希表中存储的元素数量，该表最多需要存储 n个元素。</li>
 </ul>
 ]]></content>
       <categories>
-        <category>博客</category>
+        <category>算法</category>
       </categories>
       <tags>
-        <tag>halo</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Halo博客H2数据库查询</title>
-    <url>/posts/2d3051dc/</url>
-    <content><![CDATA[<blockquote>
-<p>记录一下Halo博客中如何操作H2数据库。</p>
-</blockquote>
-<span id="more"></span>
-<h1 id="0-Halo博客数据库文件路径"><a href="#0-Halo博客数据库文件路径" class="headerlink" title="0. Halo博客数据库文件路径"></a>0. Halo博客数据库文件路径</h1><p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162738.png"></p>
-<h1 id="1-使用Halo提供的h2-console"><a href="#1-使用Halo提供的h2-console" class="headerlink" title="1. 使用Halo提供的h2-console"></a>1. 使用Halo提供的h2-console</h1><h2 id="1-1-打开h2-console功能"><a href="#1-1-打开h2-console功能" class="headerlink" title="1.1 打开h2-console功能"></a>1.1 打开h2-console功能</h2><pre><code> 修改Halo博客的配置文件(~/.halo/application.yaml)，具体如下图
-</code></pre>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162751.png"></p>
-<pre>
-1. 将false改为true
-2. 设置完毕后重启容器
-</pre>
-<h2 id="1-2-访问网址"><a href="#1-2-访问网址" class="headerlink" title="1.2 访问网址"></a>1.2 访问网址</h2><pre><code> 网址：博客域名/h2-console
-</code></pre>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162807.png"></p>
-<p>需要注意一下<code>JDBC URL</code>的填写，用户名和密码在配置文件中已有说明</p>
-<h2 id="1-3-测试"><a href="#1-3-测试" class="headerlink" title="1.3 测试"></a>1.3 测试</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> MENUS </span><br></pre></td></tr></table></figure>
-
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162838.png"></p>
-<h1 id="2-在本地主机上使用数据库可视化工具"><a href="#2-在本地主机上使用数据库可视化工具" class="headerlink" title="2. 在本地主机上使用数据库可视化工具"></a>2. 在本地主机上使用数据库可视化工具</h1><blockquote>
-<p>在使用jdbc驱动版本选择时有坑，下面本人提供了一个版本，测试可用</p>
-</blockquote>
-<h2 id="2-1-工具介绍"><a href="#2-1-工具介绍" class="headerlink" title="2.1 工具介绍"></a>2.1 工具介绍</h2><pre><code>DBeaver 6.3.3(网址：https://dbeaver.io/)
-</code></pre>
-<h2 id="2-2-jdbc驱动jar包"><a href="#2-2-jdbc驱动jar包" class="headerlink" title="2.2 jdbc驱动jar包"></a>2.2 jdbc驱动jar包</h2><pre><code>下载下来，后面需要用到
-</code></pre>
-<p>/upload/2020/1/h2-2019-03-13-d5148978df7745808925f6f2ec3671b8.zip</p>
-<h2 id="2-3-创建数据库连接"><a href="#2-3-创建数据库连接" class="headerlink" title="2.3 创建数据库连接"></a>2.3 创建数据库连接</h2><ul>
-<li>新建数据库连接</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162902.png"></p>
-<ul>
-<li><p>选择H2 embedded<br><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162924.png"></p>
-</li>
-<li><p>选择db文件<br><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162943.png"></p>
-</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415163001.png"></p>
-<p><strong>注意将后面的.mv.db删除掉</strong><br>用户名和密码就是配置文件中的H2用户名和密码</p>
-<h2 id="2-6-编辑驱动设置"><a href="#2-6-编辑驱动设置" class="headerlink" title="2.6 编辑驱动设置"></a>2.6 编辑驱动设置</h2><p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415163038.png"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415163114.png"></p>
-<h2 id="2-5-连接"><a href="#2-5-连接" class="headerlink" title="2.5 连接"></a>2.5 连接</h2><p>创建连接完毕后，连接数据库<br>可以看出Public中的存在的表<br><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415163139.png"></p>
-<h2 id="2-6-测试"><a href="#2-6-测试" class="headerlink" title="2.6 测试"></a>2.6 测试</h2><p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415163152.png"></p>
-]]></content>
-      <categories>
-        <category>博客</category>
-      </categories>
-      <tags>
-        <tag>halo</tag>
+        <tag>leetcode</tag>
       </tags>
   </entry>
   <entry>
@@ -706,124 +780,6 @@ docker部署
       </tags>
   </entry>
   <entry>
-    <title>LeetCode-001-两数之和</title>
-    <url>/posts/a239384e/</url>
-    <content><![CDATA[<blockquote>
-<p>题目链接：<a href="https://leetcode-cn.com/problems/two-sum/">https://leetcode-cn.com/problems/two-sum/</a></p>
-</blockquote>
-<span id="more"></span>
-
-<blockquote>
-<p>难度：简单</p>
-</blockquote>
-<h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h3><p>给定一个整数数组 <code>nums</code> 和一个目标值 <code>target</code>，请你在该数组中找出和为目标值的那 <strong>两个</strong> 整数，并返回他们的数组下标。</p>
-<p>你可以假设每种输入只会对应一个答案。但是，你不能重复利用这个数组中同样的元素。</p>
-<p><strong>示例</strong>:</p>
-<blockquote>
-<p>给定 nums = [2, 7, 11, 15], target = 9</p>
-<p>因为 nums[<strong>0</strong>] + nums[<strong>1</strong>] = 2 + 7 = 9<br>所以返回 [<strong>0, 1</strong>]</p>
-</blockquote>
-<h3 id="个人题解"><a href="#个人题解" class="headerlink" title="个人题解"></a>个人题解</h3><ul>
-<li>使用C++的<code>map</code>，键： <code>target - 遍历过的元素值</code>  值：<code>遍历过的元素值索引</code></li>
-<li>时间复杂度 <code>O(nlogn)</code></li>
-<li>空间复杂度<code>O(n)</code></li>
-<li>C++中<code>map</code>使用红黑树实现，<code>hash_map</code>使用哈希表实现，<code>hash_map</code>相对来说查找元素更快</li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">twoSum</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">        map&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; numMap;</span><br><span class="line">        vector&lt;<span class="keyword">int</span>&gt; v;</span><br><span class="line">        <span class="keyword">int</span> t,i;</span><br><span class="line">        i = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span> it = nums.<span class="built_in">begin</span>(); it != nums.<span class="built_in">end</span>(); it++)</span><br><span class="line">        &#123;</span><br><span class="line">            t = target - *it;</span><br><span class="line">            <span class="keyword">if</span>(numMap.<span class="built_in">find</span>(*it) != numMap.<span class="built_in">end</span>())  <span class="comment">// 之前有元素 + *it = target</span></span><br><span class="line">            &#123;</span><br><span class="line">                v.<span class="built_in">push_back</span>(numMap[*it]);</span><br><span class="line">                v.<span class="built_in">push_back</span>(i);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                numMap[t] = i;</span><br><span class="line">            &#125;</span><br><span class="line">            i++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> v;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="官方题解"><a href="#官方题解" class="headerlink" title="官方题解"></a>官方题解</h3><h4 id="方法一：暴力法"><a href="#方法一：暴力法" class="headerlink" title="方法一：暴力法"></a>方法一：暴力法</h4><p>暴力法很简单，遍历每个元素 x，并查找是否存在一个值与 target−x 相等的目标元素。</p>
-<ul>
-<li>Java</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] twoSum(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> target) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = i + <span class="number">1</span>; j &lt; nums.length; j++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (nums[j] == target - nums[i]) &#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>[] &#123; i, j &#125;;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;No two sum solution&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>复杂度分析：</strong></p>
-<ul>
-<li>时间复杂度：<code>O(n^2)</code><br>对于每个元素，我们试图通过遍历数组的其余部分来寻找它所对应的目标元素，这将耗费 O(n)的时间。因此时间复杂度为 <code>O(n^2)</code>。</li>
-<li>空间复杂度：<code>O(1)</code>。</li>
-</ul>
-<h4 id="方法二：两遍哈希表"><a href="#方法二：两遍哈希表" class="headerlink" title="方法二：两遍哈希表"></a>方法二：两遍哈希表</h4><p>为了对运行时间复杂度进行优化，我们需要一种更有效的方法来检查数组中是否存在目标元素。如果存在，我们需要找出它的索引。保持数组中的每个元素与其索引相互对应的最好方法是什么？哈希表。</p>
-<p>通过以空间换取速度的方式，我们可以将查找时间从 O(n) 降低到 O(1)。哈希表正是为此目的而构建的，它支持以 <em>近似</em> 恒定的时间进行快速查找。我用“近似”来描述，是因为一旦出现冲突，查找用时可能会退化到 O(n)。但只要你仔细地挑选哈希函数，在哈希表中进行查找的用时应当被摊销为 O(1)。</p>
-<p>一个简单的实现使用了两次迭代。在第一次迭代中，我们将每个元素的值和它的索引添加到表中。然后，在第二次迭代中，我们将检查每个元素所对应的目标元素<code>target−nums[i]</code>是否存在于表中。注意，该目标元素不能是 <code>nums[i]</code> 本身！</p>
-<ul>
-<li>Java</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] twoSum(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> target) &#123;</span><br><span class="line">        Map&lt;Integer, Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">            map.put(nums[i], i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">            <span class="keyword">int</span> complement = target - nums[i];</span><br><span class="line">            <span class="keyword">if</span> (map.containsKey(complement) &amp;&amp; map.get(complement) != i) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>[] &#123; i, map.get(complement) &#125;;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;No two sum solution&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>复杂度分析：</strong></p>
-<ul>
-<li>时间复杂度：<code>O(n) </code><br>我们把包含有 n个元素的列表遍历两次。由于哈希表将查找时间缩短到 O(1) ，所以时间复杂度为 O(n)。</li>
-<li>空间复杂度：<code>O(n) </code><br>所需的额外空间取决于哈希表中存储的元素数量，该表中存储了 n个元素。</li>
-</ul>
-<h4 id="方法三：一遍哈希表"><a href="#方法三：一遍哈希表" class="headerlink" title="方法三：一遍哈希表"></a>方法三：一遍哈希表</h4><p>事实证明，我们可以一次完成。在进行迭代并将元素插入到表中的同时，我们还会回过头来检查表中是否已经存在当前元素所对应的目标元素。如果它存在，那我们已经找到了对应解，并立即将其返回。</p>
-<ul>
-<li>Java</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] twoSum(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> target) &#123;</span><br><span class="line">        Map&lt;Integer, Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">            <span class="keyword">int</span> complement = target - nums[i];</span><br><span class="line">            <span class="keyword">if</span> (map.containsKey(complement)) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>[] &#123; map.get(complement), i &#125;;</span><br><span class="line">            &#125;</span><br><span class="line">            map.put(nums[i], i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;No two sum solution&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<p><strong>复杂度分析：</strong></p>
-<ul>
-<li>时间复杂度：<code>O(n)</code>，<br>我们只遍历了包含有 n 个元素的列表一次。在表中进行的每次查找只花费 O(1)的时间。</li>
-<li>空间复杂度：<code>O(n)</code>，<br>所需的额外空间取决于哈希表中存储的元素数量，该表最多需要存储 n个元素。</li>
-</ul>
-]]></content>
-      <categories>
-        <category>算法</category>
-      </categories>
-      <tags>
-        <tag>leetcode</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Linux下将python脚本封装成服务</title>
-    <url>/posts/db70b640/</url>
-    <content><![CDATA[<blockquote>
-<p>将脚本封装成服务方便后台运行</p>
-</blockquote>
-<span id="more"></span>
-
-<h1 id="nohup后台运行"><a href="#nohup后台运行" class="headerlink" title="nohup后台运行"></a>nohup后台运行</h1><blockquote>
-<p>nohup指不断地运行，是no hang up的缩写，指不间断，不挂断。运行一个进程的时候，不想让其在你退出账号时关闭，即可用nohup。nohup在不规定的情况下，所以输出内容会到nohup.out中</p>
-</blockquote>
-<p>运行示例：</p>
-<figure class="highlight 1c"><table><tr><td class="code"><pre><span class="line">nohup python my.py &gt;&gt; my.<span class="built_in">log</span> <span class="number">2</span>&gt;<span class="meta">&amp;1 &amp;</span></span><br><span class="line">nohup tomcat.sh &gt; /dev/<span class="literal">null</span> <span class="number">2</span>&gt;<span class="meta">&amp;1 &amp;</span></span><br></pre></td></tr></table></figure>
-
-<ol>
-<li><p><code>&gt;</code>和<code>&gt;&gt;</code>都是将输出重定向到指定位置（如文件），区别在于前者重写文件，后者追加到文件</p>
-</li>
-<li><p><code>/dev/null</code>相当于一个垃圾箱，如果不想知道输出内容，可以指定输出到次数</p>
-</li>
-<li><p>关于0、1、2</p>
-<p><code>0</code> 表示stdin标准输入，用户键盘输入的内容<br><code>1</code> 表示stdout标准输出，输出到显示屏的内容<br><code>2</code> 表示stderr标准错误，报错内容</p>
-</li>
-<li><p><code>2&gt;&amp;1</code>是一个整体，<code>&gt;</code>左右不能有空格，即将错误内容重定向输入到标准输出中去。</p>
-</li>
-<li><p><code>&amp;</code>为后台运行</p>
-</li>
-</ol>
-<h1 id="封装成system服务"><a href="#封装成system服务" class="headerlink" title="封装成system服务"></a>封装成system服务</h1><p>这个方法只适用于使用systemd的Linux系统，现在流行的Linux发行版都使用systemd。后台服务程序是随系统自启动的，我们只要把Python脚本配置为服务就行了。需要注意的一点是你Python脚本的启动时机，它依赖不依赖其他服务（网络连接、一些分区的挂载等等）。</p>
-<p>假设我们想将一个位置为<code>/home/autorun.py</code>的python脚本封装成服务。</p>
-<h2 id="创建Unit配置文件"><a href="#创建Unit配置文件" class="headerlink" title="创建Unit配置文件"></a>创建Unit配置文件</h2><figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">vim <span class="regexp">/lib/</span>systemd<span class="regexp">/system/</span>autorun.service</span><br></pre></td></tr></table></figure>
-
-<p>向文件中写入以下内容：</p>
-<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="section">[Unit]</span></span><br><span class="line"></span><br><span class="line"><span class="attr">Description</span>=Test Service</span><br><span class="line"></span><br><span class="line"><span class="attr">After</span>=multi-user.target</span><br><span class="line"></span><br><span class="line"><span class="section">[Service]</span></span><br><span class="line"></span><br><span class="line"><span class="attr">Type</span>=idle</span><br><span class="line"></span><br><span class="line"><span class="attr">ExecStart</span>=/usr/bin/python /home/snail/autorun.py</span><br><span class="line"></span><br><span class="line"><span class="section">[Install]</span></span><br><span class="line"></span><br><span class="line"><span class="attr">WantedBy</span>=multi-user.target</span><br></pre></td></tr></table></figure>
-
-<p>上面定义了一个叫 Test Service 的服务，它在multi-user环境起来之后运行；ExecStart参数指定我们要运行的程序，注意使用绝对路径；idle确保脚本在其他东西加载完成之后运行，它的默认值是simple。为了获得脚本的输出信息，我们可以重定向到文件：</p>
-<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">ExecStart=<span class="regexp">/usr/</span>bin<span class="regexp">/python /</span>home<span class="regexp">/snail/</span>autorun.py &gt; <span class="regexp">/home/</span>snail/autorun.log <span class="number">2</span>&gt;&amp;<span class="number">1</span></span><br></pre></td></tr></table></figure>
-
-<p>之后更改配置文件的权限：</p>
-<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">sudo chmod <span class="number">644</span> <span class="regexp">/lib/</span>systemd<span class="regexp">/system/</span>autorun.service</span><br></pre></td></tr></table></figure>
-<h2 id="使配置文件生效"><a href="#使配置文件生效" class="headerlink" title="使配置文件生效"></a>使配置文件生效</h2><figure class="highlight angelscript"><table><tr><td class="code"><pre><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl enable <span class="built_in">auto</span>run.service</span><br><span class="line">systemctl start <span class="built_in">auto</span>run.service</span><br><span class="line">systemctl status <span class="built_in">auto</span>run.service</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-  </entry>
-  <entry>
     <title>LeetCode-002-两数相加</title>
     <url>/posts/b190b0aa/</url>
     <content><![CDATA[<blockquote>
@@ -919,23 +875,48 @@ docker部署
       </tags>
   </entry>
   <entry>
-    <title>Linux服务查看SSH登录失败日志</title>
-    <url>/posts/26caa900/</url>
+    <title>Linux下将python脚本封装成服务</title>
+    <url>/posts/db70b640/</url>
     <content><![CDATA[<blockquote>
-<p>查询主要依据 <code>/var/log/secure</code> 文件，有些系统是<code>/var/log/auth.log</code>文件，以下以<code>/var/log/secure</code> 文件为例查询。</p>
+<p>将脚本封装成服务方便后台运行</p>
 </blockquote>
 <span id="more"></span>
-<figure class="highlight stata"><table><tr><td class="code"><pre><span class="line"># 查看哪些IP破解你SSH密码以及次数</span><br><span class="line"><span class="keyword">cat</span> /<span class="keyword">var</span>/<span class="keyword">log</span>/secure | awk &#x27;/Failed/&#123;<span class="keyword">print</span> $(NF-3)&#125;&#x27; | <span class="keyword">sort</span> | uniq -c | awk &#x27;&#123;<span class="keyword">print</span> <span class="variable">$2</span><span class="string">&quot; = &quot;</span><span class="variable">$1</span>;&#125;&#x27;</span><br><span class="line"></span><br><span class="line"># 登录失败的记录</span><br><span class="line">grep -o <span class="string">&quot;Failed password&quot;</span> /<span class="keyword">var</span>/<span class="keyword">log</span>/secure|uniq -c</span><br><span class="line"></span><br><span class="line"># 登录成功的记录</span><br><span class="line">1. grep <span class="string">&quot;Accepted &quot;</span> /<span class="keyword">var</span>/<span class="keyword">log</span>/secure | awk &#x27;&#123;<span class="keyword">print</span> <span class="variable">$1</span>,<span class="variable">$2</span>,<span class="variable">$3</span>,<span class="variable">$9</span>,<span class="variable">$11&#125;</span>&#x27;</span><br><span class="line">2. grep <span class="string">&quot;Accepted password for root&quot;</span> /<span class="keyword">var</span>/<span class="keyword">log</span>/secure | awk &#x27;&#123;<span class="keyword">print</span> <span class="variable">$11&#125;</span>&#x27; | <span class="keyword">sort</span> | uniq -c | <span class="keyword">sort</span> -nr | <span class="keyword">more</span></span><br><span class="line"></span><br><span class="line"># 排序查看哪些IP破解你SSH密码以及次数</span><br><span class="line">1. <span class="keyword">cat</span>  | awk &#x27;/Failed/&#123;<span class="keyword">print</span> $(NF-3)&#125;&#x27; /<span class="keyword">var</span>/<span class="keyword">log</span>/secure | <span class="keyword">sort</span> | uniq -c | <span class="keyword">sort</span> -rn</span><br><span class="line">2. grep <span class="string">&quot;Failed password for root&quot;</span> /<span class="keyword">var</span>/<span class="keyword">log</span>/secure | awk &#x27;&#123;<span class="keyword">print</span> <span class="variable">$11&#125;</span>&#x27; | <span class="keyword">sort</span> | uniq -c | <span class="keyword">sort</span> -nr | <span class="keyword">more</span></span><br></pre></td></tr></table></figure>
 
-<h2 id="恶意IP检测工具"><a href="#恶意IP检测工具" class="headerlink" title="恶意IP检测工具"></a>恶意IP检测工具</h2><p>网址：<a href="https://www.abuseipdb.com/">https://www.abuseipdb.com/</a><br>显示结果如下图所示:</p>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415171504.png"></p>
-]]></content>
+<h1 id="nohup后台运行"><a href="#nohup后台运行" class="headerlink" title="nohup后台运行"></a>nohup后台运行</h1><blockquote>
+<p>nohup指不断地运行，是no hang up的缩写，指不间断，不挂断。运行一个进程的时候，不想让其在你退出账号时关闭，即可用nohup。nohup在不规定的情况下，所以输出内容会到nohup.out中</p>
+</blockquote>
+<p>运行示例：</p>
+<figure class="highlight 1c"><table><tr><td class="code"><pre><span class="line">nohup python my.py &gt;&gt; my.<span class="built_in">log</span> <span class="number">2</span>&gt;<span class="meta">&amp;1 &amp;</span></span><br><span class="line">nohup tomcat.sh &gt; /dev/<span class="literal">null</span> <span class="number">2</span>&gt;<span class="meta">&amp;1 &amp;</span></span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><p><code>&gt;</code>和<code>&gt;&gt;</code>都是将输出重定向到指定位置（如文件），区别在于前者重写文件，后者追加到文件</p>
+</li>
+<li><p><code>/dev/null</code>相当于一个垃圾箱，如果不想知道输出内容，可以指定输出到次数</p>
+</li>
+<li><p>关于0、1、2</p>
+<p><code>0</code> 表示stdin标准输入，用户键盘输入的内容<br><code>1</code> 表示stdout标准输出，输出到显示屏的内容<br><code>2</code> 表示stderr标准错误，报错内容</p>
+</li>
+<li><p><code>2&gt;&amp;1</code>是一个整体，<code>&gt;</code>左右不能有空格，即将错误内容重定向输入到标准输出中去。</p>
+</li>
+<li><p><code>&amp;</code>为后台运行</p>
+</li>
+</ol>
+<h1 id="封装成system服务"><a href="#封装成system服务" class="headerlink" title="封装成system服务"></a>封装成system服务</h1><p>这个方法只适用于使用systemd的Linux系统，现在流行的Linux发行版都使用systemd。后台服务程序是随系统自启动的，我们只要把Python脚本配置为服务就行了。需要注意的一点是你Python脚本的启动时机，它依赖不依赖其他服务（网络连接、一些分区的挂载等等）。</p>
+<p>假设我们想将一个位置为<code>/home/autorun.py</code>的python脚本封装成服务。</p>
+<h2 id="创建Unit配置文件"><a href="#创建Unit配置文件" class="headerlink" title="创建Unit配置文件"></a>创建Unit配置文件</h2><figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">vim <span class="regexp">/lib/</span>systemd<span class="regexp">/system/</span>autorun.service</span><br></pre></td></tr></table></figure>
+
+<p>向文件中写入以下内容：</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="section">[Unit]</span></span><br><span class="line"></span><br><span class="line"><span class="attr">Description</span>=Test Service</span><br><span class="line"></span><br><span class="line"><span class="attr">After</span>=multi-user.target</span><br><span class="line"></span><br><span class="line"><span class="section">[Service]</span></span><br><span class="line"></span><br><span class="line"><span class="attr">Type</span>=idle</span><br><span class="line"></span><br><span class="line"><span class="attr">ExecStart</span>=/usr/bin/python /home/snail/autorun.py</span><br><span class="line"></span><br><span class="line"><span class="section">[Install]</span></span><br><span class="line"></span><br><span class="line"><span class="attr">WantedBy</span>=multi-user.target</span><br></pre></td></tr></table></figure>
+
+<p>上面定义了一个叫 Test Service 的服务，它在multi-user环境起来之后运行；ExecStart参数指定我们要运行的程序，注意使用绝对路径；idle确保脚本在其他东西加载完成之后运行，它的默认值是simple。为了获得脚本的输出信息，我们可以重定向到文件：</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">ExecStart=<span class="regexp">/usr/</span>bin<span class="regexp">/python /</span>home<span class="regexp">/snail/</span>autorun.py &gt; <span class="regexp">/home/</span>snail/autorun.log <span class="number">2</span>&gt;&amp;<span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>之后更改配置文件的权限：</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">sudo chmod <span class="number">644</span> <span class="regexp">/lib/</span>systemd<span class="regexp">/system/</span>autorun.service</span><br></pre></td></tr></table></figure>
+<h2 id="使配置文件生效"><a href="#使配置文件生效" class="headerlink" title="使配置文件生效"></a>使配置文件生效</h2><figure class="highlight angelscript"><table><tr><td class="code"><pre><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl enable <span class="built_in">auto</span>run.service</span><br><span class="line">systemctl start <span class="built_in">auto</span>run.service</span><br><span class="line">systemctl status <span class="built_in">auto</span>run.service</span><br></pre></td></tr></table></figure>]]></content>
       <categories>
         <category>linux</category>
       </categories>
-      <tags>
-        <tag>安全</tag>
-      </tags>
   </entry>
   <entry>
     <title>Linux操作系统源</title>
@@ -1038,6 +1019,25 @@ docker部署
       </categories>
       <tags>
         <tag>换源</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux服务查看SSH登录失败日志</title>
+    <url>/posts/26caa900/</url>
+    <content><![CDATA[<blockquote>
+<p>查询主要依据 <code>/var/log/secure</code> 文件，有些系统是<code>/var/log/auth.log</code>文件，以下以<code>/var/log/secure</code> 文件为例查询。</p>
+</blockquote>
+<span id="more"></span>
+<figure class="highlight stata"><table><tr><td class="code"><pre><span class="line"># 查看哪些IP破解你SSH密码以及次数</span><br><span class="line"><span class="keyword">cat</span> /<span class="keyword">var</span>/<span class="keyword">log</span>/secure | awk &#x27;/Failed/&#123;<span class="keyword">print</span> $(NF-3)&#125;&#x27; | <span class="keyword">sort</span> | uniq -c | awk &#x27;&#123;<span class="keyword">print</span> <span class="variable">$2</span><span class="string">&quot; = &quot;</span><span class="variable">$1</span>;&#125;&#x27;</span><br><span class="line"></span><br><span class="line"># 登录失败的记录</span><br><span class="line">grep -o <span class="string">&quot;Failed password&quot;</span> /<span class="keyword">var</span>/<span class="keyword">log</span>/secure|uniq -c</span><br><span class="line"></span><br><span class="line"># 登录成功的记录</span><br><span class="line">1. grep <span class="string">&quot;Accepted &quot;</span> /<span class="keyword">var</span>/<span class="keyword">log</span>/secure | awk &#x27;&#123;<span class="keyword">print</span> <span class="variable">$1</span>,<span class="variable">$2</span>,<span class="variable">$3</span>,<span class="variable">$9</span>,<span class="variable">$11&#125;</span>&#x27;</span><br><span class="line">2. grep <span class="string">&quot;Accepted password for root&quot;</span> /<span class="keyword">var</span>/<span class="keyword">log</span>/secure | awk &#x27;&#123;<span class="keyword">print</span> <span class="variable">$11&#125;</span>&#x27; | <span class="keyword">sort</span> | uniq -c | <span class="keyword">sort</span> -nr | <span class="keyword">more</span></span><br><span class="line"></span><br><span class="line"># 排序查看哪些IP破解你SSH密码以及次数</span><br><span class="line">1. <span class="keyword">cat</span>  | awk &#x27;/Failed/&#123;<span class="keyword">print</span> $(NF-3)&#125;&#x27; /<span class="keyword">var</span>/<span class="keyword">log</span>/secure | <span class="keyword">sort</span> | uniq -c | <span class="keyword">sort</span> -rn</span><br><span class="line">2. grep <span class="string">&quot;Failed password for root&quot;</span> /<span class="keyword">var</span>/<span class="keyword">log</span>/secure | awk &#x27;&#123;<span class="keyword">print</span> <span class="variable">$11&#125;</span>&#x27; | <span class="keyword">sort</span> | uniq -c | <span class="keyword">sort</span> -nr | <span class="keyword">more</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="恶意IP检测工具"><a href="#恶意IP检测工具" class="headerlink" title="恶意IP检测工具"></a>恶意IP检测工具</h2><p>网址：<a href="https://www.abuseipdb.com/">https://www.abuseipdb.com/</a><br>显示结果如下图所示:</p>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415171504.png"></p>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>安全</tag>
       </tags>
   </entry>
   <entry>
@@ -1410,6 +1410,53 @@ docker部署
       </tags>
   </entry>
   <entry>
+    <title>Python爬虫下载长江雨课堂课程音频文件</title>
+    <url>/posts/35873/</url>
+    <content><![CDATA[<blockquote>
+<p>近日疫情原因，各学校采用线上教学。软件工程这门课采用长江雨课堂，由于马上就期中测试，准备回放复习一下课程，但是长江雨课堂的回放功能不支持倍速播放，于是准备将音频文件下载到本地播放。</p>
+</blockquote>
+<span id="more"></span>
+<h2 id="爬取分析"><a href="#爬取分析" class="headerlink" title="爬取分析"></a>爬取分析</h2><ul>
+<li><code>m3u8</code>音频格式</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/Snipaste_2020-03-27_15-58-54.png"></p>
+<p>可以看出其音频格式为<code>m3u8</code>。爬取步骤如下：</p>
+<ol>
+<li>获取课程信息</li>
+<li>根据课程信息获取m3u8文件地址</li>
+<li>根据m3u8文件中ts文件名下载ts文件</li>
+<li>合并ts文件</li>
+</ol>
+<ul>
+<li><code>mp3</code>音频格式</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/Snipaste_2020-03-27_16-05-31.png"></p>
+<p>可以看出其音频格式为<code>mp3</code>, 并且包含多段。爬取步骤如下：</p>
+<ol>
+<li>获取课程信息</li>
+<li>根据课程信息获取mp3文件地址</li>
+<li>下载mp3文件</li>
+<li>合并mp3文件</li>
+</ol>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p><strong>环境说明</strong></p>
+<ul>
+<li>语言：Python</li>
+<li>库：requests</li>
+</ul>
+<p><strong>使用说明</strong></p>
+<ul>
+<li>输入lessonID，每次下载一个课程的音频文件</li>
+<li>lessonID获取方式，见图片</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/Snipaste_2020-03-27_16-14-30.png"></p>
+<p><strong>Python代码</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> json,time</span><br><span class="line"></span><br><span class="line">lessonID = <span class="string">&quot;4003249&quot;</span></span><br><span class="line"></span><br><span class="line">header = &#123;</span><br><span class="line">    <span class="string">&#x27;cookie&#x27;</span>:<span class="string">&quot;_ga=GA1.2.1597694283.1582103010; _did=web_2408385821B4C392; _gid=GA1.2.237363874.1585559892; csrftoken=UFomwya8SZP3HFR5gv9GnTQ6ChyipTSI; sessionid=o3lwkaqztkxg629ahwfnf3037jvwl9kl; django_language=zh-cn&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">url_lesson = <span class="string">&quot;https://changjiang.yuketang.cn/v/lesson/get_lesson_replay_timeline/?lesson_id=&#123;&#125;&quot;</span>.<span class="built_in">format</span>(lessonID)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 0. 获取m3u8路径</span></span><br><span class="line">resp = requests.get(url_lesson, headers=header)</span><br><span class="line">dic_info = json.loads(resp.text)</span><br><span class="line"></span><br><span class="line">m3u8_list = dic_info[<span class="string">&#x27;data&#x27;</span>][<span class="string">&#x27;live_timeline&#x27;</span>]</span><br><span class="line"></span><br><span class="line">num = <span class="number">1</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> m3u8_list:  <span class="comment">#可能存在多个文件</span></span><br><span class="line">    url_m3u8 = i[<span class="string">&quot;replay_url&quot;</span>]</span><br><span class="line">    <span class="built_in">print</span>(url_m3u8)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(<span class="string">&#x27;./&#123;&#125;/&#x27;</span>.<span class="built_in">format</span>(lessonID)):</span><br><span class="line">        os.mkdir(<span class="string">&#x27;./&#123;&#125;/&#x27;</span>.<span class="built_in">format</span>(lessonID))</span><br><span class="line">    <span class="keyword">if</span> <span class="string">&#x27;.m3u8&#x27;</span> <span class="keyword">in</span> url_m3u8: <span class="comment">#TS格式</span></span><br><span class="line">        <span class="comment"># 1. 下载m3u8文件</span></span><br><span class="line">        filename_m3u8 = <span class="string">&quot;./&#123;&#125;/&#123;&#125;&quot;</span>.<span class="built_in">format</span>(lessonID,url_m3u8.split(<span class="string">&#x27;/&#x27;</span>)[-<span class="number">1</span>])</span><br><span class="line">        resp = requests.get(url_m3u8, headers=header)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(filename_m3u8, <span class="string">&#x27;w&#x27;</span>, encoding=<span class="string">&#x27;utf8&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            f.write(resp.text)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 2. 获得TS文件名</span></span><br><span class="line">        dataTS = []</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(filename_m3u8, <span class="string">&#x27;r&#x27;</span>, encoding=<span class="string">&#x27;utf8&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            data = f.readlines();</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> data:</span><br><span class="line">                <span class="keyword">if</span> i.endswith(<span class="string">&quot;.ts\n&quot;</span>):</span><br><span class="line">                    dataTS.append(i[<span class="number">0</span>:-<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line">        url_ts_prefix = os.path.dirname(url_m3u8)+<span class="string">&quot;/&quot;</span></span><br><span class="line">        <span class="comment"># 2. 下载TS音频文件</span></span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;./&#123;&#125;/&#123;&#125;.ts&quot;</span>.<span class="built_in">format</span>(lessonID,url_m3u8.split(<span class="string">&#x27;/&#x27;</span>)[-<span class="number">1</span>].split(<span class="string">&#x27;.&#x27;</span>)[<span class="number">0</span>]), <span class="string">&#x27;wb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            <span class="keyword">for</span> ts <span class="keyword">in</span> dataTS:</span><br><span class="line">                nurl = url_ts_prefix + ts</span><br><span class="line">                <span class="built_in">print</span>(nurl)</span><br><span class="line">                resp = requests.get(nurl)</span><br><span class="line">                f.write(resp.content)</span><br><span class="line">    <span class="keyword">elif</span> <span class="string">&#x27;.mp3&#x27;</span> <span class="keyword">in</span> url_m3u8:</span><br><span class="line">        resp = requests.get(url_m3u8) <span class="comment">#mp3文件</span></span><br><span class="line">        filename = <span class="string">&quot;together_&quot;</span>+url_m3u8.split(<span class="string">&#x27;?&#x27;</span>)[<span class="number">0</span>].split(<span class="string">&#x27;/&#x27;</span>)[-<span class="number">1</span>]</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;./&#123;&#125;/&#123;&#125;&quot;</span>.<span class="built_in">format</span>(lessonID, filename), <span class="string">&#x27;ab+&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            f.write(resp.content) </span><br><span class="line"></span><br><span class="line">        filename = <span class="built_in">str</span>(num)+<span class="string">&quot;_&quot;</span>+url_m3u8.split(<span class="string">&#x27;?&#x27;</span>)[<span class="number">0</span>].split(<span class="string">&#x27;/&#x27;</span>)[-<span class="number">1</span>]</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;./&#123;&#125;/&#123;&#125;&quot;</span>.<span class="built_in">format</span>(lessonID, filename), <span class="string">&#x27;wb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            f.write(resp.content) </span><br><span class="line">        num += <span class="number">1</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">    	<span class="built_in">print</span>(<span class="string">&quot;未知URL &#123;&#125;&quot;</span>.<span class="built_in">format</span>(url_m3u8))</span><br><span class="line"></span><br><span class="line">url_lesson_info = <span class="string">&quot;https://changjiang.yuketang.cn/v/lesson/get_lesson_replay_content/?lesson_id=&#123;&#125;&quot;</span>.<span class="built_in">format</span>(lessonID)</span><br><span class="line">resp = requests.get(url_lesson_info, headers=header)</span><br><span class="line">title = json.loads(resp.text)[<span class="string">&quot;data&quot;</span>][<span class="string">&#x27;lesson&#x27;</span>][<span class="string">&#x27;title&#x27;</span>]</span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(<span class="string">&#x27;./&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(lessonID+<span class="string">&quot;_&quot;</span>+title)):</span><br><span class="line">    os.rename(<span class="string">&#x27;./&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(lessonID), <span class="string">&#x27;./&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(lessonID+<span class="string">&quot;_&quot;</span>+title))</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    os.rename(<span class="string">&#x27;./&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(lessonID+<span class="string">&quot;_&quot;</span>+title),<span class="string">&#x27;./&#123;&#125;_&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(lessonID+<span class="string">&quot;_&quot;</span>+title, <span class="built_in">int</span>(time.time())))</span><br><span class="line">    os.rename(<span class="string">&#x27;./&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(lessonID), <span class="string">&#x27;./&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(lessonID+<span class="string">&quot;_&quot;</span>+title))</span><br></pre></td></tr></table></figure>
+<p><strong>下载结果</strong><br><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/Snipaste_2020-03-27_16-22-33.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/Snipaste_2020-03-27_16-22-55.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/Snipaste_2020-03-27_16-23-08.png"></p>
+]]></content>
+  </entry>
+  <entry>
     <title>Python爬虫下载腾讯课堂回放视频</title>
     <url>/posts/21543/</url>
     <content><![CDATA[<blockquote>
@@ -1625,53 +1672,6 @@ docker部署
       <tags>
         <tag>xpath</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>Python爬虫下载长江雨课堂课程音频文件</title>
-    <url>/posts/35873/</url>
-    <content><![CDATA[<blockquote>
-<p>近日疫情原因，各学校采用线上教学。软件工程这门课采用长江雨课堂，由于马上就期中测试，准备回放复习一下课程，但是长江雨课堂的回放功能不支持倍速播放，于是准备将音频文件下载到本地播放。</p>
-</blockquote>
-<span id="more"></span>
-<h2 id="爬取分析"><a href="#爬取分析" class="headerlink" title="爬取分析"></a>爬取分析</h2><ul>
-<li><code>m3u8</code>音频格式</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/Snipaste_2020-03-27_15-58-54.png"></p>
-<p>可以看出其音频格式为<code>m3u8</code>。爬取步骤如下：</p>
-<ol>
-<li>获取课程信息</li>
-<li>根据课程信息获取m3u8文件地址</li>
-<li>根据m3u8文件中ts文件名下载ts文件</li>
-<li>合并ts文件</li>
-</ol>
-<ul>
-<li><code>mp3</code>音频格式</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/Snipaste_2020-03-27_16-05-31.png"></p>
-<p>可以看出其音频格式为<code>mp3</code>, 并且包含多段。爬取步骤如下：</p>
-<ol>
-<li>获取课程信息</li>
-<li>根据课程信息获取mp3文件地址</li>
-<li>下载mp3文件</li>
-<li>合并mp3文件</li>
-</ol>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p><strong>环境说明</strong></p>
-<ul>
-<li>语言：Python</li>
-<li>库：requests</li>
-</ul>
-<p><strong>使用说明</strong></p>
-<ul>
-<li>输入lessonID，每次下载一个课程的音频文件</li>
-<li>lessonID获取方式，见图片</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/Snipaste_2020-03-27_16-14-30.png"></p>
-<p><strong>Python代码</strong></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> json,time</span><br><span class="line"></span><br><span class="line">lessonID = <span class="string">&quot;4003249&quot;</span></span><br><span class="line"></span><br><span class="line">header = &#123;</span><br><span class="line">    <span class="string">&#x27;cookie&#x27;</span>:<span class="string">&quot;_ga=GA1.2.1597694283.1582103010; _did=web_2408385821B4C392; _gid=GA1.2.237363874.1585559892; csrftoken=UFomwya8SZP3HFR5gv9GnTQ6ChyipTSI; sessionid=o3lwkaqztkxg629ahwfnf3037jvwl9kl; django_language=zh-cn&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">url_lesson = <span class="string">&quot;https://changjiang.yuketang.cn/v/lesson/get_lesson_replay_timeline/?lesson_id=&#123;&#125;&quot;</span>.<span class="built_in">format</span>(lessonID)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 0. 获取m3u8路径</span></span><br><span class="line">resp = requests.get(url_lesson, headers=header)</span><br><span class="line">dic_info = json.loads(resp.text)</span><br><span class="line"></span><br><span class="line">m3u8_list = dic_info[<span class="string">&#x27;data&#x27;</span>][<span class="string">&#x27;live_timeline&#x27;</span>]</span><br><span class="line"></span><br><span class="line">num = <span class="number">1</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> m3u8_list:  <span class="comment">#可能存在多个文件</span></span><br><span class="line">    url_m3u8 = i[<span class="string">&quot;replay_url&quot;</span>]</span><br><span class="line">    <span class="built_in">print</span>(url_m3u8)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(<span class="string">&#x27;./&#123;&#125;/&#x27;</span>.<span class="built_in">format</span>(lessonID)):</span><br><span class="line">        os.mkdir(<span class="string">&#x27;./&#123;&#125;/&#x27;</span>.<span class="built_in">format</span>(lessonID))</span><br><span class="line">    <span class="keyword">if</span> <span class="string">&#x27;.m3u8&#x27;</span> <span class="keyword">in</span> url_m3u8: <span class="comment">#TS格式</span></span><br><span class="line">        <span class="comment"># 1. 下载m3u8文件</span></span><br><span class="line">        filename_m3u8 = <span class="string">&quot;./&#123;&#125;/&#123;&#125;&quot;</span>.<span class="built_in">format</span>(lessonID,url_m3u8.split(<span class="string">&#x27;/&#x27;</span>)[-<span class="number">1</span>])</span><br><span class="line">        resp = requests.get(url_m3u8, headers=header)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(filename_m3u8, <span class="string">&#x27;w&#x27;</span>, encoding=<span class="string">&#x27;utf8&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            f.write(resp.text)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 2. 获得TS文件名</span></span><br><span class="line">        dataTS = []</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(filename_m3u8, <span class="string">&#x27;r&#x27;</span>, encoding=<span class="string">&#x27;utf8&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            data = f.readlines();</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> data:</span><br><span class="line">                <span class="keyword">if</span> i.endswith(<span class="string">&quot;.ts\n&quot;</span>):</span><br><span class="line">                    dataTS.append(i[<span class="number">0</span>:-<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line">        url_ts_prefix = os.path.dirname(url_m3u8)+<span class="string">&quot;/&quot;</span></span><br><span class="line">        <span class="comment"># 2. 下载TS音频文件</span></span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;./&#123;&#125;/&#123;&#125;.ts&quot;</span>.<span class="built_in">format</span>(lessonID,url_m3u8.split(<span class="string">&#x27;/&#x27;</span>)[-<span class="number">1</span>].split(<span class="string">&#x27;.&#x27;</span>)[<span class="number">0</span>]), <span class="string">&#x27;wb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            <span class="keyword">for</span> ts <span class="keyword">in</span> dataTS:</span><br><span class="line">                nurl = url_ts_prefix + ts</span><br><span class="line">                <span class="built_in">print</span>(nurl)</span><br><span class="line">                resp = requests.get(nurl)</span><br><span class="line">                f.write(resp.content)</span><br><span class="line">    <span class="keyword">elif</span> <span class="string">&#x27;.mp3&#x27;</span> <span class="keyword">in</span> url_m3u8:</span><br><span class="line">        resp = requests.get(url_m3u8) <span class="comment">#mp3文件</span></span><br><span class="line">        filename = <span class="string">&quot;together_&quot;</span>+url_m3u8.split(<span class="string">&#x27;?&#x27;</span>)[<span class="number">0</span>].split(<span class="string">&#x27;/&#x27;</span>)[-<span class="number">1</span>]</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;./&#123;&#125;/&#123;&#125;&quot;</span>.<span class="built_in">format</span>(lessonID, filename), <span class="string">&#x27;ab+&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            f.write(resp.content) </span><br><span class="line"></span><br><span class="line">        filename = <span class="built_in">str</span>(num)+<span class="string">&quot;_&quot;</span>+url_m3u8.split(<span class="string">&#x27;?&#x27;</span>)[<span class="number">0</span>].split(<span class="string">&#x27;/&#x27;</span>)[-<span class="number">1</span>]</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;./&#123;&#125;/&#123;&#125;&quot;</span>.<span class="built_in">format</span>(lessonID, filename), <span class="string">&#x27;wb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            f.write(resp.content) </span><br><span class="line">        num += <span class="number">1</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">    	<span class="built_in">print</span>(<span class="string">&quot;未知URL &#123;&#125;&quot;</span>.<span class="built_in">format</span>(url_m3u8))</span><br><span class="line"></span><br><span class="line">url_lesson_info = <span class="string">&quot;https://changjiang.yuketang.cn/v/lesson/get_lesson_replay_content/?lesson_id=&#123;&#125;&quot;</span>.<span class="built_in">format</span>(lessonID)</span><br><span class="line">resp = requests.get(url_lesson_info, headers=header)</span><br><span class="line">title = json.loads(resp.text)[<span class="string">&quot;data&quot;</span>][<span class="string">&#x27;lesson&#x27;</span>][<span class="string">&#x27;title&#x27;</span>]</span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(<span class="string">&#x27;./&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(lessonID+<span class="string">&quot;_&quot;</span>+title)):</span><br><span class="line">    os.rename(<span class="string">&#x27;./&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(lessonID), <span class="string">&#x27;./&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(lessonID+<span class="string">&quot;_&quot;</span>+title))</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    os.rename(<span class="string">&#x27;./&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(lessonID+<span class="string">&quot;_&quot;</span>+title),<span class="string">&#x27;./&#123;&#125;_&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(lessonID+<span class="string">&quot;_&quot;</span>+title, <span class="built_in">int</span>(time.time())))</span><br><span class="line">    os.rename(<span class="string">&#x27;./&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(lessonID), <span class="string">&#x27;./&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(lessonID+<span class="string">&quot;_&quot;</span>+title))</span><br></pre></td></tr></table></figure>
-<p><strong>下载结果</strong><br><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/Snipaste_2020-03-27_16-22-33.png"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/Snipaste_2020-03-27_16-22-55.png"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/Snipaste_2020-03-27_16-23-08.png"></p>
-]]></content>
   </entry>
   <entry>
     <title>StarUML破解教程</title>
@@ -1965,39 +1965,6 @@ docker部署
       </tags>
   </entry>
   <entry>
-    <title>crontab定时任务发邮件的问题</title>
-    <url>/posts/a50980cb/</url>
-    <content><![CDATA[<p>在用 crontab -e 命令创建定时任务后，发现定时任务中的发邮件并未执行。</p>
-<span id="more"></span>
-
-<p>通过上网查询，可以看crontab的日志。命令如下：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tail /var/<span class="built_in">log</span>/cron</span><br></pre></td></tr></table></figure>
-
-<p>执行结果如下图：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-06/20200622132839.png"></p>
-<p>发现发送邮件报错为 mailed 284 bytes of output but got status 0x004b#012</p>
-<br>
-
-<p>通过查询资料，最终解决方案如下</p>
-<p>文字说明：修改 <code>/etc/postfix/main.cf</code>文件，将其中的 inet_interfaces 设置为all。</p>
-<p>操作：</p>
-<p>执行命令, 修改文件内容</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim /etc/postfix/main.cf</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-06/20200622133227.png"></p>
-<p>最终可以解决，但并不知道原理，不知道会不会影响系统安全性。</p>
-<p>参考执行</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">nohup  python3 -u /root/services/ISL.py  &gt;&gt; /root/services/ISL.log 2&gt;&amp;1  &amp;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>cron</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>WebDriver下载地址</title>
     <url>/posts/6b450c9b/</url>
     <content><![CDATA[<blockquote>
@@ -2095,32 +2062,36 @@ docker部署
       </categories>
   </entry>
   <entry>
-    <title>crontab相关</title>
-    <url>/posts/1bfd1149/</url>
-    <content><![CDATA[<blockquote>
-<p>记录crontab相关的操作以及问题</p>
-</blockquote>
+    <title>crontab定时任务发邮件的问题</title>
+    <url>/posts/a50980cb/</url>
+    <content><![CDATA[<p>在用 crontab -e 命令创建定时任务后，发现定时任务中的发邮件并未执行。</p>
 <span id="more"></span>
 
-<h1 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h1><h2 id="1-var-log-目录下没有cron开头的日志文件"><a href="#1-var-log-目录下没有cron开头的日志文件" class="headerlink" title="1. /var/log/目录下没有cron开头的日志文件"></a>1. /var/log/目录下没有cron开头的日志文件</h2><p>(1) 修改<code>/etc/rsyslog.d/50-default.conf </code>文件，将文件中的  <code>#cron.*  </code>前的  <code>#</code>  删掉。</p>
-<p>​        如果没有<code>50-default.conf</code>文件，可以看<code>/etc/rsyslog.conf</code>是否包含<code>#cron.*  </code>，从而进行相应修改</p>
-<p>(2) 执行以下命令</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">service rsyslog restart</span><br><span class="line">service cron restart</span><br></pre></td></tr></table></figure>
+<p>通过上网查询，可以看crontab的日志。命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tail /var/<span class="built_in">log</span>/cron</span><br></pre></td></tr></table></figure>
 
-<p>(3) 最后查看日志文件</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tail /var/<span class="built_in">log</span>/cron.log </span><br></pre></td></tr></table></figure>
+<p>执行结果如下图：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-06/20200622132839.png"></p>
+<p>发现发送邮件报错为 mailed 284 bytes of output but got status 0x004b#012</p>
+<br>
 
-<h2 id="2-修改cron日志文件中的时区"><a href="#2-修改cron日志文件中的时区" class="headerlink" title="2. 修改cron日志文件中的时区"></a>2. 修改cron日志文件中的时区</h2><figure class="highlight dsconfig"><table><tr><td class="code"><pre><span class="line"><span class="string">timedatectl</span> <span class="built_in">set-timezone</span> <span class="string">&quot;Asia/Shanghai&quot;</span></span><br><span class="line"><span class="string">service</span> <span class="string">rsyslog</span> <span class="string">restart</span></span><br><span class="line"><span class="string">service</span> <span class="string">cron</span> <span class="string">restart</span></span><br></pre></td></tr></table></figure>
+<p>通过查询资料，最终解决方案如下</p>
+<p>文字说明：修改 <code>/etc/postfix/main.cf</code>文件，将其中的 inet_interfaces 设置为all。</p>
+<p>操作：</p>
+<p>执行命令, 修改文件内容</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim /etc/postfix/main.cf</span><br></pre></td></tr></table></figure>
 
-<h2 id="3-测试服务器是否被封禁邮件端口"><a href="#3-测试服务器是否被封禁邮件端口" class="headerlink" title="3. 测试服务器是否被封禁邮件端口"></a>3. 测试服务器是否被封禁邮件端口</h2><figure class="highlight tap"><table><tr><td class="code"><pre><span class="line">apt-get install telnet <span class="comment"># 安装</span></span><br><span class="line">telnet smtp.qq.com<span class="number"> 25 </span><span class="comment"># 测试25端口</span></span><br><span class="line">telnet smtp.qq.com<span class="number"> 465 </span><span class="comment"># 测试465端口</span></span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-06/20200622133227.png"></p>
+<p>最终可以解决，但并不知道原理，不知道会不会影响系统安全性。</p>
+<p>参考执行</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">nohup  python3 -u /root/services/ISL.py  &gt;&gt; /root/services/ISL.log 2&gt;&amp;1  &amp;</span><br></pre></td></tr></table></figure>
 
-<p>如果一直trying，则表明端口被封禁，正常情况下返回数据。</p>
 ]]></content>
       <categories>
         <category>linux</category>
       </categories>
       <tags>
-        <tag>GNUTool</tag>
+        <tag>cron</tag>
       </tags>
   </entry>
   <entry>
@@ -2150,6 +2121,80 @@ docker部署
 </ul>
 <figure class="highlight vim"><table><tr><td class="code"><pre><span class="line">sudo yum -<span class="keyword">y</span> install wget curl <span class="keyword">vim</span> lsof</span><br><span class="line">sudo yum <span class="built_in">remove</span> docker docker-client docker-client-latest \</span><br><span class="line">                  docker-common docker-latest \</span><br><span class="line">                  docker-latest-logrotate docker-logrotate \</span><br><span class="line">                  docker-engine</span><br><span class="line">sudo yum install -<span class="keyword">y</span> yum-utils device-mapper-persistent-data lvm2</span><br><span class="line">sudo yum-config-manager \</span><br><span class="line">    --<span class="built_in">add</span>-repo \</span><br><span class="line">    http<span class="variable">s:</span>//download.docker.<span class="keyword">com</span>/linux/centos/docker-<span class="keyword">ce</span>.repo</span><br><span class="line">sudo yum install docker-<span class="keyword">ce</span> docker-<span class="keyword">ce</span>-cli containerd.io</span><br><span class="line">systemctl enable docker </span><br><span class="line">systemctl start docker</span><br><span class="line">docker run -d -<span class="keyword">p</span> <span class="number">25</span>:<span class="number">25</span> -<span class="keyword">p</span> <span class="number">3000</span>:<span class="number">3000</span> denghongcai/forsaken-mai<span class="variable">l:latest</span></span><br><span class="line">sudo yum install epel-release</span><br><span class="line">yum -<span class="keyword">y</span> install caddy</span><br><span class="line">systemctl enable caddy</span><br></pre></td></tr></table></figure>
 <p>上述命令执行完毕后，进行文章中的第二步操作，配置caddy</p>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>crontab相关</title>
+    <url>/posts/1bfd1149/</url>
+    <content><![CDATA[<blockquote>
+<p>记录crontab相关的操作以及问题</p>
+</blockquote>
+<span id="more"></span>
+
+<h1 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h1><h2 id="1-var-log-目录下没有cron开头的日志文件"><a href="#1-var-log-目录下没有cron开头的日志文件" class="headerlink" title="1. /var/log/目录下没有cron开头的日志文件"></a>1. /var/log/目录下没有cron开头的日志文件</h2><p>(1) 修改<code>/etc/rsyslog.d/50-default.conf </code>文件，将文件中的  <code>#cron.*  </code>前的  <code>#</code>  删掉。</p>
+<p>​        如果没有<code>50-default.conf</code>文件，可以看<code>/etc/rsyslog.conf</code>是否包含<code>#cron.*  </code>，从而进行相应修改</p>
+<p>(2) 执行以下命令</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">service rsyslog restart</span><br><span class="line">service cron restart</span><br></pre></td></tr></table></figure>
+
+<p>(3) 最后查看日志文件</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tail /var/<span class="built_in">log</span>/cron.log </span><br></pre></td></tr></table></figure>
+
+<h2 id="2-修改cron日志文件中的时区"><a href="#2-修改cron日志文件中的时区" class="headerlink" title="2. 修改cron日志文件中的时区"></a>2. 修改cron日志文件中的时区</h2><figure class="highlight dsconfig"><table><tr><td class="code"><pre><span class="line"><span class="string">timedatectl</span> <span class="built_in">set-timezone</span> <span class="string">&quot;Asia/Shanghai&quot;</span></span><br><span class="line"><span class="string">service</span> <span class="string">rsyslog</span> <span class="string">restart</span></span><br><span class="line"><span class="string">service</span> <span class="string">cron</span> <span class="string">restart</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="3-测试服务器是否被封禁邮件端口"><a href="#3-测试服务器是否被封禁邮件端口" class="headerlink" title="3. 测试服务器是否被封禁邮件端口"></a>3. 测试服务器是否被封禁邮件端口</h2><figure class="highlight tap"><table><tr><td class="code"><pre><span class="line">apt-get install telnet <span class="comment"># 安装</span></span><br><span class="line">telnet smtp.qq.com<span class="number"> 25 </span><span class="comment"># 测试25端口</span></span><br><span class="line">telnet smtp.qq.com<span class="number"> 465 </span><span class="comment"># 测试465端口</span></span><br></pre></td></tr></table></figure>
+
+<p>如果一直trying，则表明端口被封禁，正常情况下返回数据。</p>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>GNUTool</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>docker常用命令总结</title>
+    <url>/posts/8c6dafda/</url>
+    <content><![CDATA[<blockquote>
+<p>记录一下docker命令。</p>
+</blockquote>
+<span id="more"></span>
+<h2 id="一键安装脚本"><a href="#一键安装脚本" class="headerlink" title="一键安装脚本"></a>一键安装脚本</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget -qO- get.docker.com | sh  <span class="comment">#官方安装</span></span><br><span class="line">curl -sSL https://get.daocloud.io/docker | sh  <span class="comment">#国内daodocker安装,推荐</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker ps -a      // 查看所有容器</span><br><span class="line">docker images     // 查看所有镜像</span><br><span class="line">docker run REPOSITORY/TAG  //创建容器</span><br><span class="line">docker start ID //启动容器</span><br><span class="line">docker stop ID  //停止容器</span><br><span class="line">docker rm ID    //删除容器</span><br><span class="line">docker system df //查看容器使用的磁盘空间</span><br><span class="line">docker system prune -a //对 docker 进行全面垃圾回收,慎用</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200401115748.png"></p>
+<h2 id="镜像备份和加载"><a href="#镜像备份和加载" class="headerlink" title="镜像备份和加载"></a>镜像备份和加载</h2><blockquote>
+<p>可以用于将国外服务器pull的镜像备份，在国内服务器load镜像</p>
+</blockquote>
+<ul>
+<li><p>save备份</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker save -o backup.tar &lt;IMAGEID&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>load加载</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker load -i backup.tar</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="docker国内加速"><a href="#docker国内加速" class="headerlink" title="docker国内加速"></a>docker国内加速</h2><ul>
+<li><p><strong>方式一</strong>：指定pull源</p>
+<p>例如：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker pull wixr7yss.mirror.aliyuncs.com/ruibaby/halo:latest</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>方式二</strong>：修改全局配置文件</p>
+<p>修改<code>/etc/docker/daemon.json</code>文件内容如下，如果没有该文件就直接创建</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;registry-mirrors&quot;</span>: [<span class="string">&quot;https://wixr7yss.mirror.aliyuncs.com/&quot;</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>重启docker</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl restart docker</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>方式三</strong>: 使用<code>daocloud</code>加速</p>
+<p>具体查找网站其他教程，官方网站网址：<a href="https://www.daocloud.io/">https://www.daocloud.io/</a></p>
+</li>
+</ul>
 ]]></content>
       <categories>
         <category>linux</category>
@@ -2286,6 +2331,39 @@ docker部署
       </tags>
   </entry>
   <entry>
+    <title>hexo本地项目迁移(更换文件夹)</title>
+    <url>/posts/ae561650/</url>
+    <content><![CDATA[<blockquote>
+<p>有时候, 我们可能需要将本地hexo博客项目备份, 或者将本地项目换个文件夹.<br>但是如果我们直接将文件夹移动位置时会发现移动后输入hexo s启动报错,所以我们有必要知道如何将本地项目更换文件夹.<br>如果能做到这一点, 我们还可以备份到另一台电脑, 在其他环境重新编辑部署hexo博客.</p>
+</blockquote>
+<span id="more"></span>
+
+<blockquote>
+<p>进入正题, 简单的三个步骤: </p>
+</blockquote>
+<ol>
+<li><p>在新环境下新建文件夹<br> 新建的文件夹用来放置之前的项目<br> 注意: <strong>不要用hexo init初始化</strong></p>
+</li>
+<li><p>复制原先项目文件<br> 这里我们只需要复制除了.deploy_git, node_modules, public三个文件夹之外, 其他的文件全部复制到新建文件夹里面.</p>
+</li>
+<li><p>安装所需插件(node_modules)<br>在新建文件夹内, 右键git bash here<br>输入命令:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install //已经安装阿里镜像的可以用cnpm install</span><br></pre></td></tr></table></figure>
+<p>这一步是根据package.json文件安装需要的模块, 具体文件内容可以自己打开看看.</p>
+</li>
+</ol>
+<p>这样我们就完成了项目迁移!</p>
+<blockquote>
+<p>如果想知道如何迁移到其他电脑,可以参考这个博客:<br><a href="https://andyvj.coding.me/2019/02/19/190219-03/">hexo 迁移更换电脑，或多电脑终端更新博客</a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>博客</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>ffmpeg常用命令总结</title>
     <url>/posts/d827b859/</url>
     <content><![CDATA[<blockquote>
@@ -2343,84 +2421,6 @@ docker部署
       </categories>
       <tags>
         <tag>命令总结</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>docker常用命令总结</title>
-    <url>/posts/8c6dafda/</url>
-    <content><![CDATA[<blockquote>
-<p>记录一下docker命令。</p>
-</blockquote>
-<span id="more"></span>
-<h2 id="一键安装脚本"><a href="#一键安装脚本" class="headerlink" title="一键安装脚本"></a>一键安装脚本</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget -qO- get.docker.com | sh  <span class="comment">#官方安装</span></span><br><span class="line">curl -sSL https://get.daocloud.io/docker | sh  <span class="comment">#国内daodocker安装,推荐</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker ps -a      // 查看所有容器</span><br><span class="line">docker images     // 查看所有镜像</span><br><span class="line">docker run REPOSITORY/TAG  //创建容器</span><br><span class="line">docker start ID //启动容器</span><br><span class="line">docker stop ID  //停止容器</span><br><span class="line">docker rm ID    //删除容器</span><br><span class="line">docker system df //查看容器使用的磁盘空间</span><br><span class="line">docker system prune -a //对 docker 进行全面垃圾回收,慎用</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200401115748.png"></p>
-<h2 id="镜像备份和加载"><a href="#镜像备份和加载" class="headerlink" title="镜像备份和加载"></a>镜像备份和加载</h2><blockquote>
-<p>可以用于将国外服务器pull的镜像备份，在国内服务器load镜像</p>
-</blockquote>
-<ul>
-<li><p>save备份</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker save -o backup.tar &lt;IMAGEID&gt;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>load加载</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker load -i backup.tar</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<h2 id="docker国内加速"><a href="#docker国内加速" class="headerlink" title="docker国内加速"></a>docker国内加速</h2><ul>
-<li><p><strong>方式一</strong>：指定pull源</p>
-<p>例如：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker pull wixr7yss.mirror.aliyuncs.com/ruibaby/halo:latest</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>方式二</strong>：修改全局配置文件</p>
-<p>修改<code>/etc/docker/daemon.json</code>文件内容如下，如果没有该文件就直接创建</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;registry-mirrors&quot;</span>: [<span class="string">&quot;https://wixr7yss.mirror.aliyuncs.com/&quot;</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>重启docker</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl restart docker</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>方式三</strong>: 使用<code>daocloud</code>加速</p>
-<p>具体查找网站其他教程，官方网站网址：<a href="https://www.daocloud.io/">https://www.daocloud.io/</a></p>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>hexo本地项目迁移(更换文件夹)</title>
-    <url>/posts/ae561650/</url>
-    <content><![CDATA[<blockquote>
-<p>有时候, 我们可能需要将本地hexo博客项目备份, 或者将本地项目换个文件夹.<br>但是如果我们直接将文件夹移动位置时会发现移动后输入hexo s启动报错,所以我们有必要知道如何将本地项目更换文件夹.<br>如果能做到这一点, 我们还可以备份到另一台电脑, 在其他环境重新编辑部署hexo博客.</p>
-</blockquote>
-<span id="more"></span>
-
-<blockquote>
-<p>进入正题, 简单的三个步骤: </p>
-</blockquote>
-<ol>
-<li><p>在新环境下新建文件夹<br> 新建的文件夹用来放置之前的项目<br> 注意: <strong>不要用hexo init初始化</strong></p>
-</li>
-<li><p>复制原先项目文件<br> 这里我们只需要复制除了.deploy_git, node_modules, public三个文件夹之外, 其他的文件全部复制到新建文件夹里面.</p>
-</li>
-<li><p>安装所需插件(node_modules)<br>在新建文件夹内, 右键git bash here<br>输入命令:</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install //已经安装阿里镜像的可以用cnpm install</span><br></pre></td></tr></table></figure>
-<p>这一步是根据package.json文件安装需要的模块, 具体文件内容可以自己打开看看.</p>
-</li>
-</ol>
-<p>这样我们就完成了项目迁移!</p>
-<blockquote>
-<p>如果想知道如何迁移到其他电脑,可以参考这个博客:<br><a href="https://andyvj.coding.me/2019/02/19/190219-03/">hexo 迁移更换电脑，或多电脑终端更新博客</a></p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>博客</category>
-      </categories>
-      <tags>
-        <tag>hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -3543,6 +3543,106 @@ docker部署
       </categories>
   </entry>
   <entry>
+    <title>unix网络编程2-IPC-0-前言</title>
+    <url>/posts/3b3b119c/</url>
+    <content><![CDATA[<p>由于本学期操作系统课设选择了linux的进程通信，准备学习《unix网络编程卷2: 进程间通信》。这门书英文版为《UNIX NETWORK Programming, volume 2, Second Edition: Interprocss Communications》，该版出版于2015年。</p>
+<span id="more"></span>
+
+<p>目前不太了解linux和unix在IPC这一部分的区别，希望大致相同吧，准备写博客记录这些知识。</p>
+<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>大部分程序都涉及到进程间通信（Interprocess Communication, IPC），这是受这个设计原则影响的结果：<strong>把应用程序设计为一组相互通信的小片段比将其设计为单个庞大的程序更好</strong>。</p>
+<p>从历史角度看，应用程序有以下几种构建方法：</p>
+<p>(1) 用一个庞大的的程序完成全部工作。程序的各部分实现为<strong>函数</strong>，函数之间通过<strong>参数</strong>、<strong>返回值</strong>和<strong>全局变量</strong>来交换 信息。<br>(2) 使用多个程序(个人理解为进程)，程序之间用某种形式的IPC通信。许多标准的unix工具都是按照这种风格设计的，它们使用shell管道（IPC的一种形式）在程序之间的传递信息。</p>
+<p>(3) 使用一个包含多个线程的程序，线程之间通过某种IPC（假定认为是在进程之间进行的）</p>
+<div class="note default"><p>还可以把后两种设计形式结合起来：用多个进程实现，每个进程包含几个线程，进程内部线程之间可以通信，不同进程之间也可以通信。</p>
+</div>
+
+<h1 id="本书主要描述的IPC形式"><a href="#本书主要描述的IPC形式" class="headerlink" title="本书主要描述的IPC形式"></a>本书主要描述的IPC形式</h1><p>IPC可以分为非网络IPC（本书第2卷）和网络IPC（本书第1卷）。本书主要讲述非网络IPC，详细描述了以下4种不同的IPC形式：</p>
+<ul>
+<li>消息传递（管道、FIFO和消息队列）</li>
+<li>同步（互斥量、条件变量、读写锁、文件与记录锁、信号量）</li>
+<li>共享内存（匿名的和有名的）</li>
+<li>远程过程调用（Solaris门和Sun RPC）</li>
+</ul>
+<h1 id="代码下载"><a href="#代码下载" class="headerlink" title="代码下载"></a>代码下载</h1><p><a href="https://www.ituring.com.cn/book/156">https://www.ituring.com.cn/book/156</a></p>
+<h1 id="Linux的进程通信"><a href="#Linux的进程通信" class="headerlink" title="Linux的进程通信"></a>Linux的进程通信</h1><p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-07/20200731220232.png"></p>
+]]></content>
+      <categories>
+        <category>unix</category>
+      </categories>
+      <tags>
+        <tag>unix</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>unix网络编程2-IPC-2-Posix IPC</title>
+    <url>/posts/f9ac59e8/</url>
+    <content><![CDATA[<p>继续学习《unix网络编程卷2: 进程间通信》，本篇主要记录第2章 Posix IPC 的相关内容。</p>
+<span id="more"></span>
+
+<h1 id="2-1-概述"><a href="#2-1-概述" class="headerlink" title="2.1 概述"></a>2.1 概述</h1><p>以下三种类型的IPC合称为<code>Posix IPC</code>.</p>
+<ul>
+<li>Posix 消息队列</li>
+<li>Posix 信号量</li>
+<li>Posix 共享内存区</li>
+</ul>
+<p>Posix IPC 在访问它们的函数和描述它们的信息上是有一些相似的。</p>
+<p>本章主要讲述这些IPC的共同属性：<code>用于标识的路径名</code>、<code>打开或创建时指定的标志</code>和<code>访问权限</code>。</p>
+<p>下图汇总了所有IPC Posix函数。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-08/20200801084330.png"></p>
+<h1 id="2-2-IPC名字"><a href="#2-2-IPC名字" class="headerlink" title="2.2 IPC名字"></a>2.2 IPC名字</h1><p>第一章的图1.4中指出，三种类型的Poix IPC都使用<code>Posix IPC名字</code>进行标识。mq_open、sem_open和shm_open这三个函数的第一个参数就是这样的名字，<strong>它可能是某个文件系统中的一个真正的路径名，也可能不是</strong>。Posix.1中是这么描述Posix IPC名字的：</p>
+<ul>
+<li><p>它必须符合已有的路径名规则（必须最多由PATH_MAX个字节构成，包括结尾的空字节）</p>
+</li>
+<li><p>如果它以斜杠符开头，那么对<strong>这些函数的不同调用将访问同一个队列</strong>，如果它不以斜杠符开头，那么<strong>效果取决于实现</strong>。</p>
+</li>
+<li><p>名字中额外的斜杠符的解释由实现定义。</p>
+</li>
+</ul>
+<div class="note default"><p>因此，为了便于移植起见，Posix IPC名字必须以一个斜杠符开头，并且不能再包含其他斜杠符。</p>
+<p>遗憾的是，这些规则还不够，仍会出现移植性问题。</p>
+</div>
+
+<p>Solaris 2.6要求有打头的斜杠符，但是不允许有另外的斜杠符。假设要创建的是一个消息队列，创建函数将在/tmp中创建三个以.MQ开头的文件。例如，如果给mg_open的参数为/queue.1234，那么这三个文件分别为 /tmp/.MQDqueue.1234、/tmp/.MQLqueue.1234和/tmp/.MQPqueue.1234。Digital Unix 4.0B则在文件系统中创建所指定的文件名。</p>
+<p>当我们指定三个斜杠符（作为首字母）的名字时，移植性问题就发生了：<strong>我们必须在根目录中具有写权限</strong>。例如，/tmp.1234符合Posix规则，在Solaris下也可行，但是Digital Unix却会试图创建这个文件，这是除非我们有在根目录中的写权限，否则这样的尝试会失败。如果我们指定一个/tmp/test.1234的名字，那么在以该名字创建一个真正文件的所有系统上都将成功（前提是/tmp目录存在，而且具有写权限，对于多数unix系统来说，这是正常情况），<strong>在soloris下则失败</strong>。</p>
+<p>为避免这些移植性问题，我们应把Posix IPC名字的#define行放在一个便于修改的头文件中，这样应用程序转移到另一个系统上时，只需修改这个头文件。</p>
+<h2 id="px-ipc-name函数"><a href="#px-ipc-name函数" class="headerlink" title="px_ipc_name函数"></a>px_ipc_name函数</h2><p>解决上述移植性问题的另一种方案是自己定义一个名为px_ipx_name的函数，它为定位Posix IPC名字而添加上正确的前缀目录。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;unpipc.h&quot;</span></span></span><br><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">px_ipc_name</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span>; </span><br></pre></td></tr></table></figure>
+
+<p>参数name不能包含任何斜杠符。例如调用：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">px_ipc_name(<span class="string">&quot;test1&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>在solaris 2.6下该函数将返回一个执行字符串 /test1 的指针，在Digital Uninx 4.0B下返回一个指向字符串/tmp/test1的指针。存放结果的字符串的内存空间是动态分配的，并可通过调用free释放。另外，环境变量<code>PX_IPC_NAME</code>能够覆盖默认目录。</p>
+<p>下面给出了px_ipc_name函数的实现。</p>
+<figure class="highlight c"><figcaption><span>lib/px_ipc_name.c</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="comment">/* include px_ipc_name */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span>	<span class="meta-string">&quot;unpipc.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">char</span> *</span></span><br><span class="line"><span class="function"><span class="title">px_ipc_name</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span>	*dir, *dst, *slash;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ( (dst = <span class="built_in">malloc</span>(PATH_MAX)) == <span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span>(<span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* 4can override default directory with environment variable */</span></span><br><span class="line">    <span class="keyword">if</span> ( (dir = getenv(<span class="string">&quot;PX_IPC_NAME&quot;</span>)) == <span class="literal">NULL</span>) &#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span>	POSIX_IPC_PREFIX</span></span><br><span class="line">        dir = POSIX_IPC_PREFIX;		<span class="comment">/* from &quot;config.h&quot; */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line">        dir = <span class="string">&quot;/tmp/&quot;</span>;				<span class="comment">/* default */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">    &#125;</span><br><span class="line">        <span class="comment">/* 4dir must end in a slash */</span></span><br><span class="line">    slash = (dir[<span class="built_in">strlen</span>(dir) - <span class="number">1</span>] == <span class="string">&#x27;/&#x27;</span>) ? <span class="string">&quot;&quot;</span> : <span class="string">&quot;/&quot;</span>;</span><br><span class="line">    <span class="built_in">snprintf</span>(dst, PATH_MAX, <span class="string">&quot;%s%s%s&quot;</span>, dir, slash, name);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span>(dst);			<span class="comment">/* caller can free() this pointer */</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* end px_ipc_name */</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">char</span> *</span></span><br><span class="line"><span class="function"><span class="title">Px_ipc_name</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span>	*ptr;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ( (ptr = px_ipc_name(name)) == <span class="literal">NULL</span>)</span><br><span class="line">        err_sys(<span class="string">&quot;px_ipc_name error for %s&quot;</span>, name);</span><br><span class="line">    <span class="keyword">return</span>(ptr);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<div class="note primary"><p>snprintf函数与sprintf函数的区别在于前者能检查目标缓存区是否溢出，snprintf函数第二个参数是目标缓冲区的大小。</p>
+</div>
+
+<h1 id="2-3-创建或打开IPC对象"><a href="#2-3-创建或打开IPC对象" class="headerlink" title="2.3 创建或打开IPC对象"></a>2.3 创建或打开IPC对象</h1><p>mq_open、sem_open和shm_open这三个创建或打开一个IPC对象的函数，它们的名为oflag的第二个参数指定应该怎么打开所请求的对象。这个标准open函数的第二个参数类似。下图给出了可组合构成该参数的各种常值。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-08/20200801095840.png"></p>
+<p>前三行指定应该怎样打开对象：只读、只写或读写。消息队列能以其中任何一种模式打开，信号量的打开不指定任何模式（任意信号量操作，都需读写要访问权限），共享内存区对象则不能以只写模式打开。</p>
+<p>后四行的标志是可选的。</p>
+<div class="tabs" id="1"><ul class="nav-tabs"><li class="tab active"><a href="#1-1">O_CREAT</a></li><li class="tab"><a href="#1-2">O_EXCL</a></li><li class="tab"><a href="#1-3">O_NONBLOCK</a></li><li class="tab"><a href="#1-4">O_TRUNC</a></li></ul><div class="tab-content"><div class="tab-pane active" id="1-1"><p>若不存在则创建由函数第一个参数所指定名字的消息队列、信号量或共享内存区对象，同时检查O_EXCL标志。</p>
+<p>创建一个新的消息队列、信号量或共享内存区对象时，至少需要另外一个称为<code>mode</code>的参数。该参数指定权限位，它是由下图中所示常值按位或组成的。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-08/20200801101351.png"></p>
+<p>同新创建的文件一样，当创建一个新的消息队列、信号量或共享内存区对象时，其用户ID被置为当前进程的有效用户ID。信号量和共享内存区对象的组ID被置为当前进程的而有效组ID或某个系统默认组ID。新消息队列对象的组ID被置为当前进程的有效组ID。</p>
+<div class="note warning"><p>这三种IPC对象在设置组ID上存在的差异多少有点奇怪。由open新创建的文件组ID或者是当前进程的有效组ID或是该文件所在目录的组ID，但是IPC函数不能假定系统为IPC对象创建了一个在文件系统中的路径。</p>
+</div></div><div class="tab-pane" id="1-2"><p>如果该参数和O_CREAT参数一起指定，那么IPC函数只在所指定名字的消息队列、信号量或共享内存区对象不存在时创建新的对象。如果该对象已经存在，而且指定了O_CREAT | O_EXCL，那么返回一个EEXIST错误。</p>
+<p>考虑到其他进程的存在，检查所指定名字的消息队列、信号量或共享内存区对象的存在与否和创建它（如果它不存在）这两步必须是原子的。</p></div><div class="tab-pane" id="1-3"><p>该标志使一个消息队列在队列为空时的读或队列填满时的写不被阻塞。</p></div><div class="tab-pane" id="1-4"><p>如果以写模式打开了一个已存在的共享内存区对象，那么该标志将使得该对象的长度被截成0.</p></div></div></div>
+
+<p>图2.5给出了打开一个IPC对象的真正逻辑流程。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-08/20200801104130.png"></p>
+<p><strong>注</strong>：如图2.6所示，如果oflag标志只指定O_CREAT，就无法区分是创建了一个新对象，还是引用了一个已经存在的对象。</p>
+<h1 id="2-4-IPC权限"><a href="#2-4-IPC权限" class="headerlink" title="2.4 IPC权限"></a>2.4 IPC权限</h1><p>新的消息队列、有名信号量或共享内存区对象是由其oflag参数中含有O_CREAT标志的mq_open、sem_open或shm_open函数创建的。如图2-4所注，权限位与这些类型的每个对象相关联，就像它们与每个Unix文件一样。<br><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-08/20200801105611.png"></p>
+]]></content>
+      <categories>
+        <category>unix</category>
+      </categories>
+      <tags>
+        <tag>unix</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>unix网络编程2-IPC-1-简介</title>
     <url>/posts/c4f5fabe/</url>
     <content><![CDATA[<p>继续学习《unix网络编程卷2: 进程间通信》，本篇主要记录第一章简介的相关内容。</p>
@@ -3664,75 +3764,6 @@ docker部署
       </categories>
   </entry>
   <entry>
-    <title>unix网络编程2-IPC-2-Posix IPC</title>
-    <url>/posts/f9ac59e8/</url>
-    <content><![CDATA[<p>继续学习《unix网络编程卷2: 进程间通信》，本篇主要记录第2章 Posix IPC 的相关内容。</p>
-<span id="more"></span>
-
-<h1 id="2-1-概述"><a href="#2-1-概述" class="headerlink" title="2.1 概述"></a>2.1 概述</h1><p>以下三种类型的IPC合称为<code>Posix IPC</code>.</p>
-<ul>
-<li>Posix 消息队列</li>
-<li>Posix 信号量</li>
-<li>Posix 共享内存区</li>
-</ul>
-<p>Posix IPC 在访问它们的函数和描述它们的信息上是有一些相似的。</p>
-<p>本章主要讲述这些IPC的共同属性：<code>用于标识的路径名</code>、<code>打开或创建时指定的标志</code>和<code>访问权限</code>。</p>
-<p>下图汇总了所有IPC Posix函数。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-08/20200801084330.png"></p>
-<h1 id="2-2-IPC名字"><a href="#2-2-IPC名字" class="headerlink" title="2.2 IPC名字"></a>2.2 IPC名字</h1><p>第一章的图1.4中指出，三种类型的Poix IPC都使用<code>Posix IPC名字</code>进行标识。mq_open、sem_open和shm_open这三个函数的第一个参数就是这样的名字，<strong>它可能是某个文件系统中的一个真正的路径名，也可能不是</strong>。Posix.1中是这么描述Posix IPC名字的：</p>
-<ul>
-<li><p>它必须符合已有的路径名规则（必须最多由PATH_MAX个字节构成，包括结尾的空字节）</p>
-</li>
-<li><p>如果它以斜杠符开头，那么对<strong>这些函数的不同调用将访问同一个队列</strong>，如果它不以斜杠符开头，那么<strong>效果取决于实现</strong>。</p>
-</li>
-<li><p>名字中额外的斜杠符的解释由实现定义。</p>
-</li>
-</ul>
-<div class="note default"><p>因此，为了便于移植起见，Posix IPC名字必须以一个斜杠符开头，并且不能再包含其他斜杠符。</p>
-<p>遗憾的是，这些规则还不够，仍会出现移植性问题。</p>
-</div>
-
-<p>Solaris 2.6要求有打头的斜杠符，但是不允许有另外的斜杠符。假设要创建的是一个消息队列，创建函数将在/tmp中创建三个以.MQ开头的文件。例如，如果给mg_open的参数为/queue.1234，那么这三个文件分别为 /tmp/.MQDqueue.1234、/tmp/.MQLqueue.1234和/tmp/.MQPqueue.1234。Digital Unix 4.0B则在文件系统中创建所指定的文件名。</p>
-<p>当我们指定三个斜杠符（作为首字母）的名字时，移植性问题就发生了：<strong>我们必须在根目录中具有写权限</strong>。例如，/tmp.1234符合Posix规则，在Solaris下也可行，但是Digital Unix却会试图创建这个文件，这是除非我们有在根目录中的写权限，否则这样的尝试会失败。如果我们指定一个/tmp/test.1234的名字，那么在以该名字创建一个真正文件的所有系统上都将成功（前提是/tmp目录存在，而且具有写权限，对于多数unix系统来说，这是正常情况），<strong>在soloris下则失败</strong>。</p>
-<p>为避免这些移植性问题，我们应把Posix IPC名字的#define行放在一个便于修改的头文件中，这样应用程序转移到另一个系统上时，只需修改这个头文件。</p>
-<h2 id="px-ipc-name函数"><a href="#px-ipc-name函数" class="headerlink" title="px_ipc_name函数"></a>px_ipc_name函数</h2><p>解决上述移植性问题的另一种方案是自己定义一个名为px_ipx_name的函数，它为定位Posix IPC名字而添加上正确的前缀目录。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;unpipc.h&quot;</span></span></span><br><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">px_ipc_name</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span>; </span><br></pre></td></tr></table></figure>
-
-<p>参数name不能包含任何斜杠符。例如调用：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">px_ipc_name(<span class="string">&quot;test1&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-<p>在solaris 2.6下该函数将返回一个执行字符串 /test1 的指针，在Digital Uninx 4.0B下返回一个指向字符串/tmp/test1的指针。存放结果的字符串的内存空间是动态分配的，并可通过调用free释放。另外，环境变量<code>PX_IPC_NAME</code>能够覆盖默认目录。</p>
-<p>下面给出了px_ipc_name函数的实现。</p>
-<figure class="highlight c"><figcaption><span>lib/px_ipc_name.c</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="comment">/* include px_ipc_name */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span>	<span class="meta-string">&quot;unpipc.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">char</span> *</span></span><br><span class="line"><span class="function"><span class="title">px_ipc_name</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span>	*dir, *dst, *slash;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ( (dst = <span class="built_in">malloc</span>(PATH_MAX)) == <span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span>(<span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* 4can override default directory with environment variable */</span></span><br><span class="line">    <span class="keyword">if</span> ( (dir = getenv(<span class="string">&quot;PX_IPC_NAME&quot;</span>)) == <span class="literal">NULL</span>) &#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span>	POSIX_IPC_PREFIX</span></span><br><span class="line">        dir = POSIX_IPC_PREFIX;		<span class="comment">/* from &quot;config.h&quot; */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line">        dir = <span class="string">&quot;/tmp/&quot;</span>;				<span class="comment">/* default */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">    &#125;</span><br><span class="line">        <span class="comment">/* 4dir must end in a slash */</span></span><br><span class="line">    slash = (dir[<span class="built_in">strlen</span>(dir) - <span class="number">1</span>] == <span class="string">&#x27;/&#x27;</span>) ? <span class="string">&quot;&quot;</span> : <span class="string">&quot;/&quot;</span>;</span><br><span class="line">    <span class="built_in">snprintf</span>(dst, PATH_MAX, <span class="string">&quot;%s%s%s&quot;</span>, dir, slash, name);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span>(dst);			<span class="comment">/* caller can free() this pointer */</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* end px_ipc_name */</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">char</span> *</span></span><br><span class="line"><span class="function"><span class="title">Px_ipc_name</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span>	*ptr;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ( (ptr = px_ipc_name(name)) == <span class="literal">NULL</span>)</span><br><span class="line">        err_sys(<span class="string">&quot;px_ipc_name error for %s&quot;</span>, name);</span><br><span class="line">    <span class="keyword">return</span>(ptr);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<div class="note primary"><p>snprintf函数与sprintf函数的区别在于前者能检查目标缓存区是否溢出，snprintf函数第二个参数是目标缓冲区的大小。</p>
-</div>
-
-<h1 id="2-3-创建或打开IPC对象"><a href="#2-3-创建或打开IPC对象" class="headerlink" title="2.3 创建或打开IPC对象"></a>2.3 创建或打开IPC对象</h1><p>mq_open、sem_open和shm_open这三个创建或打开一个IPC对象的函数，它们的名为oflag的第二个参数指定应该怎么打开所请求的对象。这个标准open函数的第二个参数类似。下图给出了可组合构成该参数的各种常值。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-08/20200801095840.png"></p>
-<p>前三行指定应该怎样打开对象：只读、只写或读写。消息队列能以其中任何一种模式打开，信号量的打开不指定任何模式（任意信号量操作，都需读写要访问权限），共享内存区对象则不能以只写模式打开。</p>
-<p>后四行的标志是可选的。</p>
-<div class="tabs" id="1"><ul class="nav-tabs"><li class="tab active"><a href="#1-1">O_CREAT</a></li><li class="tab"><a href="#1-2">O_EXCL</a></li><li class="tab"><a href="#1-3">O_NONBLOCK</a></li><li class="tab"><a href="#1-4">O_TRUNC</a></li></ul><div class="tab-content"><div class="tab-pane active" id="1-1"><p>若不存在则创建由函数第一个参数所指定名字的消息队列、信号量或共享内存区对象，同时检查O_EXCL标志。</p>
-<p>创建一个新的消息队列、信号量或共享内存区对象时，至少需要另外一个称为<code>mode</code>的参数。该参数指定权限位，它是由下图中所示常值按位或组成的。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-08/20200801101351.png"></p>
-<p>同新创建的文件一样，当创建一个新的消息队列、信号量或共享内存区对象时，其用户ID被置为当前进程的有效用户ID。信号量和共享内存区对象的组ID被置为当前进程的而有效组ID或某个系统默认组ID。新消息队列对象的组ID被置为当前进程的有效组ID。</p>
-<div class="note warning"><p>这三种IPC对象在设置组ID上存在的差异多少有点奇怪。由open新创建的文件组ID或者是当前进程的有效组ID或是该文件所在目录的组ID，但是IPC函数不能假定系统为IPC对象创建了一个在文件系统中的路径。</p>
-</div></div><div class="tab-pane" id="1-2"><p>如果该参数和O_CREAT参数一起指定，那么IPC函数只在所指定名字的消息队列、信号量或共享内存区对象不存在时创建新的对象。如果该对象已经存在，而且指定了O_CREAT | O_EXCL，那么返回一个EEXIST错误。</p>
-<p>考虑到其他进程的存在，检查所指定名字的消息队列、信号量或共享内存区对象的存在与否和创建它（如果它不存在）这两步必须是原子的。</p></div><div class="tab-pane" id="1-3"><p>该标志使一个消息队列在队列为空时的读或队列填满时的写不被阻塞。</p></div><div class="tab-pane" id="1-4"><p>如果以写模式打开了一个已存在的共享内存区对象，那么该标志将使得该对象的长度被截成0.</p></div></div></div>
-
-<p>图2.5给出了打开一个IPC对象的真正逻辑流程。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-08/20200801104130.png"></p>
-<p><strong>注</strong>：如图2.6所示，如果oflag标志只指定O_CREAT，就无法区分是创建了一个新对象，还是引用了一个已经存在的对象。</p>
-<h1 id="2-4-IPC权限"><a href="#2-4-IPC权限" class="headerlink" title="2.4 IPC权限"></a>2.4 IPC权限</h1><p>新的消息队列、有名信号量或共享内存区对象是由其oflag参数中含有O_CREAT标志的mq_open、sem_open或shm_open函数创建的。如图2-4所注，权限位与这些类型的每个对象相关联，就像它们与每个Unix文件一样。<br><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-08/20200801105611.png"></p>
-]]></content>
-      <categories>
-        <category>unix</category>
-      </categories>
-      <tags>
-        <tag>unix</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>xshell密钥登录服务器的配置过程</title>
     <url>/posts/344ac519/</url>
     <content><![CDATA[<ul>
@@ -3797,58 +3828,6 @@ docker部署
       <categories>
         <category>linux</category>
       </categories>
-  </entry>
-  <entry>
-    <title>搭建文件服务器</title>
-    <url>/posts/3937af73/</url>
-    <content><![CDATA[<blockquote>
-<p>记录搭建文件服务器的几种方式</p>
-</blockquote>
-<span id="more"></span>
-
-<h1 id="一、配置nginx文件搭建简单文件服务器"><a href="#一、配置nginx文件搭建简单文件服务器" class="headerlink" title="一、配置nginx文件搭建简单文件服务器"></a>一、配置nginx文件搭建简单文件服务器</h1><ol>
-<li>安装</li>
-</ol>
-<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line">yum -y <span class="keyword">install</span> nginx</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>创建并编辑配置文件</li>
-</ol>
-<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">touch <span class="regexp">/etc/</span>nginx<span class="regexp">/conf.d/</span>file_server.conf</span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li>配置文件内容模板</li>
-</ol>
-<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">  <span class="attribute">listen</span> <span class="number">2020</span>; </span><br><span class="line">  <span class="attribute">server_name</span> localhost; <span class="comment">#ip或者服务器的域名</span></span><br><span class="line">  <span class="attribute">charset</span> utf-<span class="number">8</span>; <span class="comment"># 避免中文乱码 </span></span><br><span class="line">  <span class="attribute">root</span> /var/file_server; <span class="comment"># 存放文件的目录 </span></span><br><span class="line">  <span class="attribute">location</span> / &#123; </span><br><span class="line">    <span class="attribute">autoindex</span> <span class="literal">on</span>; <span class="comment"># 索引 </span></span><br><span class="line">    <span class="attribute">autoindex_exact_size</span> <span class="literal">on</span>; <span class="comment"># 显示文件大小 </span></span><br><span class="line">    <span class="attribute">autoindex_localtime</span> <span class="literal">on</span>; <span class="comment"># 显示文件时间 </span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ol start="4">
-<li>启动nginx</li>
-</ol>
-<figure class="highlight crmsh"><table><tr><td class="code"><pre><span class="line">systemctl <span class="literal">start</span> nginx</span><br></pre></td></tr></table></figure>
-
-<p>创建成功演示：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-05/20200821000816.png"></p>
-<h1 id="二、使用github项目中的FileBrowser"><a href="#二、使用github项目中的FileBrowser" class="headerlink" title="二、使用github项目中的FileBrowser"></a>二、使用github项目中的FileBrowser</h1><p><strong>项目地址</strong>: <a href="https://github.com/filebrowser/filebrowser/">https://github.com/filebrowser/filebrowser/</a></p>
-<p>由于docker配置比较简单并且易于管理，所以选择docker安装filebrowser。</p>
-<p>命令参考：</p>
-<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">docker run \</span><br><span class="line">    -v <span class="regexp">/var/</span>file_server<span class="regexp">/:/</span>srv \</span><br><span class="line">    -v <span class="regexp">/var/</span>file_server_log<span class="regexp">/filebrowser.db:/</span>database.db \</span><br><span class="line">    -v <span class="regexp">/var/</span>file_server_log<span class="regexp">/.filebrowser.json:/</span>.filebrowser.json \</span><br><span class="line">    -p <span class="number">2020</span>:<span class="number">80</span> \</span><br><span class="line">    -d \</span><br><span class="line">    filebrowser/filebrowser</span><br></pre></td></tr></table></figure>
-
-<p>上述命令指定映射的需要显示文件的系统路径为<code>/var/file_server/</code></p>
-<p>运行上述命令前，需要将其中<code>/var/file_server_log/filebrowser.db</code>和<code>/var/file_server_log/.filebrowser.json</code>这两个文件先创建好，否则会报错。</p>
-<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">touch <span class="regexp">/var/</span>file_server_log/filebrowser.db</span><br><span class="line">touch <span class="regexp">/var/</span>file_server_log/.filebrowser.json</span><br></pre></td></tr></table></figure>
-
-<p>同时，.filebrowser.json 内容需要初始化一下，官方给出的内容如下：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;port&quot;</span>: <span class="number">80</span>,</span><br><span class="line">  <span class="attr">&quot;baseURL&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;address&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;log&quot;</span>: <span class="string">&quot;stdout&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;database&quot;</span>: <span class="string">&quot;/database.db&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;root&quot;</span>: <span class="string">&quot;/srv&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>创建成功演示如下图，第一次登陆时账号密码可以任意填写，作为新建的管理员账户。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-08/20200821000901.png"></p>
-]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>文件服务器</tag>
-      </tags>
   </entry>
   <entry>
     <title>在阿里服务器上利用宝塔面板+GIT搭建hexo博客</title>
@@ -3947,37 +3926,6 @@ docker部署
       </tags>
   </entry>
   <entry>
-    <title>unix网络编程2-IPC-0-前言</title>
-    <url>/posts/3b3b119c/</url>
-    <content><![CDATA[<p>由于本学期操作系统课设选择了linux的进程通信，准备学习《unix网络编程卷2: 进程间通信》。这门书英文版为《UNIX NETWORK Programming, volume 2, Second Edition: Interprocss Communications》，该版出版于2015年。</p>
-<span id="more"></span>
-
-<p>目前不太了解linux和unix在IPC这一部分的区别，希望大致相同吧，准备写博客记录这些知识。</p>
-<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>大部分程序都涉及到进程间通信（Interprocess Communication, IPC），这是受这个设计原则影响的结果：<strong>把应用程序设计为一组相互通信的小片段比将其设计为单个庞大的程序更好</strong>。</p>
-<p>从历史角度看，应用程序有以下几种构建方法：</p>
-<p>(1) 用一个庞大的的程序完成全部工作。程序的各部分实现为<strong>函数</strong>，函数之间通过<strong>参数</strong>、<strong>返回值</strong>和<strong>全局变量</strong>来交换 信息。<br>(2) 使用多个程序(个人理解为进程)，程序之间用某种形式的IPC通信。许多标准的unix工具都是按照这种风格设计的，它们使用shell管道（IPC的一种形式）在程序之间的传递信息。</p>
-<p>(3) 使用一个包含多个线程的程序，线程之间通过某种IPC（假定认为是在进程之间进行的）</p>
-<div class="note default"><p>还可以把后两种设计形式结合起来：用多个进程实现，每个进程包含几个线程，进程内部线程之间可以通信，不同进程之间也可以通信。</p>
-</div>
-
-<h1 id="本书主要描述的IPC形式"><a href="#本书主要描述的IPC形式" class="headerlink" title="本书主要描述的IPC形式"></a>本书主要描述的IPC形式</h1><p>IPC可以分为非网络IPC（本书第2卷）和网络IPC（本书第1卷）。本书主要讲述非网络IPC，详细描述了以下4种不同的IPC形式：</p>
-<ul>
-<li>消息传递（管道、FIFO和消息队列）</li>
-<li>同步（互斥量、条件变量、读写锁、文件与记录锁、信号量）</li>
-<li>共享内存（匿名的和有名的）</li>
-<li>远程过程调用（Solaris门和Sun RPC）</li>
-</ul>
-<h1 id="代码下载"><a href="#代码下载" class="headerlink" title="代码下载"></a>代码下载</h1><p><a href="https://www.ituring.com.cn/book/156">https://www.ituring.com.cn/book/156</a></p>
-<h1 id="Linux的进程通信"><a href="#Linux的进程通信" class="headerlink" title="Linux的进程通信"></a>Linux的进程通信</h1><p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-07/20200731220232.png"></p>
-]]></content>
-      <categories>
-        <category>unix</category>
-      </categories>
-      <tags>
-        <tag>unix</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>服务器禁止被ping</title>
     <url>/posts/6898a3ea/</url>
     <content><![CDATA[<blockquote>
@@ -4030,6 +3978,58 @@ docker部署
       </categories>
       <tags>
         <tag>安全</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>搭建文件服务器</title>
+    <url>/posts/3937af73/</url>
+    <content><![CDATA[<blockquote>
+<p>记录搭建文件服务器的几种方式</p>
+</blockquote>
+<span id="more"></span>
+
+<h1 id="一、配置nginx文件搭建简单文件服务器"><a href="#一、配置nginx文件搭建简单文件服务器" class="headerlink" title="一、配置nginx文件搭建简单文件服务器"></a>一、配置nginx文件搭建简单文件服务器</h1><ol>
+<li>安装</li>
+</ol>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line">yum -y <span class="keyword">install</span> nginx</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>创建并编辑配置文件</li>
+</ol>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">touch <span class="regexp">/etc/</span>nginx<span class="regexp">/conf.d/</span>file_server.conf</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>配置文件内容模板</li>
+</ol>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">  <span class="attribute">listen</span> <span class="number">2020</span>; </span><br><span class="line">  <span class="attribute">server_name</span> localhost; <span class="comment">#ip或者服务器的域名</span></span><br><span class="line">  <span class="attribute">charset</span> utf-<span class="number">8</span>; <span class="comment"># 避免中文乱码 </span></span><br><span class="line">  <span class="attribute">root</span> /var/file_server; <span class="comment"># 存放文件的目录 </span></span><br><span class="line">  <span class="attribute">location</span> / &#123; </span><br><span class="line">    <span class="attribute">autoindex</span> <span class="literal">on</span>; <span class="comment"># 索引 </span></span><br><span class="line">    <span class="attribute">autoindex_exact_size</span> <span class="literal">on</span>; <span class="comment"># 显示文件大小 </span></span><br><span class="line">    <span class="attribute">autoindex_localtime</span> <span class="literal">on</span>; <span class="comment"># 显示文件时间 </span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>启动nginx</li>
+</ol>
+<figure class="highlight crmsh"><table><tr><td class="code"><pre><span class="line">systemctl <span class="literal">start</span> nginx</span><br></pre></td></tr></table></figure>
+
+<p>创建成功演示：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-05/20200821000816.png"></p>
+<h1 id="二、使用github项目中的FileBrowser"><a href="#二、使用github项目中的FileBrowser" class="headerlink" title="二、使用github项目中的FileBrowser"></a>二、使用github项目中的FileBrowser</h1><p><strong>项目地址</strong>: <a href="https://github.com/filebrowser/filebrowser/">https://github.com/filebrowser/filebrowser/</a></p>
+<p>由于docker配置比较简单并且易于管理，所以选择docker安装filebrowser。</p>
+<p>命令参考：</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">docker run \</span><br><span class="line">    -v <span class="regexp">/var/</span>file_server<span class="regexp">/:/</span>srv \</span><br><span class="line">    -v <span class="regexp">/var/</span>file_server_log<span class="regexp">/filebrowser.db:/</span>database.db \</span><br><span class="line">    -v <span class="regexp">/var/</span>file_server_log<span class="regexp">/.filebrowser.json:/</span>.filebrowser.json \</span><br><span class="line">    -p <span class="number">2020</span>:<span class="number">80</span> \</span><br><span class="line">    -d \</span><br><span class="line">    filebrowser/filebrowser</span><br></pre></td></tr></table></figure>
+
+<p>上述命令指定映射的需要显示文件的系统路径为<code>/var/file_server/</code></p>
+<p>运行上述命令前，需要将其中<code>/var/file_server_log/filebrowser.db</code>和<code>/var/file_server_log/.filebrowser.json</code>这两个文件先创建好，否则会报错。</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">touch <span class="regexp">/var/</span>file_server_log/filebrowser.db</span><br><span class="line">touch <span class="regexp">/var/</span>file_server_log/.filebrowser.json</span><br></pre></td></tr></table></figure>
+
+<p>同时，.filebrowser.json 内容需要初始化一下，官方给出的内容如下：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;port&quot;</span>: <span class="number">80</span>,</span><br><span class="line">  <span class="attr">&quot;baseURL&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;address&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;log&quot;</span>: <span class="string">&quot;stdout&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;database&quot;</span>: <span class="string">&quot;/database.db&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;root&quot;</span>: <span class="string">&quot;/srv&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>创建成功演示如下图，第一次登陆时账号密码可以任意填写，作为新建的管理员账户。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-08/20200821000901.png"></p>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>文件服务器</tag>
       </tags>
   </entry>
   <entry>
@@ -4306,42 +4306,64 @@ docker部署
       </tags>
   </entry>
   <entry>
-    <title>解决Unix-like、Windows系统之间文本换行符不同的问题</title>
-    <url>/posts/8af9e030/</url>
+    <title>浪潮AIStation-jupyterlab配置</title>
+    <url>/posts/6t685a77/</url>
     <content><![CDATA[<blockquote>
-<p>参考博客 :point_right: <a href="https://sphenginx.github.io/2014/12/24/CRLF-in-Unix-like_Windows-os/">网址</a></p>
+<p>实验室深度学习服务器集群采用浪潮公司提供的AIStation，记录一些避坑要点</p>
 </blockquote>
 <span id="more"></span>
-<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>\r是回车符,\n是换行符，各个系统的换行标志：</p>
-<blockquote>
-<p>win 用 \r\n<br>linux/unix 用 \n<br>Mac OS 用 \r</p>
-</blockquote>
-<p>CR用符号’\r’表示, 十进制ASCII代码是13, 十六进制代码为OxOD<br>LF使用’\n’符号表示, ASCII代码是10, 十六制为0x0A<br>所以：<br>Windows下用的是OAOD，即CR&amp;LF，<br>linux/unix用的是OA，即LF<br>MacOS用的是OD，即CR</p>
-<h2 id="CRLF来历"><a href="#CRLF来历" class="headerlink" title="CRLF来历"></a>CRLF来历</h2><p>计算机还没有出现之前，有一种叫做电传打字机（Teletype Model 33）的玩意，每秒钟可以打10个字符。但是它有一个问题，就是打完一行换行的时候，要用去0.2秒，正好可以打两个字符。要是在这0.2秒里面，又有新的字符传过来，那么这个字符将丢失。</p>
-<p>于是，研制人员想了个办法解决这个问题，就是在每行后面加两个表示结束的字符。一个叫做“回车”，告诉打字机把打印头定位在左边界；另一个叫做“换行”，告诉打字机把纸向下移一行。这就是“换行”和“回车”的来历，从它们的英语名字上也可以看出一二。</p>
-<p>后来，计算机发明了，这两个概念也就被般到了计算机上。那时，存储器很贵，一些科学家认为在每行结尾加两个字符太浪费了，加一个就可以。于是，就出现了分歧。Unix 系统里，每行结尾只有“&lt;换行&gt;”，即“\n”；Windows系统里面，每行结尾是“&lt;回车&gt;&lt;换行&gt;”，即“ \r\n”；Mac系统里，每行结尾是“&lt;回车&gt;”。一个直接后果是，Unix/Mac系统下的文件在Windows里打开的话，所有文字会变成一行；而Windows里的文件在Unix/Mac下打开的话，在每行的结尾可能会多出一个^M符号。</p>
-<h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><h3 id="问题一：文本类型文件互转"><a href="#问题一：文本类型文件互转" class="headerlink" title="问题一：文本类型文件互转"></a>问题一：文本类型文件互转</h3><blockquote>
-<p>包括 <code>txt</code> <code>sh</code>等文件</p>
-</blockquote>
-<p><strong>方法一</strong><br>使用<code>notepad++</code>中的格式转换功能，见图</p>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415172001.png"></p>
-<p><strong>方法二</strong><br>针对<code>sh</code>文件，可以使用vim工具<br>在vim模式下，输入<code>set ff</code>发现文件类型为<code>format=dos</code><br>在vim模式下，可以使用<code>set ff=unix</code>改变format为<code>unix</code></p>
-<h3 id="问题二：doc文档乱码"><a href="#问题二：doc文档乱码" class="headerlink" title="问题二：doc文档乱码"></a>问题二：doc文档乱码</h3><blockquote>
-<p>Windows下编写的doc文档，在Linux下查看（用Open Office）一般都会乱码</p>
-</blockquote>
+
+<h1 id="自定义镜像"><a href="#自定义镜像" class="headerlink" title="自定义镜像"></a>自定义镜像</h1><p>为了能够正常显示jupyterlab，需要其提供的<code>inspur-jupyter-custom.tar.gz</code>文件。</p>
+<figure class="highlight mipsasm"><table><tr><td class="code"><pre><span class="line"><span class="keyword">jupyter</span></span><br><span class="line"><span class="keyword"></span>├── custom.<span class="keyword">js</span></span><br><span class="line"><span class="keyword"></span>└── <span class="keyword">jupyter_notebook_config.py</span></span><br></pre></td></tr></table></figure>
+
+<p>压缩包内包含两个文件.</p>
+<p>第一个是<code>custom.js</code></p>
+<figure class="highlight actionscript"><table><tr><td class="code"><pre><span class="line">define([<span class="string">&#x27;base/js/namespace&#x27;</span>], <span class="function"><span class="keyword">function</span><span class="params">(Jupyter)</span></span>&#123;</span><br><span class="line">    Jupyter._target = <span class="string">&#x27;_self&#x27;</span>;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>第二个是<code>jupyter_notebook_config.py</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Copyright (c) Jupyter Development Team.</span></span><br><span class="line"><span class="comment"># Distributed under the terms of the Modified BSD License.</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> jupyter_core.paths <span class="keyword">import</span> jupyter_data_dir</span><br><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> errno</span><br><span class="line"><span class="keyword">import</span> stat</span><br><span class="line"></span><br><span class="line">jupyter_host = <span class="string">&#x27;localhost&#x27;</span></span><br><span class="line">jupyter_port = <span class="string">&#x27;8888&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> <span class="string">&#x27;JUPYTER_HOST&#x27;</span> <span class="keyword">in</span> os.environ:</span><br><span class="line">    jupyter_host = os.environ[<span class="string">&#x27;JUPYTER_HOST&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> <span class="string">&#x27;JUPYTER_PORT&#x27;</span> <span class="keyword">in</span> os.environ:</span><br><span class="line">    jupyter_port = os.environ[<span class="string">&#x27;JUPYTER_PORT&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">#import pdb</span></span><br><span class="line"><span class="comment">#pdb.set_trace()</span></span><br><span class="line"></span><br><span class="line">c = get_config()</span><br><span class="line">c.NotebookApp.ip = <span class="string">&#x27;0.0.0.0&#x27;</span></span><br><span class="line">c.NotebookApp.port = <span class="number">8888</span></span><br><span class="line">c.NotebookApp.open_browser = <span class="literal">False</span></span><br><span class="line">c.NotebookApp.token = <span class="string">u&#x27;&#x27;</span>   <span class="comment"># used for login without token </span></span><br><span class="line"><span class="comment">#c.NotebookApp.tornado_settings = &#123; &#x27;headers&#x27;: &#123; &#x27;Content-Security-Policy&#x27;: &quot;frame-ancestors %s:%s/&quot; % (jupyter_host,jupyter_port)&#125; &#125;</span></span><br><span class="line">c.NotebookApp.tornado_settings = &#123; <span class="string">&#x27;headers&#x27;</span>: &#123; <span class="string">&#x27;Content-Security-Policy&#x27;</span>: <span class="string">&#x27;none&#x27;</span>&#125; &#125;</span><br><span class="line">c.NotebookApp.extra_static_paths = [<span class="string">&quot;/etc/jupyter/custom.js&quot;</span>]</span><br><span class="line">c.NotebookApp.base_url  = <span class="string">&#x27;jupyter/https%3A%2F%2F&#x27;</span> + <span class="string">&#x27;%s&#x27;</span> % (jupyter_host) + <span class="string">&#x27;%3A&#x27;</span> + <span class="string">&#x27;%s&#x27;</span> % (jupyter_port)</span><br><span class="line"><span class="comment"># https://github.com/jupyter/notebook/issues/3130</span></span><br><span class="line">c.FileContentsManager.delete_to_trash = <span class="literal">False</span></span><br><span class="line">c.NotebookApp.terminado_settings=&#123;<span class="string">&#x27;shell_command&#x27;</span>:[<span class="string">&#x27;bash&#x27;</span>, <span class="string">&#x27;-i&#x27;</span>]&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># Generate a self-signed certificate</span></span><br><span class="line"><span class="keyword">if</span> <span class="string">&#x27;GEN_CERT&#x27;</span> <span class="keyword">in</span> os.environ:</span><br><span class="line">    dir_name = jupyter_data_dir()</span><br><span class="line">    pem_file = os.path.join(dir_name, <span class="string">&#x27;notebook.pem&#x27;</span>)</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        os.makedirs(dir_name)</span><br><span class="line">    <span class="keyword">except</span> OSError <span class="keyword">as</span> exc:  <span class="comment"># Python &gt;2.5</span></span><br><span class="line">        <span class="keyword">if</span> exc.errno == errno.EEXIST <span class="keyword">and</span> os.path.isdir(dir_name):</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">raise</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># Generate an openssl.cnf file to set the distinguished name</span></span><br><span class="line">    cnf_file = os.path.join(os.getenv(<span class="string">&#x27;CONDA_DIR&#x27;</span>, <span class="string">&#x27;/usr/lib&#x27;</span>), <span class="string">&#x27;ssl&#x27;</span>, <span class="string">&#x27;openssl.cnf&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.isfile(cnf_file):</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(cnf_file, <span class="string">&#x27;w&#x27;</span>) <span class="keyword">as</span> fh:</span><br><span class="line">            fh.write(<span class="string">&#x27;&#x27;&#x27;\</span></span><br><span class="line"><span class="string">[req]</span></span><br><span class="line"><span class="string">distinguished_name = req_distinguished_name</span></span><br><span class="line"><span class="string">[req_distinguished_name]</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Generate a certificate if one doesn&#x27;t exist on disk</span></span><br><span class="line">    subprocess.check_call([<span class="string">&#x27;openssl&#x27;</span>, <span class="string">&#x27;req&#x27;</span>, <span class="string">&#x27;-new&#x27;</span>,</span><br><span class="line">                           <span class="string">&#x27;-newkey&#x27;</span>, <span class="string">&#x27;rsa:2048&#x27;</span>,</span><br><span class="line">                           <span class="string">&#x27;-days&#x27;</span>, <span class="string">&#x27;365&#x27;</span>,</span><br><span class="line">                           <span class="string">&#x27;-nodes&#x27;</span>, <span class="string">&#x27;-x509&#x27;</span>,</span><br><span class="line">                           <span class="string">&#x27;-subj&#x27;</span>, <span class="string">&#x27;/C=XX/ST=XX/L=XX/O=generated/CN=generated&#x27;</span>,</span><br><span class="line">                           <span class="string">&#x27;-keyout&#x27;</span>, pem_file,</span><br><span class="line">                           <span class="string">&#x27;-out&#x27;</span>, pem_file])</span><br><span class="line">    <span class="comment"># Restrict access to the file</span></span><br><span class="line">    os.chmod(pem_file, stat.S_IRUSR | stat.S_IWUSR)</span><br><span class="line">    c.NotebookApp.certfile = pem_file</span><br><span class="line"></span><br><span class="line"><span class="comment"># Change default umask for all subprocesses of the notebook server if set in</span></span><br><span class="line"><span class="comment"># the environment</span></span><br><span class="line"><span class="keyword">if</span> <span class="string">&#x27;NB_UMASK&#x27;</span> <span class="keyword">in</span> os.environ:</span><br><span class="line">    os.umask(<span class="built_in">int</span>(os.environ[<span class="string">&#x27;NB_UMASK&#x27;</span>], <span class="number">8</span>))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="基于公开镜像生成AIStation支持的镜像"><a href="#基于公开镜像生成AIStation支持的镜像" class="headerlink" title="基于公开镜像生成AIStation支持的镜像"></a>基于公开镜像生成AIStation支持的镜像</h2><p>基于ubuntu18.04的dockerfile</p>
+<figure class="highlight dsconfig"><table><tr><td class="code"><pre><span class="line"><span class="string">FROM</span> <span class="string">ubuntu:18.</span><span class="string">04</span></span><br><span class="line"></span><br><span class="line"><span class="string">COPY</span> <span class="string">inspur-jupyter-custom</span>.<span class="string">tar</span>.<span class="string">gz</span> .</span><br><span class="line"><span class="string">RUN</span> <span class="string">apt</span> <span class="string">update</span> \</span><br><span class="line">&amp;&amp; <span class="string">DEBIAN_FRONTEND</span>=<span class="string">noninteractive</span> <span class="string">apt</span> <span class="string">install</span> <span class="built_in">--no-install-recommends</span> -<span class="string">y</span> <span class="string">curl</span> <span class="string">python3</span> <span class="string">python3-distutils</span> <span class="string">openssl</span> <span class="string">openssh-server</span> \</span><br><span class="line">&amp;&amp; <span class="string">curl</span> -<span class="string">k</span> <span class="string">https</span>://<span class="string">bootstrap</span>.<span class="string">pypa</span>.<span class="string">io</span>/<span class="built_in">get-pip.py</span> -<span class="string">o</span> <span class="built_in">get-pip.py</span> \</span><br><span class="line">&amp;&amp; <span class="string">python3</span> <span class="built_in">get-pip.py</span> \</span><br><span class="line">&amp;&amp; <span class="string">ln</span> -<span class="string">s</span> `<span class="string">which</span> <span class="string">python3</span>` <span class="string">&quot;$(dirname `which python3`)/python&quot;</span> \</span><br><span class="line">&amp;&amp; <span class="string">pip</span> <span class="string">install</span> <span class="string">jupyterlab</span> \</span><br><span class="line">&amp;&amp; <span class="string">tar</span> -<span class="string">zxf</span> <span class="string">inspur-jupyter-custom</span>.<span class="string">tar</span>.<span class="string">gz</span> -<span class="string">C</span> /<span class="string">etc</span> \</span><br><span class="line">&amp;&amp; <span class="string">cat</span> /<span class="string">etc</span>/<span class="string">ssh</span>/<span class="string">sshd_config</span> | <span class="string">grep</span> -<span class="string">v</span> <span class="string">PermitRootLogin</span> &gt; <span class="string">sshd_config</span>.<span class="string">temp</span> \</span><br><span class="line">&amp;&amp; <span class="string">echo</span> <span class="string">&#x27;PermitRootLogin yes&#x27;</span> &gt;&gt; <span class="string">sshd_config</span>.<span class="string">temp</span> \</span><br><span class="line">&amp;&amp; <span class="string">mv</span> <span class="string">sshd_config</span>.<span class="string">temp</span> /<span class="string">etc</span>/<span class="string">ssh</span>/<span class="string">sshd_config</span> \</span><br><span class="line">&amp;&amp; <span class="string">rm</span> <span class="built_in">get-pip.py</span> \</span><br><span class="line">&amp;&amp; <span class="string">rm</span> -<span class="string">rf</span> /<span class="string">root</span>/.<span class="string">cache</span> \</span><br><span class="line">&amp;&amp; <span class="string">apt</span> <span class="string">autoremove</span> <span class="built_in">--yes</span> <span class="built_in">--purge</span> \</span><br><span class="line">&amp;&amp; <span class="string">apt</span> <span class="string">clean</span> \</span><br><span class="line">&amp;&amp; <span class="string">rm</span> <span class="string">inspur-jupyter-custom</span>.<span class="string">tar</span>.<span class="string">gz</span> \</span><br><span class="line">&amp;&amp; <span class="string">rm</span> -<span class="string">rf</span> /<span class="string">tmp</span>/* /<span class="string">var</span>/<span class="string">tmp</span>/* /<span class="string">var</span>/<span class="string">cache</span>/<span class="string">apt</span>/*</span><br><span class="line">&amp;&amp; <span class="string">echo</span> <span class="string">&quot;Build Success!&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="Anaconda配置"><a href="#Anaconda配置" class="headerlink" title="Anaconda配置"></a>Anaconda配置</h1><p>如果要在juyterlab中使用Anaconda，首先需要在其base虚拟环境中安装<code>jupyterlab</code>。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">conda install jupyterlab</span><br></pre></td></tr></table></figure>
+
+<h2 id="Launcher显示各个虚拟环境"><a href="#Launcher显示各个虚拟环境" class="headerlink" title="Launcher显示各个虚拟环境"></a>Launcher显示各个虚拟环境</h2><h3 id="方式一：需重启jupyterlab"><a href="#方式一：需重启jupyterlab" class="headerlink" title="方式一：需重启jupyterlab"></a>方式一：需重启jupyterlab</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">conda activate &lt;虚拟环境名&gt;</span><br><span class="line">conda install nb_conda_kernels</span><br></pre></td></tr></table></figure>
+
+<h3 id="方式二：无需重启jupyterlab"><a href="#方式二：无需重启jupyterlab" class="headerlink" title="方式二：无需重启jupyterlab"></a>方式二：无需重启jupyterlab</h3><figure class="highlight crmsh"><table><tr><td class="code"><pre><span class="line">conda activate <span class="tag">&lt;虚拟环境名&gt;</span></span><br><span class="line">ipython kernel install --<span class="keyword">user</span> <span class="title">--name</span>=<span class="tag">&lt;虚拟环境名&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>成功后如下图所示，可以在jupyterlab中使用conda的各个虚拟环境了</p>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2021-03/20210404222528.png"></p>
+<h2 id="conda初始化"><a href="#conda初始化" class="headerlink" title="conda初始化"></a>conda初始化</h2><p>对于AIStation来说，创建容器后默认会启动jupyterlab，此时并未对conda进行初始化，所以jupyterlab无法使用conda环境。</p>
+<p>一种解决方案是kill当前jupyterlab进程，然后在conda虚拟环境中启动jupyterlab。</p>
+<p>启动jupyterlab命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">nohup jupyter-lab --allow-root --no-browser --notebook-dir=/xxxx jupyter_notebook_config.py &gt; /dev/null 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
+
 <ul>
-<li>  解决方法：先用Open Office打开，然后再全选，把字体设置为SYSong18030，OK中文简体和繁体都显示正常了。</li>
+<li><code>--notebook-dir</code>: 工作路径</li>
 </ul>
-<h3 id="问题三：FTP传文件时乱码"><a href="#问题三：FTP传文件时乱码" class="headerlink" title="问题三：FTP传文件时乱码"></a>问题三：FTP传文件时乱码</h3><blockquote>
-<p>在不同平台间使用FTP软件传送文件时, 在ascii文本模式传输模式下, 一些FTP客户端程序会自动对换行格式进行转换，经过这种传输的文件字节数可能会发生变化”)问题四：在不同平台间使用FTP软件传送文件时, 在ascii文本模式传输模式下, 一些FTP客户端程序会自动对换行格式进行转换，经过这种传输的文件字节数可能会发生变化</p>
-</blockquote>
-<ul>
-<li>  解决方法：如果你不想ftp修改原文件, 可以使用bin模式(二进制模式)传输文本。</li>
+<br>
+
+<p>在线初始化</p>
+<figure class="highlight crmsh"><table><tr><td class="code"><pre><span class="line">ipython kernel install --<span class="keyword">user</span> <span class="title">--name</span>=<span class="tag">&lt;虚拟环境名&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="一些深度学习镜像"><a href="#一些深度学习镜像" class="headerlink" title="一些深度学习镜像"></a>一些深度学习镜像</h1><ul>
+<li><a href="https://hub.docker.com/r/pytorch/pytorch/tags?page=1&amp;ordering=last_updated">https://hub.docker.com/r/pytorch/pytorch/tags?page=1&amp;ordering=last_updated</a></li>
+<li><a href="https://hub.docker.com/r/nvidia/cuda/tags?page=1&amp;ordering=last_updated">https://hub.docker.com/r/nvidia/cuda/tags?page=1&amp;ordering=last_updated</a></li>
 </ul>
+<h1 id="WebVPN无法访问jupyterlab的问题"><a href="#WebVPN无法访问jupyterlab的问题" class="headerlink" title="WebVPN无法访问jupyterlab的问题"></a>WebVPN无法访问jupyterlab的问题</h1><p>对于webvpn无法打开AIStation的问题，通过查看请求，发现某个url并未转码</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><h3 id="下载requestly插件"><a href="#下载requestly插件" class="headerlink" title="下载requestly插件"></a>下载requestly插件</h3><p>地址：<a href="https://chrome.google.com/webstore/detail/requestly-redirect-url-mo/mdnleldcmiljblolnjhpnblkcekpdkpa">https://chrome.google.com/webstore/detail/requestly-redirect-url-mo/mdnleldcmiljblolnjhpnblkcekpdkpa</a></p>
+<h3 id="添加规则"><a href="#添加规则" class="headerlink" title="添加规则"></a>添加规则</h3><p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2021-04/20210530165159.png"></p>
+<figure class="highlight taggerscript"><table><tr><td class="code"><pre><span class="line">/https:<span class="symbol">\/</span><span class="symbol">\/</span>webvpn.xxxx.edu.cn<span class="symbol">\/</span>https-32206<span class="symbol">\/</span>77726476706e69737468656265737421f1fe52882624615f704684b5965037327044a0d1e9ffaa<span class="symbol">\/</span>jupyter<span class="symbol">\/</span>https:<span class="symbol">\/</span><span class="symbol">\/</span>(<span class="symbol">\d</span>+)<span class="symbol">\.</span>(<span class="symbol">\d</span>+)<span class="symbol">\.</span>(<span class="symbol">\d</span>+).(<span class="symbol">\d</span>+):(<span class="symbol">\d</span>+)([<span class="symbol">\s</span><span class="symbol">\S</span>]*)/i</span><br><span class="line"></span><br><span class="line">https://webvpn.xxxx.edu.cn/https-32206/77726476706e69737468656265737421f1fe52882624615f704684b5965037327044a0d1e9ffaa/jupyter/https<span class="variable">%3A%</span>2F<span class="variable">%2F$1.$2.$3.$4%</span>3A$5$6</span><br></pre></td></tr></table></figure>
+
 ]]></content>
       <categories>
         <category>linux</category>
       </categories>
+      <tags>
+        <tag>jupyterlab</tag>
+      </tags>
   </entry>
   <entry>
     <title>环形链表</title>
@@ -4396,59 +4418,42 @@ docker部署
       </tags>
   </entry>
   <entry>
-    <title>浪潮AIStation-jupyterlab配置</title>
-    <url>/posts/6t685a77/</url>
+    <title>解决Unix-like、Windows系统之间文本换行符不同的问题</title>
+    <url>/posts/8af9e030/</url>
     <content><![CDATA[<blockquote>
-<p>实验室深度学习服务器集群采用浪潮公司提供的AIStation，记录一些避坑要点</p>
+<p>参考博客 :point_right: <a href="https://sphenginx.github.io/2014/12/24/CRLF-in-Unix-like_Windows-os/">网址</a></p>
 </blockquote>
 <span id="more"></span>
-
-<h1 id="自定义镜像"><a href="#自定义镜像" class="headerlink" title="自定义镜像"></a>自定义镜像</h1><p>为了能够正常显示jupyterlab，需要其提供的<code>inspur-jupyter-custom.tar.gz</code>文件。</p>
-<figure class="highlight mipsasm"><table><tr><td class="code"><pre><span class="line"><span class="keyword">jupyter</span></span><br><span class="line"><span class="keyword"></span>├── custom.<span class="keyword">js</span></span><br><span class="line"><span class="keyword"></span>└── <span class="keyword">jupyter_notebook_config.py</span></span><br></pre></td></tr></table></figure>
-
-<p>压缩包内包含两个文件.</p>
-<p>第一个是<code>custom.js</code></p>
-<figure class="highlight actionscript"><table><tr><td class="code"><pre><span class="line">define([<span class="string">&#x27;base/js/namespace&#x27;</span>], <span class="function"><span class="keyword">function</span><span class="params">(Jupyter)</span></span>&#123;</span><br><span class="line">    Jupyter._target = <span class="string">&#x27;_self&#x27;</span>;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>第二个是<code>jupyter_notebook_config.py</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Copyright (c) Jupyter Development Team.</span></span><br><span class="line"><span class="comment"># Distributed under the terms of the Modified BSD License.</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> jupyter_core.paths <span class="keyword">import</span> jupyter_data_dir</span><br><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> errno</span><br><span class="line"><span class="keyword">import</span> stat</span><br><span class="line"></span><br><span class="line">jupyter_host = <span class="string">&#x27;localhost&#x27;</span></span><br><span class="line">jupyter_port = <span class="string">&#x27;8888&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> <span class="string">&#x27;JUPYTER_HOST&#x27;</span> <span class="keyword">in</span> os.environ:</span><br><span class="line">    jupyter_host = os.environ[<span class="string">&#x27;JUPYTER_HOST&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> <span class="string">&#x27;JUPYTER_PORT&#x27;</span> <span class="keyword">in</span> os.environ:</span><br><span class="line">    jupyter_port = os.environ[<span class="string">&#x27;JUPYTER_PORT&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">#import pdb</span></span><br><span class="line"><span class="comment">#pdb.set_trace()</span></span><br><span class="line"></span><br><span class="line">c = get_config()</span><br><span class="line">c.NotebookApp.ip = <span class="string">&#x27;0.0.0.0&#x27;</span></span><br><span class="line">c.NotebookApp.port = <span class="number">8888</span></span><br><span class="line">c.NotebookApp.open_browser = <span class="literal">False</span></span><br><span class="line">c.NotebookApp.token = <span class="string">u&#x27;&#x27;</span>   <span class="comment"># used for login without token </span></span><br><span class="line"><span class="comment">#c.NotebookApp.tornado_settings = &#123; &#x27;headers&#x27;: &#123; &#x27;Content-Security-Policy&#x27;: &quot;frame-ancestors %s:%s/&quot; % (jupyter_host,jupyter_port)&#125; &#125;</span></span><br><span class="line">c.NotebookApp.tornado_settings = &#123; <span class="string">&#x27;headers&#x27;</span>: &#123; <span class="string">&#x27;Content-Security-Policy&#x27;</span>: <span class="string">&#x27;none&#x27;</span>&#125; &#125;</span><br><span class="line">c.NotebookApp.extra_static_paths = [<span class="string">&quot;/etc/jupyter/custom.js&quot;</span>]</span><br><span class="line">c.NotebookApp.base_url  = <span class="string">&#x27;jupyter/https%3A%2F%2F&#x27;</span> + <span class="string">&#x27;%s&#x27;</span> % (jupyter_host) + <span class="string">&#x27;%3A&#x27;</span> + <span class="string">&#x27;%s&#x27;</span> % (jupyter_port)</span><br><span class="line"><span class="comment"># https://github.com/jupyter/notebook/issues/3130</span></span><br><span class="line">c.FileContentsManager.delete_to_trash = <span class="literal">False</span></span><br><span class="line">c.NotebookApp.terminado_settings=&#123;<span class="string">&#x27;shell_command&#x27;</span>:[<span class="string">&#x27;bash&#x27;</span>, <span class="string">&#x27;-i&#x27;</span>]&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># Generate a self-signed certificate</span></span><br><span class="line"><span class="keyword">if</span> <span class="string">&#x27;GEN_CERT&#x27;</span> <span class="keyword">in</span> os.environ:</span><br><span class="line">    dir_name = jupyter_data_dir()</span><br><span class="line">    pem_file = os.path.join(dir_name, <span class="string">&#x27;notebook.pem&#x27;</span>)</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        os.makedirs(dir_name)</span><br><span class="line">    <span class="keyword">except</span> OSError <span class="keyword">as</span> exc:  <span class="comment"># Python &gt;2.5</span></span><br><span class="line">        <span class="keyword">if</span> exc.errno == errno.EEXIST <span class="keyword">and</span> os.path.isdir(dir_name):</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">raise</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># Generate an openssl.cnf file to set the distinguished name</span></span><br><span class="line">    cnf_file = os.path.join(os.getenv(<span class="string">&#x27;CONDA_DIR&#x27;</span>, <span class="string">&#x27;/usr/lib&#x27;</span>), <span class="string">&#x27;ssl&#x27;</span>, <span class="string">&#x27;openssl.cnf&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.isfile(cnf_file):</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(cnf_file, <span class="string">&#x27;w&#x27;</span>) <span class="keyword">as</span> fh:</span><br><span class="line">            fh.write(<span class="string">&#x27;&#x27;&#x27;\</span></span><br><span class="line"><span class="string">[req]</span></span><br><span class="line"><span class="string">distinguished_name = req_distinguished_name</span></span><br><span class="line"><span class="string">[req_distinguished_name]</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Generate a certificate if one doesn&#x27;t exist on disk</span></span><br><span class="line">    subprocess.check_call([<span class="string">&#x27;openssl&#x27;</span>, <span class="string">&#x27;req&#x27;</span>, <span class="string">&#x27;-new&#x27;</span>,</span><br><span class="line">                           <span class="string">&#x27;-newkey&#x27;</span>, <span class="string">&#x27;rsa:2048&#x27;</span>,</span><br><span class="line">                           <span class="string">&#x27;-days&#x27;</span>, <span class="string">&#x27;365&#x27;</span>,</span><br><span class="line">                           <span class="string">&#x27;-nodes&#x27;</span>, <span class="string">&#x27;-x509&#x27;</span>,</span><br><span class="line">                           <span class="string">&#x27;-subj&#x27;</span>, <span class="string">&#x27;/C=XX/ST=XX/L=XX/O=generated/CN=generated&#x27;</span>,</span><br><span class="line">                           <span class="string">&#x27;-keyout&#x27;</span>, pem_file,</span><br><span class="line">                           <span class="string">&#x27;-out&#x27;</span>, pem_file])</span><br><span class="line">    <span class="comment"># Restrict access to the file</span></span><br><span class="line">    os.chmod(pem_file, stat.S_IRUSR | stat.S_IWUSR)</span><br><span class="line">    c.NotebookApp.certfile = pem_file</span><br><span class="line"></span><br><span class="line"><span class="comment"># Change default umask for all subprocesses of the notebook server if set in</span></span><br><span class="line"><span class="comment"># the environment</span></span><br><span class="line"><span class="keyword">if</span> <span class="string">&#x27;NB_UMASK&#x27;</span> <span class="keyword">in</span> os.environ:</span><br><span class="line">    os.umask(<span class="built_in">int</span>(os.environ[<span class="string">&#x27;NB_UMASK&#x27;</span>], <span class="number">8</span>))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h2 id="基于公开镜像生成AIStation支持的镜像"><a href="#基于公开镜像生成AIStation支持的镜像" class="headerlink" title="基于公开镜像生成AIStation支持的镜像"></a>基于公开镜像生成AIStation支持的镜像</h2><p>基于ubuntu18.04的dockerfile</p>
-<figure class="highlight dsconfig"><table><tr><td class="code"><pre><span class="line"><span class="string">FROM</span> <span class="string">ubuntu:18.</span><span class="string">04</span></span><br><span class="line"></span><br><span class="line"><span class="string">COPY</span> <span class="string">inspur-jupyter-custom</span>.<span class="string">tar</span>.<span class="string">gz</span> .</span><br><span class="line"><span class="string">RUN</span> <span class="string">apt</span> <span class="string">update</span> \</span><br><span class="line">&amp;&amp; <span class="string">DEBIAN_FRONTEND</span>=<span class="string">noninteractive</span> <span class="string">apt</span> <span class="string">install</span> <span class="built_in">--no-install-recommends</span> -<span class="string">y</span> <span class="string">curl</span> <span class="string">python3</span> <span class="string">python3-distutils</span> <span class="string">openssl</span> <span class="string">openssh-server</span> \</span><br><span class="line">&amp;&amp; <span class="string">curl</span> -<span class="string">k</span> <span class="string">https</span>://<span class="string">bootstrap</span>.<span class="string">pypa</span>.<span class="string">io</span>/<span class="built_in">get-pip.py</span> -<span class="string">o</span> <span class="built_in">get-pip.py</span> \</span><br><span class="line">&amp;&amp; <span class="string">python3</span> <span class="built_in">get-pip.py</span> \</span><br><span class="line">&amp;&amp; <span class="string">ln</span> -<span class="string">s</span> `<span class="string">which</span> <span class="string">python3</span>` <span class="string">&quot;$(dirname `which python3`)/python&quot;</span> \</span><br><span class="line">&amp;&amp; <span class="string">pip</span> <span class="string">install</span> <span class="string">jupyterlab</span> \</span><br><span class="line">&amp;&amp; <span class="string">tar</span> -<span class="string">zxf</span> <span class="string">inspur-jupyter-custom</span>.<span class="string">tar</span>.<span class="string">gz</span> -<span class="string">C</span> /<span class="string">etc</span> \</span><br><span class="line">&amp;&amp; <span class="string">cat</span> /<span class="string">etc</span>/<span class="string">ssh</span>/<span class="string">sshd_config</span> | <span class="string">grep</span> -<span class="string">v</span> <span class="string">PermitRootLogin</span> &gt; <span class="string">sshd_config</span>.<span class="string">temp</span> \</span><br><span class="line">&amp;&amp; <span class="string">echo</span> <span class="string">&#x27;PermitRootLogin yes&#x27;</span> &gt;&gt; <span class="string">sshd_config</span>.<span class="string">temp</span> \</span><br><span class="line">&amp;&amp; <span class="string">mv</span> <span class="string">sshd_config</span>.<span class="string">temp</span> /<span class="string">etc</span>/<span class="string">ssh</span>/<span class="string">sshd_config</span> \</span><br><span class="line">&amp;&amp; <span class="string">rm</span> <span class="built_in">get-pip.py</span> \</span><br><span class="line">&amp;&amp; <span class="string">rm</span> -<span class="string">rf</span> /<span class="string">root</span>/.<span class="string">cache</span> \</span><br><span class="line">&amp;&amp; <span class="string">apt</span> <span class="string">autoremove</span> <span class="built_in">--yes</span> <span class="built_in">--purge</span> \</span><br><span class="line">&amp;&amp; <span class="string">apt</span> <span class="string">clean</span> \</span><br><span class="line">&amp;&amp; <span class="string">rm</span> <span class="string">inspur-jupyter-custom</span>.<span class="string">tar</span>.<span class="string">gz</span> \</span><br><span class="line">&amp;&amp; <span class="string">rm</span> -<span class="string">rf</span> /<span class="string">tmp</span>/* /<span class="string">var</span>/<span class="string">tmp</span>/* /<span class="string">var</span>/<span class="string">cache</span>/<span class="string">apt</span>/*</span><br><span class="line">&amp;&amp; <span class="string">echo</span> <span class="string">&quot;Build Success!&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h1 id="Anaconda配置"><a href="#Anaconda配置" class="headerlink" title="Anaconda配置"></a>Anaconda配置</h1><p>如果要在juyterlab中使用Anaconda，首先需要在其base虚拟环境中安装<code>jupyterlab</code>。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">conda install jupyterlab</span><br></pre></td></tr></table></figure>
-
-<h2 id="Launcher显示各个虚拟环境"><a href="#Launcher显示各个虚拟环境" class="headerlink" title="Launcher显示各个虚拟环境"></a>Launcher显示各个虚拟环境</h2><h3 id="方式一：需重启jupyterlab"><a href="#方式一：需重启jupyterlab" class="headerlink" title="方式一：需重启jupyterlab"></a>方式一：需重启jupyterlab</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">conda activate &lt;虚拟环境名&gt;</span><br><span class="line">conda install nb_conda_kernels</span><br></pre></td></tr></table></figure>
-
-<h3 id="方式二：无需重启jupyterlab"><a href="#方式二：无需重启jupyterlab" class="headerlink" title="方式二：无需重启jupyterlab"></a>方式二：无需重启jupyterlab</h3><figure class="highlight crmsh"><table><tr><td class="code"><pre><span class="line">conda activate <span class="tag">&lt;虚拟环境名&gt;</span></span><br><span class="line">ipython kernel install --<span class="keyword">user</span> <span class="title">--name</span>=<span class="tag">&lt;虚拟环境名&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>成功后如下图所示，可以在jupyterlab中使用conda的各个虚拟环境了</p>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2021-03/20210404222528.png"></p>
-<h2 id="conda初始化"><a href="#conda初始化" class="headerlink" title="conda初始化"></a>conda初始化</h2><p>对于AIStation来说，创建容器后默认会启动jupyterlab，此时并未对conda进行初始化，所以jupyterlab无法使用conda环境。</p>
-<p>一种解决方案是kill当前jupyterlab进程，然后在conda虚拟环境中启动jupyterlab。</p>
-<p>启动jupyterlab命令：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">nohup jupyter-lab --allow-root --no-browser --notebook-dir=/xxxx jupyter_notebook_config.py &gt; /dev/null 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
-
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>\r是回车符,\n是换行符，各个系统的换行标志：</p>
+<blockquote>
+<p>win 用 \r\n<br>linux/unix 用 \n<br>Mac OS 用 \r</p>
+</blockquote>
+<p>CR用符号’\r’表示, 十进制ASCII代码是13, 十六进制代码为OxOD<br>LF使用’\n’符号表示, ASCII代码是10, 十六制为0x0A<br>所以：<br>Windows下用的是OAOD，即CR&amp;LF，<br>linux/unix用的是OA，即LF<br>MacOS用的是OD，即CR</p>
+<h2 id="CRLF来历"><a href="#CRLF来历" class="headerlink" title="CRLF来历"></a>CRLF来历</h2><p>计算机还没有出现之前，有一种叫做电传打字机（Teletype Model 33）的玩意，每秒钟可以打10个字符。但是它有一个问题，就是打完一行换行的时候，要用去0.2秒，正好可以打两个字符。要是在这0.2秒里面，又有新的字符传过来，那么这个字符将丢失。</p>
+<p>于是，研制人员想了个办法解决这个问题，就是在每行后面加两个表示结束的字符。一个叫做“回车”，告诉打字机把打印头定位在左边界；另一个叫做“换行”，告诉打字机把纸向下移一行。这就是“换行”和“回车”的来历，从它们的英语名字上也可以看出一二。</p>
+<p>后来，计算机发明了，这两个概念也就被般到了计算机上。那时，存储器很贵，一些科学家认为在每行结尾加两个字符太浪费了，加一个就可以。于是，就出现了分歧。Unix 系统里，每行结尾只有“&lt;换行&gt;”，即“\n”；Windows系统里面，每行结尾是“&lt;回车&gt;&lt;换行&gt;”，即“ \r\n”；Mac系统里，每行结尾是“&lt;回车&gt;”。一个直接后果是，Unix/Mac系统下的文件在Windows里打开的话，所有文字会变成一行；而Windows里的文件在Unix/Mac下打开的话，在每行的结尾可能会多出一个^M符号。</p>
+<h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><h3 id="问题一：文本类型文件互转"><a href="#问题一：文本类型文件互转" class="headerlink" title="问题一：文本类型文件互转"></a>问题一：文本类型文件互转</h3><blockquote>
+<p>包括 <code>txt</code> <code>sh</code>等文件</p>
+</blockquote>
+<p><strong>方法一</strong><br>使用<code>notepad++</code>中的格式转换功能，见图</p>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415172001.png"></p>
+<p><strong>方法二</strong><br>针对<code>sh</code>文件，可以使用vim工具<br>在vim模式下，输入<code>set ff</code>发现文件类型为<code>format=dos</code><br>在vim模式下，可以使用<code>set ff=unix</code>改变format为<code>unix</code></p>
+<h3 id="问题二：doc文档乱码"><a href="#问题二：doc文档乱码" class="headerlink" title="问题二：doc文档乱码"></a>问题二：doc文档乱码</h3><blockquote>
+<p>Windows下编写的doc文档，在Linux下查看（用Open Office）一般都会乱码</p>
+</blockquote>
 <ul>
-<li><code>--notebook-dir</code>: 工作路径</li>
+<li>  解决方法：先用Open Office打开，然后再全选，把字体设置为SYSong18030，OK中文简体和繁体都显示正常了。</li>
 </ul>
-<h1 id="一些深度学习镜像"><a href="#一些深度学习镜像" class="headerlink" title="一些深度学习镜像"></a>一些深度学习镜像</h1><ul>
-<li><a href="https://hub.docker.com/r/pytorch/pytorch/tags?page=1&amp;ordering=last_updated">https://hub.docker.com/r/pytorch/pytorch/tags?page=1&amp;ordering=last_updated</a></li>
-<li><a href="https://hub.docker.com/r/nvidia/cuda/tags?page=1&amp;ordering=last_updated">https://hub.docker.com/r/nvidia/cuda/tags?page=1&amp;ordering=last_updated</a></li>
+<h3 id="问题三：FTP传文件时乱码"><a href="#问题三：FTP传文件时乱码" class="headerlink" title="问题三：FTP传文件时乱码"></a>问题三：FTP传文件时乱码</h3><blockquote>
+<p>在不同平台间使用FTP软件传送文件时, 在ascii文本模式传输模式下, 一些FTP客户端程序会自动对换行格式进行转换，经过这种传输的文件字节数可能会发生变化”)问题四：在不同平台间使用FTP软件传送文件时, 在ascii文本模式传输模式下, 一些FTP客户端程序会自动对换行格式进行转换，经过这种传输的文件字节数可能会发生变化</p>
+</blockquote>
+<ul>
+<li>  解决方法：如果你不想ftp修改原文件, 可以使用bin模式(二进制模式)传输文本。</li>
 </ul>
-<h1 id="WebVPN无法访问jupyterlab的问题"><a href="#WebVPN无法访问jupyterlab的问题" class="headerlink" title="WebVPN无法访问jupyterlab的问题"></a>WebVPN无法访问jupyterlab的问题</h1><p>对于webvpn无法打开AIStation的问题，通过查看请求，发现某个url并未转码</p>
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><h3 id="下载requestly插件"><a href="#下载requestly插件" class="headerlink" title="下载requestly插件"></a>下载requestly插件</h3><p>地址：<a href="https://chrome.google.com/webstore/detail/requestly-redirect-url-mo/mdnleldcmiljblolnjhpnblkcekpdkpa">https://chrome.google.com/webstore/detail/requestly-redirect-url-mo/mdnleldcmiljblolnjhpnblkcekpdkpa</a></p>
-<h3 id="添加规则"><a href="#添加规则" class="headerlink" title="添加规则"></a>添加规则</h3><p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2021-04/20210530165159.png"></p>
-<figure class="highlight taggerscript"><table><tr><td class="code"><pre><span class="line">/https:<span class="symbol">\/</span><span class="symbol">\/</span>webvpn.xxxx.edu.cn<span class="symbol">\/</span>https-32206<span class="symbol">\/</span>77726476706e69737468656265737421f1fe52882624615f704684b5965037327044a0d1e9ffaa<span class="symbol">\/</span>jupyter<span class="symbol">\/</span>https:<span class="symbol">\/</span><span class="symbol">\/</span>(<span class="symbol">\d</span>+)<span class="symbol">\.</span>(<span class="symbol">\d</span>+)<span class="symbol">\.</span>(<span class="symbol">\d</span>+).(<span class="symbol">\d</span>+):(<span class="symbol">\d</span>+)([<span class="symbol">\s</span><span class="symbol">\S</span>]*)/i</span><br><span class="line"></span><br><span class="line">https://webvpn.xxxx.edu.cn/https-32206/77726476706e69737468656265737421f1fe52882624615f704684b5965037327044a0d1e9ffaa/jupyter/https<span class="variable">%3A%</span>2F<span class="variable">%2F$1.$2.$3.$4%</span>3A$5$6</span><br></pre></td></tr></table></figure>
-
 ]]></content>
       <categories>
         <category>linux</category>
       </categories>
-      <tags>
-        <tag>jupyterlab</tag>
-      </tags>
   </entry>
   <entry>
     <title>linux学习05 - linux环境变量与文件查找</title>
