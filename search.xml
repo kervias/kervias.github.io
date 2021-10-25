@@ -289,60 +289,6 @@
       </categories>
   </entry>
   <entry>
-    <title>Halo博客H2数据库查询</title>
-    <url>/posts/2d3051dc/</url>
-    <content><![CDATA[<blockquote>
-<p>记录一下Halo博客中如何操作H2数据库。</p>
-</blockquote>
-<span id="more"></span>
-<h1 id="0-Halo博客数据库文件路径"><a href="#0-Halo博客数据库文件路径" class="headerlink" title="0. Halo博客数据库文件路径"></a>0. Halo博客数据库文件路径</h1><p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162738.png"></p>
-<h1 id="1-使用Halo提供的h2-console"><a href="#1-使用Halo提供的h2-console" class="headerlink" title="1. 使用Halo提供的h2-console"></a>1. 使用Halo提供的h2-console</h1><h2 id="1-1-打开h2-console功能"><a href="#1-1-打开h2-console功能" class="headerlink" title="1.1 打开h2-console功能"></a>1.1 打开h2-console功能</h2><pre><code> 修改Halo博客的配置文件(~/.halo/application.yaml)，具体如下图
-</code></pre>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162751.png"></p>
-<pre>
-1. 将false改为true
-2. 设置完毕后重启容器
-</pre>
-<h2 id="1-2-访问网址"><a href="#1-2-访问网址" class="headerlink" title="1.2 访问网址"></a>1.2 访问网址</h2><pre><code> 网址：博客域名/h2-console
-</code></pre>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162807.png"></p>
-<p>需要注意一下<code>JDBC URL</code>的填写，用户名和密码在配置文件中已有说明</p>
-<h2 id="1-3-测试"><a href="#1-3-测试" class="headerlink" title="1.3 测试"></a>1.3 测试</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> MENUS </span><br></pre></td></tr></table></figure>
-
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162838.png"></p>
-<h1 id="2-在本地主机上使用数据库可视化工具"><a href="#2-在本地主机上使用数据库可视化工具" class="headerlink" title="2. 在本地主机上使用数据库可视化工具"></a>2. 在本地主机上使用数据库可视化工具</h1><blockquote>
-<p>在使用jdbc驱动版本选择时有坑，下面本人提供了一个版本，测试可用</p>
-</blockquote>
-<h2 id="2-1-工具介绍"><a href="#2-1-工具介绍" class="headerlink" title="2.1 工具介绍"></a>2.1 工具介绍</h2><pre><code>DBeaver 6.3.3(网址：https://dbeaver.io/)
-</code></pre>
-<h2 id="2-2-jdbc驱动jar包"><a href="#2-2-jdbc驱动jar包" class="headerlink" title="2.2 jdbc驱动jar包"></a>2.2 jdbc驱动jar包</h2><pre><code>下载下来，后面需要用到
-</code></pre>
-<p>/upload/2020/1/h2-2019-03-13-d5148978df7745808925f6f2ec3671b8.zip</p>
-<h2 id="2-3-创建数据库连接"><a href="#2-3-创建数据库连接" class="headerlink" title="2.3 创建数据库连接"></a>2.3 创建数据库连接</h2><ul>
-<li>新建数据库连接</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162902.png"></p>
-<ul>
-<li><p>选择H2 embedded<br><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162924.png"></p>
-</li>
-<li><p>选择db文件<br><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162943.png"></p>
-</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415163001.png"></p>
-<p><strong>注意将后面的.mv.db删除掉</strong><br>用户名和密码就是配置文件中的H2用户名和密码</p>
-<h2 id="2-6-编辑驱动设置"><a href="#2-6-编辑驱动设置" class="headerlink" title="2.6 编辑驱动设置"></a>2.6 编辑驱动设置</h2><p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415163038.png"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415163114.png"></p>
-<h2 id="2-5-连接"><a href="#2-5-连接" class="headerlink" title="2.5 连接"></a>2.5 连接</h2><p>创建连接完毕后，连接数据库<br>可以看出Public中的存在的表<br><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415163139.png"></p>
-<h2 id="2-6-测试"><a href="#2-6-测试" class="headerlink" title="2.6 测试"></a>2.6 测试</h2><p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415163152.png"></p>
-]]></content>
-      <categories>
-        <category>博客</category>
-      </categories>
-      <tags>
-        <tag>halo</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Git常用命令总结</title>
     <url>/posts/dwqdwq/</url>
     <content><![CDATA[<blockquote>
@@ -422,6 +368,60 @@
       </categories>
       <tags>
         <tag>命令总结</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Halo博客H2数据库查询</title>
+    <url>/posts/2d3051dc/</url>
+    <content><![CDATA[<blockquote>
+<p>记录一下Halo博客中如何操作H2数据库。</p>
+</blockquote>
+<span id="more"></span>
+<h1 id="0-Halo博客数据库文件路径"><a href="#0-Halo博客数据库文件路径" class="headerlink" title="0. Halo博客数据库文件路径"></a>0. Halo博客数据库文件路径</h1><p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162738.png"></p>
+<h1 id="1-使用Halo提供的h2-console"><a href="#1-使用Halo提供的h2-console" class="headerlink" title="1. 使用Halo提供的h2-console"></a>1. 使用Halo提供的h2-console</h1><h2 id="1-1-打开h2-console功能"><a href="#1-1-打开h2-console功能" class="headerlink" title="1.1 打开h2-console功能"></a>1.1 打开h2-console功能</h2><pre><code> 修改Halo博客的配置文件(~/.halo/application.yaml)，具体如下图
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162751.png"></p>
+<pre>
+1. 将false改为true
+2. 设置完毕后重启容器
+</pre>
+<h2 id="1-2-访问网址"><a href="#1-2-访问网址" class="headerlink" title="1.2 访问网址"></a>1.2 访问网址</h2><pre><code> 网址：博客域名/h2-console
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162807.png"></p>
+<p>需要注意一下<code>JDBC URL</code>的填写，用户名和密码在配置文件中已有说明</p>
+<h2 id="1-3-测试"><a href="#1-3-测试" class="headerlink" title="1.3 测试"></a>1.3 测试</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> MENUS </span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162838.png"></p>
+<h1 id="2-在本地主机上使用数据库可视化工具"><a href="#2-在本地主机上使用数据库可视化工具" class="headerlink" title="2. 在本地主机上使用数据库可视化工具"></a>2. 在本地主机上使用数据库可视化工具</h1><blockquote>
+<p>在使用jdbc驱动版本选择时有坑，下面本人提供了一个版本，测试可用</p>
+</blockquote>
+<h2 id="2-1-工具介绍"><a href="#2-1-工具介绍" class="headerlink" title="2.1 工具介绍"></a>2.1 工具介绍</h2><pre><code>DBeaver 6.3.3(网址：https://dbeaver.io/)
+</code></pre>
+<h2 id="2-2-jdbc驱动jar包"><a href="#2-2-jdbc驱动jar包" class="headerlink" title="2.2 jdbc驱动jar包"></a>2.2 jdbc驱动jar包</h2><pre><code>下载下来，后面需要用到
+</code></pre>
+<p>/upload/2020/1/h2-2019-03-13-d5148978df7745808925f6f2ec3671b8.zip</p>
+<h2 id="2-3-创建数据库连接"><a href="#2-3-创建数据库连接" class="headerlink" title="2.3 创建数据库连接"></a>2.3 创建数据库连接</h2><ul>
+<li>新建数据库连接</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162902.png"></p>
+<ul>
+<li><p>选择H2 embedded<br><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162924.png"></p>
+</li>
+<li><p>选择db文件<br><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162943.png"></p>
+</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415163001.png"></p>
+<p><strong>注意将后面的.mv.db删除掉</strong><br>用户名和密码就是配置文件中的H2用户名和密码</p>
+<h2 id="2-6-编辑驱动设置"><a href="#2-6-编辑驱动设置" class="headerlink" title="2.6 编辑驱动设置"></a>2.6 编辑驱动设置</h2><p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415163038.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415163114.png"></p>
+<h2 id="2-5-连接"><a href="#2-5-连接" class="headerlink" title="2.5 连接"></a>2.5 连接</h2><p>创建连接完毕后，连接数据库<br>可以看出Public中的存在的表<br><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415163139.png"></p>
+<h2 id="2-6-测试"><a href="#2-6-测试" class="headerlink" title="2.6 测试"></a>2.6 测试</h2><p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415163152.png"></p>
+]]></content>
+      <categories>
+        <category>博客</category>
+      </categories>
+      <tags>
+        <tag>halo</tag>
       </tags>
   </entry>
   <entry>
@@ -875,50 +875,6 @@ docker部署
       </tags>
   </entry>
   <entry>
-    <title>Linux下将python脚本封装成服务</title>
-    <url>/posts/db70b640/</url>
-    <content><![CDATA[<blockquote>
-<p>将脚本封装成服务方便后台运行</p>
-</blockquote>
-<span id="more"></span>
-
-<h1 id="nohup后台运行"><a href="#nohup后台运行" class="headerlink" title="nohup后台运行"></a>nohup后台运行</h1><blockquote>
-<p>nohup指不断地运行，是no hang up的缩写，指不间断，不挂断。运行一个进程的时候，不想让其在你退出账号时关闭，即可用nohup。nohup在不规定的情况下，所以输出内容会到nohup.out中</p>
-</blockquote>
-<p>运行示例：</p>
-<figure class="highlight 1c"><table><tr><td class="code"><pre><span class="line">nohup python my.py &gt;&gt; my.<span class="built_in">log</span> <span class="number">2</span>&gt;<span class="meta">&amp;1 &amp;</span></span><br><span class="line">nohup tomcat.sh &gt; /dev/<span class="literal">null</span> <span class="number">2</span>&gt;<span class="meta">&amp;1 &amp;</span></span><br></pre></td></tr></table></figure>
-
-<ol>
-<li><p><code>&gt;</code>和<code>&gt;&gt;</code>都是将输出重定向到指定位置（如文件），区别在于前者重写文件，后者追加到文件</p>
-</li>
-<li><p><code>/dev/null</code>相当于一个垃圾箱，如果不想知道输出内容，可以指定输出到次数</p>
-</li>
-<li><p>关于0、1、2</p>
-<p><code>0</code> 表示stdin标准输入，用户键盘输入的内容<br><code>1</code> 表示stdout标准输出，输出到显示屏的内容<br><code>2</code> 表示stderr标准错误，报错内容</p>
-</li>
-<li><p><code>2&gt;&amp;1</code>是一个整体，<code>&gt;</code>左右不能有空格，即将错误内容重定向输入到标准输出中去。</p>
-</li>
-<li><p><code>&amp;</code>为后台运行</p>
-</li>
-</ol>
-<h1 id="封装成system服务"><a href="#封装成system服务" class="headerlink" title="封装成system服务"></a>封装成system服务</h1><p>这个方法只适用于使用systemd的Linux系统，现在流行的Linux发行版都使用systemd。后台服务程序是随系统自启动的，我们只要把Python脚本配置为服务就行了。需要注意的一点是你Python脚本的启动时机，它依赖不依赖其他服务（网络连接、一些分区的挂载等等）。</p>
-<p>假设我们想将一个位置为<code>/home/autorun.py</code>的python脚本封装成服务。</p>
-<h2 id="创建Unit配置文件"><a href="#创建Unit配置文件" class="headerlink" title="创建Unit配置文件"></a>创建Unit配置文件</h2><figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">vim <span class="regexp">/lib/</span>systemd<span class="regexp">/system/</span>autorun.service</span><br></pre></td></tr></table></figure>
-
-<p>向文件中写入以下内容：</p>
-<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="section">[Unit]</span></span><br><span class="line"></span><br><span class="line"><span class="attr">Description</span>=Test Service</span><br><span class="line"></span><br><span class="line"><span class="attr">After</span>=multi-user.target</span><br><span class="line"></span><br><span class="line"><span class="section">[Service]</span></span><br><span class="line"></span><br><span class="line"><span class="attr">Type</span>=idle</span><br><span class="line"></span><br><span class="line"><span class="attr">ExecStart</span>=/usr/bin/python /home/snail/autorun.py</span><br><span class="line"></span><br><span class="line"><span class="section">[Install]</span></span><br><span class="line"></span><br><span class="line"><span class="attr">WantedBy</span>=multi-user.target</span><br></pre></td></tr></table></figure>
-
-<p>上面定义了一个叫 Test Service 的服务，它在multi-user环境起来之后运行；ExecStart参数指定我们要运行的程序，注意使用绝对路径；idle确保脚本在其他东西加载完成之后运行，它的默认值是simple。为了获得脚本的输出信息，我们可以重定向到文件：</p>
-<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">ExecStart=<span class="regexp">/usr/</span>bin<span class="regexp">/python /</span>home<span class="regexp">/snail/</span>autorun.py &gt; <span class="regexp">/home/</span>snail/autorun.log <span class="number">2</span>&gt;&amp;<span class="number">1</span></span><br></pre></td></tr></table></figure>
-
-<p>之后更改配置文件的权限：</p>
-<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">sudo chmod <span class="number">644</span> <span class="regexp">/lib/</span>systemd<span class="regexp">/system/</span>autorun.service</span><br></pre></td></tr></table></figure>
-<h2 id="使配置文件生效"><a href="#使配置文件生效" class="headerlink" title="使配置文件生效"></a>使配置文件生效</h2><figure class="highlight angelscript"><table><tr><td class="code"><pre><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl enable <span class="built_in">auto</span>run.service</span><br><span class="line">systemctl start <span class="built_in">auto</span>run.service</span><br><span class="line">systemctl status <span class="built_in">auto</span>run.service</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-  </entry>
-  <entry>
     <title>Linux操作系统源</title>
     <url>/posts/2480d896/</url>
     <content><![CDATA[<p>记录常见linux操作系统的源以及换源方式。</p>
@@ -1082,6 +1038,50 @@ docker部署
       <tags>
         <tag>MySQL</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>Linux下将python脚本封装成服务</title>
+    <url>/posts/db70b640/</url>
+    <content><![CDATA[<blockquote>
+<p>将脚本封装成服务方便后台运行</p>
+</blockquote>
+<span id="more"></span>
+
+<h1 id="nohup后台运行"><a href="#nohup后台运行" class="headerlink" title="nohup后台运行"></a>nohup后台运行</h1><blockquote>
+<p>nohup指不断地运行，是no hang up的缩写，指不间断，不挂断。运行一个进程的时候，不想让其在你退出账号时关闭，即可用nohup。nohup在不规定的情况下，所以输出内容会到nohup.out中</p>
+</blockquote>
+<p>运行示例：</p>
+<figure class="highlight 1c"><table><tr><td class="code"><pre><span class="line">nohup python my.py &gt;&gt; my.<span class="built_in">log</span> <span class="number">2</span>&gt;<span class="meta">&amp;1 &amp;</span></span><br><span class="line">nohup tomcat.sh &gt; /dev/<span class="literal">null</span> <span class="number">2</span>&gt;<span class="meta">&amp;1 &amp;</span></span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><p><code>&gt;</code>和<code>&gt;&gt;</code>都是将输出重定向到指定位置（如文件），区别在于前者重写文件，后者追加到文件</p>
+</li>
+<li><p><code>/dev/null</code>相当于一个垃圾箱，如果不想知道输出内容，可以指定输出到次数</p>
+</li>
+<li><p>关于0、1、2</p>
+<p><code>0</code> 表示stdin标准输入，用户键盘输入的内容<br><code>1</code> 表示stdout标准输出，输出到显示屏的内容<br><code>2</code> 表示stderr标准错误，报错内容</p>
+</li>
+<li><p><code>2&gt;&amp;1</code>是一个整体，<code>&gt;</code>左右不能有空格，即将错误内容重定向输入到标准输出中去。</p>
+</li>
+<li><p><code>&amp;</code>为后台运行</p>
+</li>
+</ol>
+<h1 id="封装成system服务"><a href="#封装成system服务" class="headerlink" title="封装成system服务"></a>封装成system服务</h1><p>这个方法只适用于使用systemd的Linux系统，现在流行的Linux发行版都使用systemd。后台服务程序是随系统自启动的，我们只要把Python脚本配置为服务就行了。需要注意的一点是你Python脚本的启动时机，它依赖不依赖其他服务（网络连接、一些分区的挂载等等）。</p>
+<p>假设我们想将一个位置为<code>/home/autorun.py</code>的python脚本封装成服务。</p>
+<h2 id="创建Unit配置文件"><a href="#创建Unit配置文件" class="headerlink" title="创建Unit配置文件"></a>创建Unit配置文件</h2><figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">vim <span class="regexp">/lib/</span>systemd<span class="regexp">/system/</span>autorun.service</span><br></pre></td></tr></table></figure>
+
+<p>向文件中写入以下内容：</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="section">[Unit]</span></span><br><span class="line"></span><br><span class="line"><span class="attr">Description</span>=Test Service</span><br><span class="line"></span><br><span class="line"><span class="attr">After</span>=multi-user.target</span><br><span class="line"></span><br><span class="line"><span class="section">[Service]</span></span><br><span class="line"></span><br><span class="line"><span class="attr">Type</span>=idle</span><br><span class="line"></span><br><span class="line"><span class="attr">ExecStart</span>=/usr/bin/python /home/snail/autorun.py</span><br><span class="line"></span><br><span class="line"><span class="section">[Install]</span></span><br><span class="line"></span><br><span class="line"><span class="attr">WantedBy</span>=multi-user.target</span><br></pre></td></tr></table></figure>
+
+<p>上面定义了一个叫 Test Service 的服务，它在multi-user环境起来之后运行；ExecStart参数指定我们要运行的程序，注意使用绝对路径；idle确保脚本在其他东西加载完成之后运行，它的默认值是simple。为了获得脚本的输出信息，我们可以重定向到文件：</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">ExecStart=<span class="regexp">/usr/</span>bin<span class="regexp">/python /</span>home<span class="regexp">/snail/</span>autorun.py &gt; <span class="regexp">/home/</span>snail/autorun.log <span class="number">2</span>&gt;&amp;<span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>之后更改配置文件的权限：</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">sudo chmod <span class="number">644</span> <span class="regexp">/lib/</span>systemd<span class="regexp">/system/</span>autorun.service</span><br></pre></td></tr></table></figure>
+<h2 id="使配置文件生效"><a href="#使配置文件生效" class="headerlink" title="使配置文件生效"></a>使配置文件生效</h2><figure class="highlight angelscript"><table><tr><td class="code"><pre><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl enable <span class="built_in">auto</span>run.service</span><br><span class="line">systemctl start <span class="built_in">auto</span>run.service</span><br><span class="line">systemctl status <span class="built_in">auto</span>run.service</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
   </entry>
   <entry>
     <title>Python3高级编程第2版-有用的设计模式</title>
@@ -1410,53 +1410,6 @@ docker部署
       </tags>
   </entry>
   <entry>
-    <title>Python爬虫下载长江雨课堂课程音频文件</title>
-    <url>/posts/35873/</url>
-    <content><![CDATA[<blockquote>
-<p>近日疫情原因，各学校采用线上教学。软件工程这门课采用长江雨课堂，由于马上就期中测试，准备回放复习一下课程，但是长江雨课堂的回放功能不支持倍速播放，于是准备将音频文件下载到本地播放。</p>
-</blockquote>
-<span id="more"></span>
-<h2 id="爬取分析"><a href="#爬取分析" class="headerlink" title="爬取分析"></a>爬取分析</h2><ul>
-<li><code>m3u8</code>音频格式</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/Snipaste_2020-03-27_15-58-54.png"></p>
-<p>可以看出其音频格式为<code>m3u8</code>。爬取步骤如下：</p>
-<ol>
-<li>获取课程信息</li>
-<li>根据课程信息获取m3u8文件地址</li>
-<li>根据m3u8文件中ts文件名下载ts文件</li>
-<li>合并ts文件</li>
-</ol>
-<ul>
-<li><code>mp3</code>音频格式</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/Snipaste_2020-03-27_16-05-31.png"></p>
-<p>可以看出其音频格式为<code>mp3</code>, 并且包含多段。爬取步骤如下：</p>
-<ol>
-<li>获取课程信息</li>
-<li>根据课程信息获取mp3文件地址</li>
-<li>下载mp3文件</li>
-<li>合并mp3文件</li>
-</ol>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p><strong>环境说明</strong></p>
-<ul>
-<li>语言：Python</li>
-<li>库：requests</li>
-</ul>
-<p><strong>使用说明</strong></p>
-<ul>
-<li>输入lessonID，每次下载一个课程的音频文件</li>
-<li>lessonID获取方式，见图片</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/Snipaste_2020-03-27_16-14-30.png"></p>
-<p><strong>Python代码</strong></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> json,time</span><br><span class="line"></span><br><span class="line">lessonID = <span class="string">&quot;4003249&quot;</span></span><br><span class="line"></span><br><span class="line">header = &#123;</span><br><span class="line">    <span class="string">&#x27;cookie&#x27;</span>:<span class="string">&quot;_ga=GA1.2.1597694283.1582103010; _did=web_2408385821B4C392; _gid=GA1.2.237363874.1585559892; csrftoken=UFomwya8SZP3HFR5gv9GnTQ6ChyipTSI; sessionid=o3lwkaqztkxg629ahwfnf3037jvwl9kl; django_language=zh-cn&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">url_lesson = <span class="string">&quot;https://changjiang.yuketang.cn/v/lesson/get_lesson_replay_timeline/?lesson_id=&#123;&#125;&quot;</span>.<span class="built_in">format</span>(lessonID)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 0. 获取m3u8路径</span></span><br><span class="line">resp = requests.get(url_lesson, headers=header)</span><br><span class="line">dic_info = json.loads(resp.text)</span><br><span class="line"></span><br><span class="line">m3u8_list = dic_info[<span class="string">&#x27;data&#x27;</span>][<span class="string">&#x27;live_timeline&#x27;</span>]</span><br><span class="line"></span><br><span class="line">num = <span class="number">1</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> m3u8_list:  <span class="comment">#可能存在多个文件</span></span><br><span class="line">    url_m3u8 = i[<span class="string">&quot;replay_url&quot;</span>]</span><br><span class="line">    <span class="built_in">print</span>(url_m3u8)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(<span class="string">&#x27;./&#123;&#125;/&#x27;</span>.<span class="built_in">format</span>(lessonID)):</span><br><span class="line">        os.mkdir(<span class="string">&#x27;./&#123;&#125;/&#x27;</span>.<span class="built_in">format</span>(lessonID))</span><br><span class="line">    <span class="keyword">if</span> <span class="string">&#x27;.m3u8&#x27;</span> <span class="keyword">in</span> url_m3u8: <span class="comment">#TS格式</span></span><br><span class="line">        <span class="comment"># 1. 下载m3u8文件</span></span><br><span class="line">        filename_m3u8 = <span class="string">&quot;./&#123;&#125;/&#123;&#125;&quot;</span>.<span class="built_in">format</span>(lessonID,url_m3u8.split(<span class="string">&#x27;/&#x27;</span>)[-<span class="number">1</span>])</span><br><span class="line">        resp = requests.get(url_m3u8, headers=header)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(filename_m3u8, <span class="string">&#x27;w&#x27;</span>, encoding=<span class="string">&#x27;utf8&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            f.write(resp.text)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 2. 获得TS文件名</span></span><br><span class="line">        dataTS = []</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(filename_m3u8, <span class="string">&#x27;r&#x27;</span>, encoding=<span class="string">&#x27;utf8&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            data = f.readlines();</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> data:</span><br><span class="line">                <span class="keyword">if</span> i.endswith(<span class="string">&quot;.ts\n&quot;</span>):</span><br><span class="line">                    dataTS.append(i[<span class="number">0</span>:-<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line">        url_ts_prefix = os.path.dirname(url_m3u8)+<span class="string">&quot;/&quot;</span></span><br><span class="line">        <span class="comment"># 2. 下载TS音频文件</span></span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;./&#123;&#125;/&#123;&#125;.ts&quot;</span>.<span class="built_in">format</span>(lessonID,url_m3u8.split(<span class="string">&#x27;/&#x27;</span>)[-<span class="number">1</span>].split(<span class="string">&#x27;.&#x27;</span>)[<span class="number">0</span>]), <span class="string">&#x27;wb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            <span class="keyword">for</span> ts <span class="keyword">in</span> dataTS:</span><br><span class="line">                nurl = url_ts_prefix + ts</span><br><span class="line">                <span class="built_in">print</span>(nurl)</span><br><span class="line">                resp = requests.get(nurl)</span><br><span class="line">                f.write(resp.content)</span><br><span class="line">    <span class="keyword">elif</span> <span class="string">&#x27;.mp3&#x27;</span> <span class="keyword">in</span> url_m3u8:</span><br><span class="line">        resp = requests.get(url_m3u8) <span class="comment">#mp3文件</span></span><br><span class="line">        filename = <span class="string">&quot;together_&quot;</span>+url_m3u8.split(<span class="string">&#x27;?&#x27;</span>)[<span class="number">0</span>].split(<span class="string">&#x27;/&#x27;</span>)[-<span class="number">1</span>]</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;./&#123;&#125;/&#123;&#125;&quot;</span>.<span class="built_in">format</span>(lessonID, filename), <span class="string">&#x27;ab+&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            f.write(resp.content) </span><br><span class="line"></span><br><span class="line">        filename = <span class="built_in">str</span>(num)+<span class="string">&quot;_&quot;</span>+url_m3u8.split(<span class="string">&#x27;?&#x27;</span>)[<span class="number">0</span>].split(<span class="string">&#x27;/&#x27;</span>)[-<span class="number">1</span>]</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;./&#123;&#125;/&#123;&#125;&quot;</span>.<span class="built_in">format</span>(lessonID, filename), <span class="string">&#x27;wb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            f.write(resp.content) </span><br><span class="line">        num += <span class="number">1</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">    	<span class="built_in">print</span>(<span class="string">&quot;未知URL &#123;&#125;&quot;</span>.<span class="built_in">format</span>(url_m3u8))</span><br><span class="line"></span><br><span class="line">url_lesson_info = <span class="string">&quot;https://changjiang.yuketang.cn/v/lesson/get_lesson_replay_content/?lesson_id=&#123;&#125;&quot;</span>.<span class="built_in">format</span>(lessonID)</span><br><span class="line">resp = requests.get(url_lesson_info, headers=header)</span><br><span class="line">title = json.loads(resp.text)[<span class="string">&quot;data&quot;</span>][<span class="string">&#x27;lesson&#x27;</span>][<span class="string">&#x27;title&#x27;</span>]</span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(<span class="string">&#x27;./&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(lessonID+<span class="string">&quot;_&quot;</span>+title)):</span><br><span class="line">    os.rename(<span class="string">&#x27;./&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(lessonID), <span class="string">&#x27;./&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(lessonID+<span class="string">&quot;_&quot;</span>+title))</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    os.rename(<span class="string">&#x27;./&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(lessonID+<span class="string">&quot;_&quot;</span>+title),<span class="string">&#x27;./&#123;&#125;_&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(lessonID+<span class="string">&quot;_&quot;</span>+title, <span class="built_in">int</span>(time.time())))</span><br><span class="line">    os.rename(<span class="string">&#x27;./&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(lessonID), <span class="string">&#x27;./&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(lessonID+<span class="string">&quot;_&quot;</span>+title))</span><br></pre></td></tr></table></figure>
-<p><strong>下载结果</strong><br><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/Snipaste_2020-03-27_16-22-33.png"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/Snipaste_2020-03-27_16-22-55.png"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/Snipaste_2020-03-27_16-23-08.png"></p>
-]]></content>
-  </entry>
-  <entry>
     <title>Python爬虫下载腾讯课堂回放视频</title>
     <url>/posts/21543/</url>
     <content><![CDATA[<blockquote>
@@ -1549,6 +1502,109 @@ docker部署
 
 
 ]]></content>
+  </entry>
+  <entry>
+    <title>Python爬虫下载长江雨课堂课程音频文件</title>
+    <url>/posts/35873/</url>
+    <content><![CDATA[<blockquote>
+<p>近日疫情原因，各学校采用线上教学。软件工程这门课采用长江雨课堂，由于马上就期中测试，准备回放复习一下课程，但是长江雨课堂的回放功能不支持倍速播放，于是准备将音频文件下载到本地播放。</p>
+</blockquote>
+<span id="more"></span>
+<h2 id="爬取分析"><a href="#爬取分析" class="headerlink" title="爬取分析"></a>爬取分析</h2><ul>
+<li><code>m3u8</code>音频格式</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/Snipaste_2020-03-27_15-58-54.png"></p>
+<p>可以看出其音频格式为<code>m3u8</code>。爬取步骤如下：</p>
+<ol>
+<li>获取课程信息</li>
+<li>根据课程信息获取m3u8文件地址</li>
+<li>根据m3u8文件中ts文件名下载ts文件</li>
+<li>合并ts文件</li>
+</ol>
+<ul>
+<li><code>mp3</code>音频格式</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/Snipaste_2020-03-27_16-05-31.png"></p>
+<p>可以看出其音频格式为<code>mp3</code>, 并且包含多段。爬取步骤如下：</p>
+<ol>
+<li>获取课程信息</li>
+<li>根据课程信息获取mp3文件地址</li>
+<li>下载mp3文件</li>
+<li>合并mp3文件</li>
+</ol>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p><strong>环境说明</strong></p>
+<ul>
+<li>语言：Python</li>
+<li>库：requests</li>
+</ul>
+<p><strong>使用说明</strong></p>
+<ul>
+<li>输入lessonID，每次下载一个课程的音频文件</li>
+<li>lessonID获取方式，见图片</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/Snipaste_2020-03-27_16-14-30.png"></p>
+<p><strong>Python代码</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> json,time</span><br><span class="line"></span><br><span class="line">lessonID = <span class="string">&quot;4003249&quot;</span></span><br><span class="line"></span><br><span class="line">header = &#123;</span><br><span class="line">    <span class="string">&#x27;cookie&#x27;</span>:<span class="string">&quot;_ga=GA1.2.1597694283.1582103010; _did=web_2408385821B4C392; _gid=GA1.2.237363874.1585559892; csrftoken=UFomwya8SZP3HFR5gv9GnTQ6ChyipTSI; sessionid=o3lwkaqztkxg629ahwfnf3037jvwl9kl; django_language=zh-cn&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">url_lesson = <span class="string">&quot;https://changjiang.yuketang.cn/v/lesson/get_lesson_replay_timeline/?lesson_id=&#123;&#125;&quot;</span>.<span class="built_in">format</span>(lessonID)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 0. 获取m3u8路径</span></span><br><span class="line">resp = requests.get(url_lesson, headers=header)</span><br><span class="line">dic_info = json.loads(resp.text)</span><br><span class="line"></span><br><span class="line">m3u8_list = dic_info[<span class="string">&#x27;data&#x27;</span>][<span class="string">&#x27;live_timeline&#x27;</span>]</span><br><span class="line"></span><br><span class="line">num = <span class="number">1</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> m3u8_list:  <span class="comment">#可能存在多个文件</span></span><br><span class="line">    url_m3u8 = i[<span class="string">&quot;replay_url&quot;</span>]</span><br><span class="line">    <span class="built_in">print</span>(url_m3u8)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(<span class="string">&#x27;./&#123;&#125;/&#x27;</span>.<span class="built_in">format</span>(lessonID)):</span><br><span class="line">        os.mkdir(<span class="string">&#x27;./&#123;&#125;/&#x27;</span>.<span class="built_in">format</span>(lessonID))</span><br><span class="line">    <span class="keyword">if</span> <span class="string">&#x27;.m3u8&#x27;</span> <span class="keyword">in</span> url_m3u8: <span class="comment">#TS格式</span></span><br><span class="line">        <span class="comment"># 1. 下载m3u8文件</span></span><br><span class="line">        filename_m3u8 = <span class="string">&quot;./&#123;&#125;/&#123;&#125;&quot;</span>.<span class="built_in">format</span>(lessonID,url_m3u8.split(<span class="string">&#x27;/&#x27;</span>)[-<span class="number">1</span>])</span><br><span class="line">        resp = requests.get(url_m3u8, headers=header)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(filename_m3u8, <span class="string">&#x27;w&#x27;</span>, encoding=<span class="string">&#x27;utf8&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            f.write(resp.text)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 2. 获得TS文件名</span></span><br><span class="line">        dataTS = []</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(filename_m3u8, <span class="string">&#x27;r&#x27;</span>, encoding=<span class="string">&#x27;utf8&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            data = f.readlines();</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> data:</span><br><span class="line">                <span class="keyword">if</span> i.endswith(<span class="string">&quot;.ts\n&quot;</span>):</span><br><span class="line">                    dataTS.append(i[<span class="number">0</span>:-<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line">        url_ts_prefix = os.path.dirname(url_m3u8)+<span class="string">&quot;/&quot;</span></span><br><span class="line">        <span class="comment"># 2. 下载TS音频文件</span></span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;./&#123;&#125;/&#123;&#125;.ts&quot;</span>.<span class="built_in">format</span>(lessonID,url_m3u8.split(<span class="string">&#x27;/&#x27;</span>)[-<span class="number">1</span>].split(<span class="string">&#x27;.&#x27;</span>)[<span class="number">0</span>]), <span class="string">&#x27;wb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            <span class="keyword">for</span> ts <span class="keyword">in</span> dataTS:</span><br><span class="line">                nurl = url_ts_prefix + ts</span><br><span class="line">                <span class="built_in">print</span>(nurl)</span><br><span class="line">                resp = requests.get(nurl)</span><br><span class="line">                f.write(resp.content)</span><br><span class="line">    <span class="keyword">elif</span> <span class="string">&#x27;.mp3&#x27;</span> <span class="keyword">in</span> url_m3u8:</span><br><span class="line">        resp = requests.get(url_m3u8) <span class="comment">#mp3文件</span></span><br><span class="line">        filename = <span class="string">&quot;together_&quot;</span>+url_m3u8.split(<span class="string">&#x27;?&#x27;</span>)[<span class="number">0</span>].split(<span class="string">&#x27;/&#x27;</span>)[-<span class="number">1</span>]</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;./&#123;&#125;/&#123;&#125;&quot;</span>.<span class="built_in">format</span>(lessonID, filename), <span class="string">&#x27;ab+&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            f.write(resp.content) </span><br><span class="line"></span><br><span class="line">        filename = <span class="built_in">str</span>(num)+<span class="string">&quot;_&quot;</span>+url_m3u8.split(<span class="string">&#x27;?&#x27;</span>)[<span class="number">0</span>].split(<span class="string">&#x27;/&#x27;</span>)[-<span class="number">1</span>]</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;./&#123;&#125;/&#123;&#125;&quot;</span>.<span class="built_in">format</span>(lessonID, filename), <span class="string">&#x27;wb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            f.write(resp.content) </span><br><span class="line">        num += <span class="number">1</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">    	<span class="built_in">print</span>(<span class="string">&quot;未知URL &#123;&#125;&quot;</span>.<span class="built_in">format</span>(url_m3u8))</span><br><span class="line"></span><br><span class="line">url_lesson_info = <span class="string">&quot;https://changjiang.yuketang.cn/v/lesson/get_lesson_replay_content/?lesson_id=&#123;&#125;&quot;</span>.<span class="built_in">format</span>(lessonID)</span><br><span class="line">resp = requests.get(url_lesson_info, headers=header)</span><br><span class="line">title = json.loads(resp.text)[<span class="string">&quot;data&quot;</span>][<span class="string">&#x27;lesson&#x27;</span>][<span class="string">&#x27;title&#x27;</span>]</span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(<span class="string">&#x27;./&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(lessonID+<span class="string">&quot;_&quot;</span>+title)):</span><br><span class="line">    os.rename(<span class="string">&#x27;./&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(lessonID), <span class="string">&#x27;./&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(lessonID+<span class="string">&quot;_&quot;</span>+title))</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    os.rename(<span class="string">&#x27;./&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(lessonID+<span class="string">&quot;_&quot;</span>+title),<span class="string">&#x27;./&#123;&#125;_&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(lessonID+<span class="string">&quot;_&quot;</span>+title, <span class="built_in">int</span>(time.time())))</span><br><span class="line">    os.rename(<span class="string">&#x27;./&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(lessonID), <span class="string">&#x27;./&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(lessonID+<span class="string">&quot;_&quot;</span>+title))</span><br></pre></td></tr></table></figure>
+<p><strong>下载结果</strong><br><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/Snipaste_2020-03-27_16-22-33.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/Snipaste_2020-03-27_16-22-55.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/Snipaste_2020-03-27_16-23-08.png"></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>StarUML破解教程</title>
+    <url>/posts/b785abd2/</url>
+    <content><![CDATA[<blockquote>
+<p>StarUML 是非常好的UML画图工具，这里介绍StarUML3.2.2的破解教程。</p>
+</blockquote>
+<ul>
+<li><strong>有能力的请支持正版！</strong></li>
+<li>参考教程：<a href="https://www.cnblogs.com/yourstars/p/9309529.html">https://www.cnblogs.com/yourstars/p/9309529.html</a></li>
+<li>在破解基础上取消自动更新</li>
+</ul>
+<span id="more"></span>
+
+<h3 id="破解原理"><a href="#破解原理" class="headerlink" title="破解原理"></a>破解原理</h3><p><a href="http://staruml.io/download"><code>StarUML</code></a>是用<code>nodejs</code>写的。确切的说是用<a href="https://github.com/electron/electron">Electron前端框架</a>写的。</p>
+<p>新版本中所有的starUML源代码是通过<a href="https://github.com/electron/asar">asar</a>工具打包而成。</p>
+<p>确切的代码位置在<code>%LOCALAPPDATA%\Programs\StarURML\resources\app.asar</code>。</p>
+<h3 id="环境安装"><a href="#环境安装" class="headerlink" title="环境安装"></a>环境安装</h3><p>在执行下列操作前，<strong>请确保本机安装了<code>nodejs    </code>工具</strong></p>
+<p>我们可以通过<code>asar</code>工具解压修改达到破解目的。具体操作如下：</p>
+<ol>
+<li><p>安装<code>nodejs</code></p>
+<p><a href="https://nodejs.org/en/download/">https://nodejs.org/en/download/</a></p>
+</li>
+<li><p>安装<code>asar</code></p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">cnpm install -g asar  <span class="regexp">//</span>或者npm install -g asar</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h3 id="修改源代码"><a href="#修改源代码" class="headerlink" title="修改源代码"></a>修改源代码</h3><p>打开软件安装路径，找到resources文件夹下的app.asar文件，将其复制到另一文件夹，我们从另一文件夹内解压app.asar，修改其中代码，最后将其压缩为app.asar文件替换最初的app.asar文件。具体过程如下：</p>
+<ol>
+<li><p>解压app.asar</p>
+<figure class="highlight stata"><table><tr><td class="code"><pre><span class="line">asar extract <span class="keyword">app</span>.asar ./<span class="keyword">app</span> <span class="comment">// 解压到app文件夹</span></span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>修改<code>app\src\engine\license-manager.js</code>文件 –&gt; 取消<code>注册操作</code></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">checkLicenseValidity () &#123;</span><br><span class="line">  <span class="built_in">this</span>.validate().then(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    setStatus(<span class="built_in">this</span>, <span class="literal">true</span>)</span><br><span class="line">  &#125;, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">//setStatus(this, false)</span></span><br><span class="line">    <span class="comment">//UnregisteredDialog.showDialog()</span></span><br><span class="line">    </span><br><span class="line">    setStatus(<span class="built_in">this</span>, <span class="literal">true</span>)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>找到上述代码位置，注释掉原先两行代码，添加<code>setStatus(this, true)</code>。</p>
+</li>
+<li><p>修改<code>app\src\engine\update-manager.js</code>文件 –&gt; 取消<code>自动更新</code></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Check extensions updates</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">checkExtensionUpdates () &#123;</span><br><span class="line">  ExtensionManager.downloadRegistry().done(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> updateAvailable = <span class="literal">false</span></span><br><span class="line">    _.each(ExtensionManager.extensions, <span class="function"><span class="params">ext</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">//if (ext.installInfo &amp;&amp; ext.installInfo.updateAvailable) &#123;</span></span><br><span class="line">        <span class="comment">//updateAvailable = true</span></span><br><span class="line">      <span class="comment">//&#125;</span></span><br><span class="line">        updateAvailable = <span class="literal">false</span></span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="keyword">if</span> (updateAvailable) &#123;</span><br><span class="line">      $(<span class="string">&#x27;#toolbar-extension-manager&#x27;</span>).addClass(<span class="string">&#x27;selected&#x27;</span>)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      $(<span class="string">&#x27;#toolbar-extension-manager&#x27;</span>).removeClass(<span class="string">&#x27;selected&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>找到上述代码位置，注释那几行代码，添加<code>updateAvailable = false</code>。</p>
+</li>
+<li><p>重新打包<code>app.asar</code></p>
+<figure class="highlight stata"><table><tr><td class="code"><pre><span class="line">asar pack <span class="keyword">app</span> <span class="keyword">app</span>.asar</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将打包后的<code>app.asar</code>覆盖原先的<code>app.asar</code>文件</p>
+</li>
+</ol>
+<h3 id="已经破解好的StarUML"><a href="#已经破解好的StarUML" class="headerlink" title="已经破解好的StarUML"></a>已经破解好的StarUML</h3><p><a href="https://jxjjxy-my.sharepoint.com/:u:/g/personal/cxz_kervia1_t_odmail_cn/Efh1n8IPGbZMqhmdubupEAsBwk6GVdVutPwb9Eoizy_qUQ?e=9ai3Jr">下载地址</a></p>
+]]></content>
+      <categories>
+        <category>工具</category>
+      </categories>
   </entry>
   <entry>
     <title>Python爬虫解析库-XPath</title>
@@ -1674,62 +1730,6 @@ docker部署
       </tags>
   </entry>
   <entry>
-    <title>StarUML破解教程</title>
-    <url>/posts/b785abd2/</url>
-    <content><![CDATA[<blockquote>
-<p>StarUML 是非常好的UML画图工具，这里介绍StarUML3.2.2的破解教程。</p>
-</blockquote>
-<ul>
-<li><strong>有能力的请支持正版！</strong></li>
-<li>参考教程：<a href="https://www.cnblogs.com/yourstars/p/9309529.html">https://www.cnblogs.com/yourstars/p/9309529.html</a></li>
-<li>在破解基础上取消自动更新</li>
-</ul>
-<span id="more"></span>
-
-<h3 id="破解原理"><a href="#破解原理" class="headerlink" title="破解原理"></a>破解原理</h3><p><a href="http://staruml.io/download"><code>StarUML</code></a>是用<code>nodejs</code>写的。确切的说是用<a href="https://github.com/electron/electron">Electron前端框架</a>写的。</p>
-<p>新版本中所有的starUML源代码是通过<a href="https://github.com/electron/asar">asar</a>工具打包而成。</p>
-<p>确切的代码位置在<code>%LOCALAPPDATA%\Programs\StarURML\resources\app.asar</code>。</p>
-<h3 id="环境安装"><a href="#环境安装" class="headerlink" title="环境安装"></a>环境安装</h3><p>在执行下列操作前，<strong>请确保本机安装了<code>nodejs    </code>工具</strong></p>
-<p>我们可以通过<code>asar</code>工具解压修改达到破解目的。具体操作如下：</p>
-<ol>
-<li><p>安装<code>nodejs</code></p>
-<p><a href="https://nodejs.org/en/download/">https://nodejs.org/en/download/</a></p>
-</li>
-<li><p>安装<code>asar</code></p>
-<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">cnpm install -g asar  <span class="regexp">//</span>或者npm install -g asar</span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-<h3 id="修改源代码"><a href="#修改源代码" class="headerlink" title="修改源代码"></a>修改源代码</h3><p>打开软件安装路径，找到resources文件夹下的app.asar文件，将其复制到另一文件夹，我们从另一文件夹内解压app.asar，修改其中代码，最后将其压缩为app.asar文件替换最初的app.asar文件。具体过程如下：</p>
-<ol>
-<li><p>解压app.asar</p>
-<figure class="highlight stata"><table><tr><td class="code"><pre><span class="line">asar extract <span class="keyword">app</span>.asar ./<span class="keyword">app</span> <span class="comment">// 解压到app文件夹</span></span><br></pre></td></tr></table></figure>
-
-
-</li>
-<li><p>修改<code>app\src\engine\license-manager.js</code>文件 –&gt; 取消<code>注册操作</code></p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">checkLicenseValidity () &#123;</span><br><span class="line">  <span class="built_in">this</span>.validate().then(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    setStatus(<span class="built_in">this</span>, <span class="literal">true</span>)</span><br><span class="line">  &#125;, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">//setStatus(this, false)</span></span><br><span class="line">    <span class="comment">//UnregisteredDialog.showDialog()</span></span><br><span class="line">    </span><br><span class="line">    setStatus(<span class="built_in">this</span>, <span class="literal">true</span>)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>找到上述代码位置，注释掉原先两行代码，添加<code>setStatus(this, true)</code>。</p>
-</li>
-<li><p>修改<code>app\src\engine\update-manager.js</code>文件 –&gt; 取消<code>自动更新</code></p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Check extensions updates</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">checkExtensionUpdates () &#123;</span><br><span class="line">  ExtensionManager.downloadRegistry().done(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> updateAvailable = <span class="literal">false</span></span><br><span class="line">    _.each(ExtensionManager.extensions, <span class="function"><span class="params">ext</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">//if (ext.installInfo &amp;&amp; ext.installInfo.updateAvailable) &#123;</span></span><br><span class="line">        <span class="comment">//updateAvailable = true</span></span><br><span class="line">      <span class="comment">//&#125;</span></span><br><span class="line">        updateAvailable = <span class="literal">false</span></span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="keyword">if</span> (updateAvailable) &#123;</span><br><span class="line">      $(<span class="string">&#x27;#toolbar-extension-manager&#x27;</span>).addClass(<span class="string">&#x27;selected&#x27;</span>)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      $(<span class="string">&#x27;#toolbar-extension-manager&#x27;</span>).removeClass(<span class="string">&#x27;selected&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>找到上述代码位置，注释那几行代码，添加<code>updateAvailable = false</code>。</p>
-</li>
-<li><p>重新打包<code>app.asar</code></p>
-<figure class="highlight stata"><table><tr><td class="code"><pre><span class="line">asar pack <span class="keyword">app</span> <span class="keyword">app</span>.asar</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>将打包后的<code>app.asar</code>覆盖原先的<code>app.asar</code>文件</p>
-</li>
-</ol>
-<h3 id="已经破解好的StarUML"><a href="#已经破解好的StarUML" class="headerlink" title="已经破解好的StarUML"></a>已经破解好的StarUML</h3><p><a href="https://jxjjxy-my.sharepoint.com/:u:/g/personal/cxz_kervia1_t_odmail_cn/Efh1n8IPGbZMqhmdubupEAsBwk6GVdVutPwb9Eoizy_qUQ?e=9ai3Jr">下载地址</a></p>
-]]></content>
-      <categories>
-        <category>工具</category>
-      </categories>
-  </entry>
-  <entry>
     <title>Telegram-cli使用教程</title>
     <url>/posts/scja9c88h/</url>
     <content><![CDATA[<blockquote>
@@ -1802,6 +1802,55 @@ docker部署
       </categories>
       <tags>
         <tag>telegram</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>WebDriver下载地址</title>
+    <url>/posts/6b450c9b/</url>
+    <content><![CDATA[<blockquote>
+<p>在使用python的selenium库实现python爬虫时, 需要安装一些浏览器的driver, 每次安装时都需要寻找下载地址, 这里将各浏览器driver的下载地址记录下来, 方便以后查询.</p>
+</blockquote>
+<span id="more"></span>
+<h3 id="各driver下载地址"><a href="#各driver下载地址" class="headerlink" title="各driver下载地址"></a>各driver下载地址</h3><h4 id="1-chrome浏览器"><a href="#1-chrome浏览器" class="headerlink" title="1. chrome浏览器"></a>1. chrome浏览器</h4><ul>
+<li><a href="https://chromedriver.storage.googleapis.com/index.html">下载地址</a></li>
+</ul>
+<h4 id="2-Firefox浏览器"><a href="#2-Firefox浏览器" class="headerlink" title="2. Firefox浏览器"></a>2. Firefox浏览器</h4><ul>
+<li><a href="https://github.com/mozilla/geckodriver/releases/">下载地址</a></li>
+</ul>
+<h4 id="3-IE浏览器"><a href="#3-IE浏览器" class="headerlink" title="3. IE浏览器"></a>3. IE浏览器</h4><ul>
+<li><a href="https://selenium-release.storage.googleapis.com/index.html">下载地址</a></li>
+</ul>
+<h4 id="4-PhantomJS"><a href="#4-PhantomJS" class="headerlink" title="4. PhantomJS"></a>4. PhantomJS</h4><ul>
+<li><p><a href="https://phantomjs.org/download.html">下载地址</a></p>
+<blockquote>
+<p>这个webdriver已经被selenium弃用了, 使用时会显示相关的警告信息.</p>
+<p>可以替代的有chrome和Firefox的无头浏览器.</p>
+</blockquote>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 以chromedriver为例, 展示其使用方法</span></span><br><span class="line"><span class="keyword">from</span> selenium <span class="keyword">import</span> webdriver</span><br><span class="line">browser = webdriver.Chrome() // FireFox(), Ie(), PhantomJS()</span><br><span class="line">broswer.get(<span class="string">&#x27;https://baidu.com&#x27;</span>) //网址</span><br><span class="line"><span class="built_in">print</span>(broswer.page_source)</span><br><span class="line">browser.close()</span><br></pre></td></tr></table></figure>
+
+
+
+<hr>
+<h3 id="安装方法"><a href="#安装方法" class="headerlink" title="安装方法"></a>安装方法</h3><blockquote>
+<p>按照对应浏览器版本下载driver, 下载后放在具有环境变量的路径内, 如果不知道如何操作, 直接将driver.exe放在python安装路径下</p>
+</blockquote>
+<h3 id="无头浏览器"><a href="#无头浏览器" class="headerlink" title="无头浏览器"></a>无头浏览器</h3><blockquote>
+<p>chrome和 Firfox都具有类似PhantomJS的功能</p>
+</blockquote>
+<ul>
+<li><p>使用方法如下:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> selenium <span class="keyword">import</span> webdriver</span><br><span class="line"><span class="keyword">from</span> selenium.webdriver.chrome.options <span class="keyword">import</span> Options</span><br><span class="line">chrome_options = Options()</span><br><span class="line">chrome_options.add_argument(<span class="string">&#x27;--headless&#x27;</span>)</span><br><span class="line">chrome_options.add_argument(<span class="string">&#x27;--disable-gpu&#x27;</span>)</span><br><span class="line">driver = webdriver.Chrome(chrome_options=chrome_options)</span><br><span class="line">driver.get(<span class="string">&quot;https://baidu.com/&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(driver.page_source)</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>爬虫</category>
+      </categories>
+      <tags>
+        <tag>webdriver</tag>
       </tags>
   </entry>
   <entry>
@@ -1965,55 +2014,6 @@ docker部署
       </tags>
   </entry>
   <entry>
-    <title>WebDriver下载地址</title>
-    <url>/posts/6b450c9b/</url>
-    <content><![CDATA[<blockquote>
-<p>在使用python的selenium库实现python爬虫时, 需要安装一些浏览器的driver, 每次安装时都需要寻找下载地址, 这里将各浏览器driver的下载地址记录下来, 方便以后查询.</p>
-</blockquote>
-<span id="more"></span>
-<h3 id="各driver下载地址"><a href="#各driver下载地址" class="headerlink" title="各driver下载地址"></a>各driver下载地址</h3><h4 id="1-chrome浏览器"><a href="#1-chrome浏览器" class="headerlink" title="1. chrome浏览器"></a>1. chrome浏览器</h4><ul>
-<li><a href="https://chromedriver.storage.googleapis.com/index.html">下载地址</a></li>
-</ul>
-<h4 id="2-Firefox浏览器"><a href="#2-Firefox浏览器" class="headerlink" title="2. Firefox浏览器"></a>2. Firefox浏览器</h4><ul>
-<li><a href="https://github.com/mozilla/geckodriver/releases/">下载地址</a></li>
-</ul>
-<h4 id="3-IE浏览器"><a href="#3-IE浏览器" class="headerlink" title="3. IE浏览器"></a>3. IE浏览器</h4><ul>
-<li><a href="https://selenium-release.storage.googleapis.com/index.html">下载地址</a></li>
-</ul>
-<h4 id="4-PhantomJS"><a href="#4-PhantomJS" class="headerlink" title="4. PhantomJS"></a>4. PhantomJS</h4><ul>
-<li><p><a href="https://phantomjs.org/download.html">下载地址</a></p>
-<blockquote>
-<p>这个webdriver已经被selenium弃用了, 使用时会显示相关的警告信息.</p>
-<p>可以替代的有chrome和Firefox的无头浏览器.</p>
-</blockquote>
-</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 以chromedriver为例, 展示其使用方法</span></span><br><span class="line"><span class="keyword">from</span> selenium <span class="keyword">import</span> webdriver</span><br><span class="line">browser = webdriver.Chrome() // FireFox(), Ie(), PhantomJS()</span><br><span class="line">broswer.get(<span class="string">&#x27;https://baidu.com&#x27;</span>) //网址</span><br><span class="line"><span class="built_in">print</span>(broswer.page_source)</span><br><span class="line">browser.close()</span><br></pre></td></tr></table></figure>
-
-
-
-<hr>
-<h3 id="安装方法"><a href="#安装方法" class="headerlink" title="安装方法"></a>安装方法</h3><blockquote>
-<p>按照对应浏览器版本下载driver, 下载后放在具有环境变量的路径内, 如果不知道如何操作, 直接将driver.exe放在python安装路径下</p>
-</blockquote>
-<h3 id="无头浏览器"><a href="#无头浏览器" class="headerlink" title="无头浏览器"></a>无头浏览器</h3><blockquote>
-<p>chrome和 Firfox都具有类似PhantomJS的功能</p>
-</blockquote>
-<ul>
-<li><p>使用方法如下:</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> selenium <span class="keyword">import</span> webdriver</span><br><span class="line"><span class="keyword">from</span> selenium.webdriver.chrome.options <span class="keyword">import</span> Options</span><br><span class="line">chrome_options = Options()</span><br><span class="line">chrome_options.add_argument(<span class="string">&#x27;--headless&#x27;</span>)</span><br><span class="line">chrome_options.add_argument(<span class="string">&#x27;--disable-gpu&#x27;</span>)</span><br><span class="line">driver = webdriver.Chrome(chrome_options=chrome_options)</span><br><span class="line">driver.get(<span class="string">&quot;https://baidu.com/&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(driver.page_source)</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>爬虫</category>
-      </categories>
-      <tags>
-        <tag>webdriver</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>centos防火墙设置</title>
     <url>/posts/751f4e41/</url>
     <content><![CDATA[<blockquote>
@@ -2095,6 +2095,35 @@ docker部署
       </tags>
   </entry>
   <entry>
+    <title>crontab相关</title>
+    <url>/posts/1bfd1149/</url>
+    <content><![CDATA[<blockquote>
+<p>记录crontab相关的操作以及问题</p>
+</blockquote>
+<span id="more"></span>
+
+<h1 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h1><h2 id="1-var-log-目录下没有cron开头的日志文件"><a href="#1-var-log-目录下没有cron开头的日志文件" class="headerlink" title="1. /var/log/目录下没有cron开头的日志文件"></a>1. /var/log/目录下没有cron开头的日志文件</h2><p>(1) 修改<code>/etc/rsyslog.d/50-default.conf </code>文件，将文件中的  <code>#cron.*  </code>前的  <code>#</code>  删掉。</p>
+<p>​        如果没有<code>50-default.conf</code>文件，可以看<code>/etc/rsyslog.conf</code>是否包含<code>#cron.*  </code>，从而进行相应修改</p>
+<p>(2) 执行以下命令</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">service rsyslog restart</span><br><span class="line">service cron restart</span><br></pre></td></tr></table></figure>
+
+<p>(3) 最后查看日志文件</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tail /var/<span class="built_in">log</span>/cron.log </span><br></pre></td></tr></table></figure>
+
+<h2 id="2-修改cron日志文件中的时区"><a href="#2-修改cron日志文件中的时区" class="headerlink" title="2. 修改cron日志文件中的时区"></a>2. 修改cron日志文件中的时区</h2><figure class="highlight dsconfig"><table><tr><td class="code"><pre><span class="line"><span class="string">timedatectl</span> <span class="built_in">set-timezone</span> <span class="string">&quot;Asia/Shanghai&quot;</span></span><br><span class="line"><span class="string">service</span> <span class="string">rsyslog</span> <span class="string">restart</span></span><br><span class="line"><span class="string">service</span> <span class="string">cron</span> <span class="string">restart</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="3-测试服务器是否被封禁邮件端口"><a href="#3-测试服务器是否被封禁邮件端口" class="headerlink" title="3. 测试服务器是否被封禁邮件端口"></a>3. 测试服务器是否被封禁邮件端口</h2><figure class="highlight tap"><table><tr><td class="code"><pre><span class="line">apt-get install telnet <span class="comment"># 安装</span></span><br><span class="line">telnet smtp.qq.com<span class="number"> 25 </span><span class="comment"># 测试25端口</span></span><br><span class="line">telnet smtp.qq.com<span class="number"> 465 </span><span class="comment"># 测试465端口</span></span><br></pre></td></tr></table></figure>
+
+<p>如果一直trying，则表明端口被封禁，正常情况下返回数据。</p>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>GNUTool</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>docker安装forsaken mail</title>
     <url>/posts/918f076b/</url>
     <content><![CDATA[<blockquote>
@@ -2125,35 +2154,6 @@ docker部署
       <categories>
         <category>linux</category>
       </categories>
-  </entry>
-  <entry>
-    <title>crontab相关</title>
-    <url>/posts/1bfd1149/</url>
-    <content><![CDATA[<blockquote>
-<p>记录crontab相关的操作以及问题</p>
-</blockquote>
-<span id="more"></span>
-
-<h1 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h1><h2 id="1-var-log-目录下没有cron开头的日志文件"><a href="#1-var-log-目录下没有cron开头的日志文件" class="headerlink" title="1. /var/log/目录下没有cron开头的日志文件"></a>1. /var/log/目录下没有cron开头的日志文件</h2><p>(1) 修改<code>/etc/rsyslog.d/50-default.conf </code>文件，将文件中的  <code>#cron.*  </code>前的  <code>#</code>  删掉。</p>
-<p>​        如果没有<code>50-default.conf</code>文件，可以看<code>/etc/rsyslog.conf</code>是否包含<code>#cron.*  </code>，从而进行相应修改</p>
-<p>(2) 执行以下命令</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">service rsyslog restart</span><br><span class="line">service cron restart</span><br></pre></td></tr></table></figure>
-
-<p>(3) 最后查看日志文件</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tail /var/<span class="built_in">log</span>/cron.log </span><br></pre></td></tr></table></figure>
-
-<h2 id="2-修改cron日志文件中的时区"><a href="#2-修改cron日志文件中的时区" class="headerlink" title="2. 修改cron日志文件中的时区"></a>2. 修改cron日志文件中的时区</h2><figure class="highlight dsconfig"><table><tr><td class="code"><pre><span class="line"><span class="string">timedatectl</span> <span class="built_in">set-timezone</span> <span class="string">&quot;Asia/Shanghai&quot;</span></span><br><span class="line"><span class="string">service</span> <span class="string">rsyslog</span> <span class="string">restart</span></span><br><span class="line"><span class="string">service</span> <span class="string">cron</span> <span class="string">restart</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="3-测试服务器是否被封禁邮件端口"><a href="#3-测试服务器是否被封禁邮件端口" class="headerlink" title="3. 测试服务器是否被封禁邮件端口"></a>3. 测试服务器是否被封禁邮件端口</h2><figure class="highlight tap"><table><tr><td class="code"><pre><span class="line">apt-get install telnet <span class="comment"># 安装</span></span><br><span class="line">telnet smtp.qq.com<span class="number"> 25 </span><span class="comment"># 测试25端口</span></span><br><span class="line">telnet smtp.qq.com<span class="number"> 465 </span><span class="comment"># 测试465端口</span></span><br></pre></td></tr></table></figure>
-
-<p>如果一直trying，则表明端口被封禁，正常情况下返回数据。</p>
-]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>GNUTool</tag>
-      </tags>
   </entry>
   <entry>
     <title>docker常用命令总结</title>
@@ -2331,39 +2331,6 @@ docker部署
       </tags>
   </entry>
   <entry>
-    <title>hexo本地项目迁移(更换文件夹)</title>
-    <url>/posts/ae561650/</url>
-    <content><![CDATA[<blockquote>
-<p>有时候, 我们可能需要将本地hexo博客项目备份, 或者将本地项目换个文件夹.<br>但是如果我们直接将文件夹移动位置时会发现移动后输入hexo s启动报错,所以我们有必要知道如何将本地项目更换文件夹.<br>如果能做到这一点, 我们还可以备份到另一台电脑, 在其他环境重新编辑部署hexo博客.</p>
-</blockquote>
-<span id="more"></span>
-
-<blockquote>
-<p>进入正题, 简单的三个步骤: </p>
-</blockquote>
-<ol>
-<li><p>在新环境下新建文件夹<br> 新建的文件夹用来放置之前的项目<br> 注意: <strong>不要用hexo init初始化</strong></p>
-</li>
-<li><p>复制原先项目文件<br> 这里我们只需要复制除了.deploy_git, node_modules, public三个文件夹之外, 其他的文件全部复制到新建文件夹里面.</p>
-</li>
-<li><p>安装所需插件(node_modules)<br>在新建文件夹内, 右键git bash here<br>输入命令:</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install //已经安装阿里镜像的可以用cnpm install</span><br></pre></td></tr></table></figure>
-<p>这一步是根据package.json文件安装需要的模块, 具体文件内容可以自己打开看看.</p>
-</li>
-</ol>
-<p>这样我们就完成了项目迁移!</p>
-<blockquote>
-<p>如果想知道如何迁移到其他电脑,可以参考这个博客:<br><a href="https://andyvj.coding.me/2019/02/19/190219-03/">hexo 迁移更换电脑，或多电脑终端更新博客</a></p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>博客</category>
-      </categories>
-      <tags>
-        <tag>hexo</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>ffmpeg常用命令总结</title>
     <url>/posts/d827b859/</url>
     <content><![CDATA[<blockquote>
@@ -2421,6 +2388,39 @@ docker部署
       </categories>
       <tags>
         <tag>命令总结</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>hexo本地项目迁移(更换文件夹)</title>
+    <url>/posts/ae561650/</url>
+    <content><![CDATA[<blockquote>
+<p>有时候, 我们可能需要将本地hexo博客项目备份, 或者将本地项目换个文件夹.<br>但是如果我们直接将文件夹移动位置时会发现移动后输入hexo s启动报错,所以我们有必要知道如何将本地项目更换文件夹.<br>如果能做到这一点, 我们还可以备份到另一台电脑, 在其他环境重新编辑部署hexo博客.</p>
+</blockquote>
+<span id="more"></span>
+
+<blockquote>
+<p>进入正题, 简单的三个步骤: </p>
+</blockquote>
+<ol>
+<li><p>在新环境下新建文件夹<br> 新建的文件夹用来放置之前的项目<br> 注意: <strong>不要用hexo init初始化</strong></p>
+</li>
+<li><p>复制原先项目文件<br> 这里我们只需要复制除了.deploy_git, node_modules, public三个文件夹之外, 其他的文件全部复制到新建文件夹里面.</p>
+</li>
+<li><p>安装所需插件(node_modules)<br>在新建文件夹内, 右键git bash here<br>输入命令:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install //已经安装阿里镜像的可以用cnpm install</span><br></pre></td></tr></table></figure>
+<p>这一步是根据package.json文件安装需要的模块, 具体文件内容可以自己打开看看.</p>
+</li>
+</ol>
+<p>这样我们就完成了项目迁移!</p>
+<blockquote>
+<p>如果想知道如何迁移到其他电脑,可以参考这个博客:<br><a href="https://andyvj.coding.me/2019/02/19/190219-03/">hexo 迁移更换电脑，或多电脑终端更新博客</a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>博客</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -3216,6 +3216,98 @@ docker部署
       </categories>
   </entry>
   <entry>
+    <title>linux添加虚拟内存swap</title>
+    <url>/posts/218b6e0a/</url>
+    <content><![CDATA[<blockquote>
+<p>记录linux如何新建swap分区，添加虚拟内存，解决服务器内存不足的问题。</p>
+</blockquote>
+<span id="more"></span>
+
+<h1 id="新建swap分区"><a href="#新建swap分区" class="headerlink" title="新建swap分区"></a>新建swap分区</h1><h2 id="创建分区文件"><a href="#创建分区文件" class="headerlink" title="创建分区文件"></a>创建分区文件</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">dd if=/dev/zero of=/root/swapfile bs=1M count=2048</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>dd:  用指定大小的块拷贝一个文件，并在拷贝的同时进行指定的转换。</li>
+<li>if: 输入文件名，缺省为标准输入，即指定源文件</li>
+<li>of: 输出文件名，缺省为标准输出，即指定目的文件</li>
+<li>/dev/zero: 创建一个指定长度用于初始化的空文件</li>
+<li>bs: bytes，设置读入/输出的块大小</li>
+<li>count: 拷贝块的个数</li>
+<li>上述命令指定了/root/swapfile 大小为2G</li>
+</ul>
+<h2 id="修改文件权限、建立swap分区并启用"><a href="#修改文件权限、建立swap分区并启用" class="headerlink" title="修改文件权限、建立swap分区并启用"></a>修改文件权限、建立swap分区并启用</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">chmod 0600 /root/swapfile</span><br><span class="line">mkswap /root/swapfile</span><br><span class="line">swapon /root/swapfile</span><br></pre></td></tr></table></figure>
+
+<h1 id="调整swap分区使用优先级"><a href="#调整swap分区使用优先级" class="headerlink" title="调整swap分区使用优先级"></a>调整swap分区使用优先级</h1><ul>
+<li><p>查看当前swap使用优先级</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cat /proc/sys/vm/swappiness</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改swap使用优先级</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo sysctl vm.swappiness=60 # 一般设为60，表明系统内存剩余100%-60%=40%时，开始使用交换内存</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>永久修改swap使用优先级</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vim /etc/sysctl.conf # 打开文件</span><br></pre></td></tr></table></figure>
+
+<p>找到文件中 <code> vm.swappiness=0</code>这一行，修改其值即可。如果没有这一行，则添加这一行。</p>
+</li>
+</ul>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
+<li><a href="https://www.cnblogs.com/chennl/p/10167088.html">https://www.cnblogs.com/chennl/p/10167088.html</a></li>
+<li><a href="https://blog.csdn.net/demo_deng/article/details/9428491">https://blog.csdn.net/demo_deng/article/details/9428491</a></li>
+<li><a href="https://www.cnblogs.com/shouke/p/10157626.html">https://www.cnblogs.com/shouke/p/10157626.html</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>npm命令总结</title>
+    <url>/posts/dj8392A/</url>
+    <content><![CDATA[<blockquote>
+<p>总结npm命令</p>
+</blockquote>
+<span id="more"></span>
+<h3 id="npm安装模块"><a href="#npm安装模块" class="headerlink" title="npm安装模块"></a>npm安装模块</h3><ul>
+<li>【npm install xxx】利用 npm 安装xxx模块到当前命令行所在目录；</li>
+<li>【npm install -g xxx】利用npm安装全局模块xxx；</li>
+<li>【npm install xxx】安装但不写入package.json；</li>
+<li>【npm install xxx –save】 安装并写入package.json的”dependencies”中；</li>
+<li>【npm install xxx –save-dev】安装并写入package.json的”devDependencies”中。</li>
+</ul>
+<h3 id="npm-删除模块"><a href="#npm-删除模块" class="headerlink" title="npm 删除模块"></a>npm 删除模块</h3><ul>
+<li>【npm uninstall xxx】删除xxx模块；</li>
+<li>【npm uninstall -g xxx】删除全局模块xxx</li>
+</ul>
+<h3 id="查看npm全局安装过哪些模块"><a href="#查看npm全局安装过哪些模块" class="headerlink" title="查看npm全局安装过哪些模块"></a>查看npm全局安装过哪些模块</h3><ul>
+<li>【npm list -g –depth 0】</li>
+</ul>
+<h3 id="查看npm全局配置"><a href="#查看npm全局配置" class="headerlink" title="查看npm全局配置"></a>查看npm全局配置</h3><ul>
+<li>【npm config ls】</li>
+</ul>
+<h3 id="修改npm全局安装路径"><a href="#修改npm全局安装路径" class="headerlink" title="修改npm全局安装路径"></a>修改npm全局安装路径</h3><ul>
+<li>【npm config set prefix *】 如：npm config set prefix “D:\Test”</li>
+</ul>
+<h3 id="npm设置代理"><a href="#npm设置代理" class="headerlink" title="npm设置代理"></a>npm设置代理</h3><ul>
+<li>【npm config set proxy=<a href="http://127.0.0.1:8087】">http://127.0.0.1:8087】</a></li>
+<li>【npm config set registry=<a href="http://registry.npmjs.org】/">http://registry.npmjs.org】</a></li>
+<li>【npm config delete proxy】</li>
+<li>【npm config delete https-proxy】</li>
+</ul>
+<h3 id="win10关闭node进程"><a href="#win10关闭node进程" class="headerlink" title="win10关闭node进程"></a>win10关闭node进程</h3><ul>
+<li>【taskkill /F  /IM node.exe】 win10中git终端ctrl+c无法关闭node进程的解决方案</li>
+</ul>
+]]></content>
+      <categories>
+        <category>工具</category>
+      </categories>
+      <tags>
+        <tag>命令总结</tag>
+        <tag>npm</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>linux时间</title>
     <url>/posts/linuxtime/</url>
     <content><![CDATA[<blockquote>
@@ -3349,149 +3441,6 @@ docker部署
       </categories>
   </entry>
   <entry>
-    <title>linux服务器上传文件到百度网盘</title>
-    <url>/posts/33eb66fd/</url>
-    <content><![CDATA[<blockquote>
-<p>记录linux如何直接上传文件到百度网盘</p>
-</blockquote>
-<span id="more"></span>
-<h1 id="1-安装python3和相关库"><a href="#1-安装python3和相关库" class="headerlink" title="1. 安装python3和相关库"></a>1. 安装python3和相关库</h1><figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line">yum -y <span class="keyword">install</span> python3</span><br><span class="line">pip3 <span class="keyword">install</span> requests</span><br><span class="line">pip3 <span class="keyword">install</span> bypy</span><br></pre></td></tr></table></figure>
-<p><code>bypy</code>就是连接百度网盘的工具</p>
-<h1 id="2-身份认证"><a href="#2-身份认证" class="headerlink" title="2. 身份认证"></a>2. 身份认证</h1><figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="attribute">bypy</span> <span class="literal">info</span></span><br></pre></td></tr></table></figure>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415172131.png"><br>访问要求的网址，获得授权码，前提是浏览器需要登录了网页版百度网盘</p>
-<p>将授权码复制到命令行中，按下enter键，就能认证成功</p>
-<p>:warning: 如果输入bypy info提示编码问题，可以修改linux默认编码解决，参考我的另一篇博客 <a href="/archives/%E4%BF%AE%E6%94%B9linux%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%BB%98%E8%AE%A4%E7%BC%96%E7%A0%81%E4%B8%BAutf8#more">修改linux默认编码为utf8</a></p>
-<h1 id="3-一些常用命令"><a href="#3-一些常用命令" class="headerlink" title="3. 一些常用命令"></a>3. 一些常用命令</h1><figure class="highlight mipsasm"><table><tr><td class="code"><pre><span class="line"><span class="keyword">bypy </span>list                 <span class="comment"># 显示文档</span></span><br><span class="line"><span class="keyword">bypy </span>upload filename -v   <span class="comment"># 上传某文件，显示进度</span></span><br><span class="line"><span class="keyword">bypy </span>-c                   <span class="comment"># 取消令牌文件。一段时间后要重新授权</span></span><br><span class="line"><span class="keyword">bypy </span>downdir filename     <span class="comment"># 下载</span></span><br><span class="line"><span class="keyword">bypy </span><span class="built_in">compare</span>              <span class="comment"># 比较本地目录和网盘目录</span></span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>linux添加虚拟内存swap</title>
-    <url>/posts/218b6e0a/</url>
-    <content><![CDATA[<blockquote>
-<p>记录linux如何新建swap分区，添加虚拟内存，解决服务器内存不足的问题。</p>
-</blockquote>
-<span id="more"></span>
-
-<h1 id="新建swap分区"><a href="#新建swap分区" class="headerlink" title="新建swap分区"></a>新建swap分区</h1><h2 id="创建分区文件"><a href="#创建分区文件" class="headerlink" title="创建分区文件"></a>创建分区文件</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">dd if=/dev/zero of=/root/swapfile bs=1M count=2048</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>dd:  用指定大小的块拷贝一个文件，并在拷贝的同时进行指定的转换。</li>
-<li>if: 输入文件名，缺省为标准输入，即指定源文件</li>
-<li>of: 输出文件名，缺省为标准输出，即指定目的文件</li>
-<li>/dev/zero: 创建一个指定长度用于初始化的空文件</li>
-<li>bs: bytes，设置读入/输出的块大小</li>
-<li>count: 拷贝块的个数</li>
-<li>上述命令指定了/root/swapfile 大小为2G</li>
-</ul>
-<h2 id="修改文件权限、建立swap分区并启用"><a href="#修改文件权限、建立swap分区并启用" class="headerlink" title="修改文件权限、建立swap分区并启用"></a>修改文件权限、建立swap分区并启用</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">chmod 0600 /root/swapfile</span><br><span class="line">mkswap /root/swapfile</span><br><span class="line">swapon /root/swapfile</span><br></pre></td></tr></table></figure>
-
-<h1 id="调整swap分区使用优先级"><a href="#调整swap分区使用优先级" class="headerlink" title="调整swap分区使用优先级"></a>调整swap分区使用优先级</h1><ul>
-<li><p>查看当前swap使用优先级</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cat /proc/sys/vm/swappiness</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>修改swap使用优先级</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo sysctl vm.swappiness=60 # 一般设为60，表明系统内存剩余100%-60%=40%时，开始使用交换内存</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>永久修改swap使用优先级</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vim /etc/sysctl.conf # 打开文件</span><br></pre></td></tr></table></figure>
-
-<p>找到文件中 <code> vm.swappiness=0</code>这一行，修改其值即可。如果没有这一行，则添加这一行。</p>
-</li>
-</ul>
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
-<li><a href="https://www.cnblogs.com/chennl/p/10167088.html">https://www.cnblogs.com/chennl/p/10167088.html</a></li>
-<li><a href="https://blog.csdn.net/demo_deng/article/details/9428491">https://blog.csdn.net/demo_deng/article/details/9428491</a></li>
-<li><a href="https://www.cnblogs.com/shouke/p/10157626.html">https://www.cnblogs.com/shouke/p/10157626.html</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>linux</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>npm命令总结</title>
-    <url>/posts/dj8392A/</url>
-    <content><![CDATA[<blockquote>
-<p>总结npm命令</p>
-</blockquote>
-<span id="more"></span>
-<h3 id="npm安装模块"><a href="#npm安装模块" class="headerlink" title="npm安装模块"></a>npm安装模块</h3><ul>
-<li>【npm install xxx】利用 npm 安装xxx模块到当前命令行所在目录；</li>
-<li>【npm install -g xxx】利用npm安装全局模块xxx；</li>
-<li>【npm install xxx】安装但不写入package.json；</li>
-<li>【npm install xxx –save】 安装并写入package.json的”dependencies”中；</li>
-<li>【npm install xxx –save-dev】安装并写入package.json的”devDependencies”中。</li>
-</ul>
-<h3 id="npm-删除模块"><a href="#npm-删除模块" class="headerlink" title="npm 删除模块"></a>npm 删除模块</h3><ul>
-<li>【npm uninstall xxx】删除xxx模块；</li>
-<li>【npm uninstall -g xxx】删除全局模块xxx</li>
-</ul>
-<h3 id="查看npm全局安装过哪些模块"><a href="#查看npm全局安装过哪些模块" class="headerlink" title="查看npm全局安装过哪些模块"></a>查看npm全局安装过哪些模块</h3><ul>
-<li>【npm list -g –depth 0】</li>
-</ul>
-<h3 id="查看npm全局配置"><a href="#查看npm全局配置" class="headerlink" title="查看npm全局配置"></a>查看npm全局配置</h3><ul>
-<li>【npm config ls】</li>
-</ul>
-<h3 id="修改npm全局安装路径"><a href="#修改npm全局安装路径" class="headerlink" title="修改npm全局安装路径"></a>修改npm全局安装路径</h3><ul>
-<li>【npm config set prefix *】 如：npm config set prefix “D:\Test”</li>
-</ul>
-<h3 id="npm设置代理"><a href="#npm设置代理" class="headerlink" title="npm设置代理"></a>npm设置代理</h3><ul>
-<li>【npm config set proxy=<a href="http://127.0.0.1:8087】">http://127.0.0.1:8087】</a></li>
-<li>【npm config set registry=<a href="http://registry.npmjs.org】/">http://registry.npmjs.org】</a></li>
-<li>【npm config delete proxy】</li>
-<li>【npm config delete https-proxy】</li>
-</ul>
-<h3 id="win10关闭node进程"><a href="#win10关闭node进程" class="headerlink" title="win10关闭node进程"></a>win10关闭node进程</h3><ul>
-<li>【taskkill /F  /IM node.exe】 win10中git终端ctrl+c无法关闭node进程的解决方案</li>
-</ul>
-]]></content>
-      <categories>
-        <category>工具</category>
-      </categories>
-      <tags>
-        <tag>命令总结</tag>
-        <tag>npm</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Python的pip缓存</title>
-    <url>/posts/5e683b0e/</url>
-    <content><![CDATA[<blockquote>
-<p>pip安装时默认会有缓存，存储在C盘占用空间</p>
-</blockquote>
-<span id="more"></span>
-
-<h1 id="查看缓存位置"><a href="#查看缓存位置" class="headerlink" title="查看缓存位置"></a>查看缓存位置</h1><ul>
-<li>win10下默认缓存路径为：<code>C:\Users\用户名\AppData\Local\pip\cache</code></li>
-<li>linux下默认缓存路径为：<code>~/.cache/pip</code></li>
-</ul>
-<h2 id="通过Python命令查看"><a href="#通过Python命令查看" class="headerlink" title="通过Python命令查看"></a>通过Python命令查看</h2><figure class="highlight coffeescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pip.utils.appdirs <span class="keyword">import</span> user_cache_dir  <span class="comment"># before pip v.10</span></span><br><span class="line"><span class="keyword">from</span> pip._internal.utils.appdirs <span class="keyword">import</span> user_cache_dir  <span class="comment"># since pip v.10</span></span><br><span class="line"><span class="built_in">print</span>(user_cache_dir(<span class="string">&#x27;pip&#x27;</span>))</span><br><span class="line"><span class="built_in">print</span>(user_cache_dir(<span class="string">&#x27;wheel&#x27;</span>))</span><br></pre></td></tr></table></figure>
-
-<h1 id="修改缓存位置"><a href="#修改缓存位置" class="headerlink" title="修改缓存位置"></a>修改缓存位置</h1><h2 id="通过命令的方式"><a href="#通过命令的方式" class="headerlink" title="通过命令的方式"></a>通过命令的方式</h2><figure class="highlight lasso"><table><tr><td class="code"><pre><span class="line">pip config <span class="built_in">set</span> <span class="built_in">global</span>.<span class="keyword">cache</span><span class="params">-dir</span> <span class="string">&quot;新的路径&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="通过修改配置文件的方式"><a href="#通过修改配置文件的方式" class="headerlink" title="通过修改配置文件的方式"></a>通过修改配置文件的方式</h2><ul>
-<li><p>win10配置文件路径: <code>%APPDATA%\pip\pip.ini</code></p>
-</li>
-<li><p>linux配置文件路径：<code>~/.config/pip/pip.conf</code></p>
-<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="section">[global]</span></span><br><span class="line"><span class="attr">index-url</span> = http://pypi.douban.com/simple/</span><br><span class="line"><span class="attr">extra-index-url</span> = http://mirrors.aliyun.com/pypi/simple/ https://pypi.python.org/simple https://download.pytorch.org/whl/torch_stable.html</span><br><span class="line"><span class="attr">trusted-host</span> = pypi.douban.com mirrors.aliyun.com pypi.python.org download.pytorch.org</span><br><span class="line"><span class="attr">cache-dir</span> = D:\BCache\python-cache</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<h2 id="设置某次pip安装没有缓存"><a href="#设置某次pip安装没有缓存" class="headerlink" title="设置某次pip安装没有缓存"></a>设置某次pip安装没有缓存</h2><figure class="highlight stata"><table><tr><td class="code"><pre><span class="line"># pip安装时添加--<span class="keyword">no</span>-cache-<span class="keyword">dir</span>参数</span><br><span class="line">pip install requests --<span class="keyword">no</span>-cache-<span class="keyword">dir</span></span><br></pre></td></tr></table></figure>
-
-
-
-]]></content>
-      <categories>
-        <category>技巧</category>
-      </categories>
-  </entry>
-  <entry>
     <title>ubuntu安装最新稳定版nginx</title>
     <url>/posts/49201cbb/</url>
     <content><![CDATA[<blockquote>
@@ -3543,6 +3492,39 @@ docker部署
       </categories>
   </entry>
   <entry>
+    <title>Python的pip缓存</title>
+    <url>/posts/5e683b0e/</url>
+    <content><![CDATA[<blockquote>
+<p>pip安装时默认会有缓存，存储在C盘占用空间</p>
+</blockquote>
+<span id="more"></span>
+
+<h1 id="查看缓存位置"><a href="#查看缓存位置" class="headerlink" title="查看缓存位置"></a>查看缓存位置</h1><ul>
+<li>win10下默认缓存路径为：<code>C:\Users\用户名\AppData\Local\pip\cache</code></li>
+<li>linux下默认缓存路径为：<code>~/.cache/pip</code></li>
+</ul>
+<h2 id="通过Python命令查看"><a href="#通过Python命令查看" class="headerlink" title="通过Python命令查看"></a>通过Python命令查看</h2><figure class="highlight coffeescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pip.utils.appdirs <span class="keyword">import</span> user_cache_dir  <span class="comment"># before pip v.10</span></span><br><span class="line"><span class="keyword">from</span> pip._internal.utils.appdirs <span class="keyword">import</span> user_cache_dir  <span class="comment"># since pip v.10</span></span><br><span class="line"><span class="built_in">print</span>(user_cache_dir(<span class="string">&#x27;pip&#x27;</span>))</span><br><span class="line"><span class="built_in">print</span>(user_cache_dir(<span class="string">&#x27;wheel&#x27;</span>))</span><br></pre></td></tr></table></figure>
+
+<h1 id="修改缓存位置"><a href="#修改缓存位置" class="headerlink" title="修改缓存位置"></a>修改缓存位置</h1><h2 id="通过命令的方式"><a href="#通过命令的方式" class="headerlink" title="通过命令的方式"></a>通过命令的方式</h2><figure class="highlight lasso"><table><tr><td class="code"><pre><span class="line">pip config <span class="built_in">set</span> <span class="built_in">global</span>.<span class="keyword">cache</span><span class="params">-dir</span> <span class="string">&quot;新的路径&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="通过修改配置文件的方式"><a href="#通过修改配置文件的方式" class="headerlink" title="通过修改配置文件的方式"></a>通过修改配置文件的方式</h2><ul>
+<li><p>win10配置文件路径: <code>%APPDATA%\pip\pip.ini</code></p>
+</li>
+<li><p>linux配置文件路径：<code>~/.config/pip/pip.conf</code></p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="section">[global]</span></span><br><span class="line"><span class="attr">index-url</span> = http://pypi.douban.com/simple/</span><br><span class="line"><span class="attr">extra-index-url</span> = http://mirrors.aliyun.com/pypi/simple/ https://pypi.python.org/simple https://download.pytorch.org/whl/torch_stable.html</span><br><span class="line"><span class="attr">trusted-host</span> = pypi.douban.com mirrors.aliyun.com pypi.python.org download.pytorch.org</span><br><span class="line"><span class="attr">cache-dir</span> = D:\BCache\python-cache</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="设置某次pip安装没有缓存"><a href="#设置某次pip安装没有缓存" class="headerlink" title="设置某次pip安装没有缓存"></a>设置某次pip安装没有缓存</h2><figure class="highlight stata"><table><tr><td class="code"><pre><span class="line"># pip安装时添加--<span class="keyword">no</span>-cache-<span class="keyword">dir</span>参数</span><br><span class="line">pip install requests --<span class="keyword">no</span>-cache-<span class="keyword">dir</span></span><br></pre></td></tr></table></figure>
+
+
+
+]]></content>
+      <categories>
+        <category>技巧</category>
+      </categories>
+  </entry>
+  <entry>
     <title>unix网络编程2-IPC-0-前言</title>
     <url>/posts/3b3b119c/</url>
     <content><![CDATA[<p>由于本学期操作系统课设选择了linux的进程通信，准备学习《unix网络编程卷2: 进程间通信》。这门书英文版为《UNIX NETWORK Programming, volume 2, Second Edition: Interprocss Communications》，该版出版于2015年。</p>
@@ -3565,75 +3547,6 @@ docker部署
 </ul>
 <h1 id="代码下载"><a href="#代码下载" class="headerlink" title="代码下载"></a>代码下载</h1><p><a href="https://www.ituring.com.cn/book/156">https://www.ituring.com.cn/book/156</a></p>
 <h1 id="Linux的进程通信"><a href="#Linux的进程通信" class="headerlink" title="Linux的进程通信"></a>Linux的进程通信</h1><p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-07/20200731220232.png"></p>
-]]></content>
-      <categories>
-        <category>unix</category>
-      </categories>
-      <tags>
-        <tag>unix</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>unix网络编程2-IPC-2-Posix IPC</title>
-    <url>/posts/f9ac59e8/</url>
-    <content><![CDATA[<p>继续学习《unix网络编程卷2: 进程间通信》，本篇主要记录第2章 Posix IPC 的相关内容。</p>
-<span id="more"></span>
-
-<h1 id="2-1-概述"><a href="#2-1-概述" class="headerlink" title="2.1 概述"></a>2.1 概述</h1><p>以下三种类型的IPC合称为<code>Posix IPC</code>.</p>
-<ul>
-<li>Posix 消息队列</li>
-<li>Posix 信号量</li>
-<li>Posix 共享内存区</li>
-</ul>
-<p>Posix IPC 在访问它们的函数和描述它们的信息上是有一些相似的。</p>
-<p>本章主要讲述这些IPC的共同属性：<code>用于标识的路径名</code>、<code>打开或创建时指定的标志</code>和<code>访问权限</code>。</p>
-<p>下图汇总了所有IPC Posix函数。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-08/20200801084330.png"></p>
-<h1 id="2-2-IPC名字"><a href="#2-2-IPC名字" class="headerlink" title="2.2 IPC名字"></a>2.2 IPC名字</h1><p>第一章的图1.4中指出，三种类型的Poix IPC都使用<code>Posix IPC名字</code>进行标识。mq_open、sem_open和shm_open这三个函数的第一个参数就是这样的名字，<strong>它可能是某个文件系统中的一个真正的路径名，也可能不是</strong>。Posix.1中是这么描述Posix IPC名字的：</p>
-<ul>
-<li><p>它必须符合已有的路径名规则（必须最多由PATH_MAX个字节构成，包括结尾的空字节）</p>
-</li>
-<li><p>如果它以斜杠符开头，那么对<strong>这些函数的不同调用将访问同一个队列</strong>，如果它不以斜杠符开头，那么<strong>效果取决于实现</strong>。</p>
-</li>
-<li><p>名字中额外的斜杠符的解释由实现定义。</p>
-</li>
-</ul>
-<div class="note default"><p>因此，为了便于移植起见，Posix IPC名字必须以一个斜杠符开头，并且不能再包含其他斜杠符。</p>
-<p>遗憾的是，这些规则还不够，仍会出现移植性问题。</p>
-</div>
-
-<p>Solaris 2.6要求有打头的斜杠符，但是不允许有另外的斜杠符。假设要创建的是一个消息队列，创建函数将在/tmp中创建三个以.MQ开头的文件。例如，如果给mg_open的参数为/queue.1234，那么这三个文件分别为 /tmp/.MQDqueue.1234、/tmp/.MQLqueue.1234和/tmp/.MQPqueue.1234。Digital Unix 4.0B则在文件系统中创建所指定的文件名。</p>
-<p>当我们指定三个斜杠符（作为首字母）的名字时，移植性问题就发生了：<strong>我们必须在根目录中具有写权限</strong>。例如，/tmp.1234符合Posix规则，在Solaris下也可行，但是Digital Unix却会试图创建这个文件，这是除非我们有在根目录中的写权限，否则这样的尝试会失败。如果我们指定一个/tmp/test.1234的名字，那么在以该名字创建一个真正文件的所有系统上都将成功（前提是/tmp目录存在，而且具有写权限，对于多数unix系统来说，这是正常情况），<strong>在soloris下则失败</strong>。</p>
-<p>为避免这些移植性问题，我们应把Posix IPC名字的#define行放在一个便于修改的头文件中，这样应用程序转移到另一个系统上时，只需修改这个头文件。</p>
-<h2 id="px-ipc-name函数"><a href="#px-ipc-name函数" class="headerlink" title="px_ipc_name函数"></a>px_ipc_name函数</h2><p>解决上述移植性问题的另一种方案是自己定义一个名为px_ipx_name的函数，它为定位Posix IPC名字而添加上正确的前缀目录。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;unpipc.h&quot;</span></span></span><br><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">px_ipc_name</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span>; </span><br></pre></td></tr></table></figure>
-
-<p>参数name不能包含任何斜杠符。例如调用：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">px_ipc_name(<span class="string">&quot;test1&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-<p>在solaris 2.6下该函数将返回一个执行字符串 /test1 的指针，在Digital Uninx 4.0B下返回一个指向字符串/tmp/test1的指针。存放结果的字符串的内存空间是动态分配的，并可通过调用free释放。另外，环境变量<code>PX_IPC_NAME</code>能够覆盖默认目录。</p>
-<p>下面给出了px_ipc_name函数的实现。</p>
-<figure class="highlight c"><figcaption><span>lib/px_ipc_name.c</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="comment">/* include px_ipc_name */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span>	<span class="meta-string">&quot;unpipc.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">char</span> *</span></span><br><span class="line"><span class="function"><span class="title">px_ipc_name</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span>	*dir, *dst, *slash;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ( (dst = <span class="built_in">malloc</span>(PATH_MAX)) == <span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span>(<span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* 4can override default directory with environment variable */</span></span><br><span class="line">    <span class="keyword">if</span> ( (dir = getenv(<span class="string">&quot;PX_IPC_NAME&quot;</span>)) == <span class="literal">NULL</span>) &#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span>	POSIX_IPC_PREFIX</span></span><br><span class="line">        dir = POSIX_IPC_PREFIX;		<span class="comment">/* from &quot;config.h&quot; */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line">        dir = <span class="string">&quot;/tmp/&quot;</span>;				<span class="comment">/* default */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">    &#125;</span><br><span class="line">        <span class="comment">/* 4dir must end in a slash */</span></span><br><span class="line">    slash = (dir[<span class="built_in">strlen</span>(dir) - <span class="number">1</span>] == <span class="string">&#x27;/&#x27;</span>) ? <span class="string">&quot;&quot;</span> : <span class="string">&quot;/&quot;</span>;</span><br><span class="line">    <span class="built_in">snprintf</span>(dst, PATH_MAX, <span class="string">&quot;%s%s%s&quot;</span>, dir, slash, name);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span>(dst);			<span class="comment">/* caller can free() this pointer */</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* end px_ipc_name */</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">char</span> *</span></span><br><span class="line"><span class="function"><span class="title">Px_ipc_name</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span>	*ptr;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ( (ptr = px_ipc_name(name)) == <span class="literal">NULL</span>)</span><br><span class="line">        err_sys(<span class="string">&quot;px_ipc_name error for %s&quot;</span>, name);</span><br><span class="line">    <span class="keyword">return</span>(ptr);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<div class="note primary"><p>snprintf函数与sprintf函数的区别在于前者能检查目标缓存区是否溢出，snprintf函数第二个参数是目标缓冲区的大小。</p>
-</div>
-
-<h1 id="2-3-创建或打开IPC对象"><a href="#2-3-创建或打开IPC对象" class="headerlink" title="2.3 创建或打开IPC对象"></a>2.3 创建或打开IPC对象</h1><p>mq_open、sem_open和shm_open这三个创建或打开一个IPC对象的函数，它们的名为oflag的第二个参数指定应该怎么打开所请求的对象。这个标准open函数的第二个参数类似。下图给出了可组合构成该参数的各种常值。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-08/20200801095840.png"></p>
-<p>前三行指定应该怎样打开对象：只读、只写或读写。消息队列能以其中任何一种模式打开，信号量的打开不指定任何模式（任意信号量操作，都需读写要访问权限），共享内存区对象则不能以只写模式打开。</p>
-<p>后四行的标志是可选的。</p>
-<div class="tabs" id="1"><ul class="nav-tabs"><li class="tab active"><a href="#1-1">O_CREAT</a></li><li class="tab"><a href="#1-2">O_EXCL</a></li><li class="tab"><a href="#1-3">O_NONBLOCK</a></li><li class="tab"><a href="#1-4">O_TRUNC</a></li></ul><div class="tab-content"><div class="tab-pane active" id="1-1"><p>若不存在则创建由函数第一个参数所指定名字的消息队列、信号量或共享内存区对象，同时检查O_EXCL标志。</p>
-<p>创建一个新的消息队列、信号量或共享内存区对象时，至少需要另外一个称为<code>mode</code>的参数。该参数指定权限位，它是由下图中所示常值按位或组成的。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-08/20200801101351.png"></p>
-<p>同新创建的文件一样，当创建一个新的消息队列、信号量或共享内存区对象时，其用户ID被置为当前进程的有效用户ID。信号量和共享内存区对象的组ID被置为当前进程的而有效组ID或某个系统默认组ID。新消息队列对象的组ID被置为当前进程的有效组ID。</p>
-<div class="note warning"><p>这三种IPC对象在设置组ID上存在的差异多少有点奇怪。由open新创建的文件组ID或者是当前进程的有效组ID或是该文件所在目录的组ID，但是IPC函数不能假定系统为IPC对象创建了一个在文件系统中的路径。</p>
-</div></div><div class="tab-pane" id="1-2"><p>如果该参数和O_CREAT参数一起指定，那么IPC函数只在所指定名字的消息队列、信号量或共享内存区对象不存在时创建新的对象。如果该对象已经存在，而且指定了O_CREAT | O_EXCL，那么返回一个EEXIST错误。</p>
-<p>考虑到其他进程的存在，检查所指定名字的消息队列、信号量或共享内存区对象的存在与否和创建它（如果它不存在）这两步必须是原子的。</p></div><div class="tab-pane" id="1-3"><p>该标志使一个消息队列在队列为空时的读或队列填满时的写不被阻塞。</p></div><div class="tab-pane" id="1-4"><p>如果以写模式打开了一个已存在的共享内存区对象，那么该标志将使得该对象的长度被截成0.</p></div></div></div>
-
-<p>图2.5给出了打开一个IPC对象的真正逻辑流程。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-08/20200801104130.png"></p>
-<p><strong>注</strong>：如图2.6所示，如果oflag标志只指定O_CREAT，就无法区分是创建了一个新对象，还是引用了一个已经存在的对象。</p>
-<h1 id="2-4-IPC权限"><a href="#2-4-IPC权限" class="headerlink" title="2.4 IPC权限"></a>2.4 IPC权限</h1><p>新的消息队列、有名信号量或共享内存区对象是由其oflag参数中含有O_CREAT标志的mq_open、sem_open或shm_open函数创建的。如图2-4所注，权限位与这些类型的每个对象相关联，就像它们与每个Unix文件一样。<br><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-08/20200801105611.png"></p>
 ]]></content>
       <categories>
         <category>unix</category>
@@ -3747,6 +3660,75 @@ docker部署
       </tags>
   </entry>
   <entry>
+    <title>unix网络编程2-IPC-2-Posix IPC</title>
+    <url>/posts/f9ac59e8/</url>
+    <content><![CDATA[<p>继续学习《unix网络编程卷2: 进程间通信》，本篇主要记录第2章 Posix IPC 的相关内容。</p>
+<span id="more"></span>
+
+<h1 id="2-1-概述"><a href="#2-1-概述" class="headerlink" title="2.1 概述"></a>2.1 概述</h1><p>以下三种类型的IPC合称为<code>Posix IPC</code>.</p>
+<ul>
+<li>Posix 消息队列</li>
+<li>Posix 信号量</li>
+<li>Posix 共享内存区</li>
+</ul>
+<p>Posix IPC 在访问它们的函数和描述它们的信息上是有一些相似的。</p>
+<p>本章主要讲述这些IPC的共同属性：<code>用于标识的路径名</code>、<code>打开或创建时指定的标志</code>和<code>访问权限</code>。</p>
+<p>下图汇总了所有IPC Posix函数。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-08/20200801084330.png"></p>
+<h1 id="2-2-IPC名字"><a href="#2-2-IPC名字" class="headerlink" title="2.2 IPC名字"></a>2.2 IPC名字</h1><p>第一章的图1.4中指出，三种类型的Poix IPC都使用<code>Posix IPC名字</code>进行标识。mq_open、sem_open和shm_open这三个函数的第一个参数就是这样的名字，<strong>它可能是某个文件系统中的一个真正的路径名，也可能不是</strong>。Posix.1中是这么描述Posix IPC名字的：</p>
+<ul>
+<li><p>它必须符合已有的路径名规则（必须最多由PATH_MAX个字节构成，包括结尾的空字节）</p>
+</li>
+<li><p>如果它以斜杠符开头，那么对<strong>这些函数的不同调用将访问同一个队列</strong>，如果它不以斜杠符开头，那么<strong>效果取决于实现</strong>。</p>
+</li>
+<li><p>名字中额外的斜杠符的解释由实现定义。</p>
+</li>
+</ul>
+<div class="note default"><p>因此，为了便于移植起见，Posix IPC名字必须以一个斜杠符开头，并且不能再包含其他斜杠符。</p>
+<p>遗憾的是，这些规则还不够，仍会出现移植性问题。</p>
+</div>
+
+<p>Solaris 2.6要求有打头的斜杠符，但是不允许有另外的斜杠符。假设要创建的是一个消息队列，创建函数将在/tmp中创建三个以.MQ开头的文件。例如，如果给mg_open的参数为/queue.1234，那么这三个文件分别为 /tmp/.MQDqueue.1234、/tmp/.MQLqueue.1234和/tmp/.MQPqueue.1234。Digital Unix 4.0B则在文件系统中创建所指定的文件名。</p>
+<p>当我们指定三个斜杠符（作为首字母）的名字时，移植性问题就发生了：<strong>我们必须在根目录中具有写权限</strong>。例如，/tmp.1234符合Posix规则，在Solaris下也可行，但是Digital Unix却会试图创建这个文件，这是除非我们有在根目录中的写权限，否则这样的尝试会失败。如果我们指定一个/tmp/test.1234的名字，那么在以该名字创建一个真正文件的所有系统上都将成功（前提是/tmp目录存在，而且具有写权限，对于多数unix系统来说，这是正常情况），<strong>在soloris下则失败</strong>。</p>
+<p>为避免这些移植性问题，我们应把Posix IPC名字的#define行放在一个便于修改的头文件中，这样应用程序转移到另一个系统上时，只需修改这个头文件。</p>
+<h2 id="px-ipc-name函数"><a href="#px-ipc-name函数" class="headerlink" title="px_ipc_name函数"></a>px_ipc_name函数</h2><p>解决上述移植性问题的另一种方案是自己定义一个名为px_ipx_name的函数，它为定位Posix IPC名字而添加上正确的前缀目录。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;unpipc.h&quot;</span></span></span><br><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">px_ipc_name</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span>; </span><br></pre></td></tr></table></figure>
+
+<p>参数name不能包含任何斜杠符。例如调用：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">px_ipc_name(<span class="string">&quot;test1&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>在solaris 2.6下该函数将返回一个执行字符串 /test1 的指针，在Digital Uninx 4.0B下返回一个指向字符串/tmp/test1的指针。存放结果的字符串的内存空间是动态分配的，并可通过调用free释放。另外，环境变量<code>PX_IPC_NAME</code>能够覆盖默认目录。</p>
+<p>下面给出了px_ipc_name函数的实现。</p>
+<figure class="highlight c"><figcaption><span>lib/px_ipc_name.c</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="comment">/* include px_ipc_name */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span>	<span class="meta-string">&quot;unpipc.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">char</span> *</span></span><br><span class="line"><span class="function"><span class="title">px_ipc_name</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span>	*dir, *dst, *slash;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ( (dst = <span class="built_in">malloc</span>(PATH_MAX)) == <span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span>(<span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* 4can override default directory with environment variable */</span></span><br><span class="line">    <span class="keyword">if</span> ( (dir = getenv(<span class="string">&quot;PX_IPC_NAME&quot;</span>)) == <span class="literal">NULL</span>) &#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span>	POSIX_IPC_PREFIX</span></span><br><span class="line">        dir = POSIX_IPC_PREFIX;		<span class="comment">/* from &quot;config.h&quot; */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line">        dir = <span class="string">&quot;/tmp/&quot;</span>;				<span class="comment">/* default */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">    &#125;</span><br><span class="line">        <span class="comment">/* 4dir must end in a slash */</span></span><br><span class="line">    slash = (dir[<span class="built_in">strlen</span>(dir) - <span class="number">1</span>] == <span class="string">&#x27;/&#x27;</span>) ? <span class="string">&quot;&quot;</span> : <span class="string">&quot;/&quot;</span>;</span><br><span class="line">    <span class="built_in">snprintf</span>(dst, PATH_MAX, <span class="string">&quot;%s%s%s&quot;</span>, dir, slash, name);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span>(dst);			<span class="comment">/* caller can free() this pointer */</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* end px_ipc_name */</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">char</span> *</span></span><br><span class="line"><span class="function"><span class="title">Px_ipc_name</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span>	*ptr;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ( (ptr = px_ipc_name(name)) == <span class="literal">NULL</span>)</span><br><span class="line">        err_sys(<span class="string">&quot;px_ipc_name error for %s&quot;</span>, name);</span><br><span class="line">    <span class="keyword">return</span>(ptr);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<div class="note primary"><p>snprintf函数与sprintf函数的区别在于前者能检查目标缓存区是否溢出，snprintf函数第二个参数是目标缓冲区的大小。</p>
+</div>
+
+<h1 id="2-3-创建或打开IPC对象"><a href="#2-3-创建或打开IPC对象" class="headerlink" title="2.3 创建或打开IPC对象"></a>2.3 创建或打开IPC对象</h1><p>mq_open、sem_open和shm_open这三个创建或打开一个IPC对象的函数，它们的名为oflag的第二个参数指定应该怎么打开所请求的对象。这个标准open函数的第二个参数类似。下图给出了可组合构成该参数的各种常值。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-08/20200801095840.png"></p>
+<p>前三行指定应该怎样打开对象：只读、只写或读写。消息队列能以其中任何一种模式打开，信号量的打开不指定任何模式（任意信号量操作，都需读写要访问权限），共享内存区对象则不能以只写模式打开。</p>
+<p>后四行的标志是可选的。</p>
+<div class="tabs" id="1"><ul class="nav-tabs"><li class="tab active"><a href="#1-1">O_CREAT</a></li><li class="tab"><a href="#1-2">O_EXCL</a></li><li class="tab"><a href="#1-3">O_NONBLOCK</a></li><li class="tab"><a href="#1-4">O_TRUNC</a></li></ul><div class="tab-content"><div class="tab-pane active" id="1-1"><p>若不存在则创建由函数第一个参数所指定名字的消息队列、信号量或共享内存区对象，同时检查O_EXCL标志。</p>
+<p>创建一个新的消息队列、信号量或共享内存区对象时，至少需要另外一个称为<code>mode</code>的参数。该参数指定权限位，它是由下图中所示常值按位或组成的。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-08/20200801101351.png"></p>
+<p>同新创建的文件一样，当创建一个新的消息队列、信号量或共享内存区对象时，其用户ID被置为当前进程的有效用户ID。信号量和共享内存区对象的组ID被置为当前进程的而有效组ID或某个系统默认组ID。新消息队列对象的组ID被置为当前进程的有效组ID。</p>
+<div class="note warning"><p>这三种IPC对象在设置组ID上存在的差异多少有点奇怪。由open新创建的文件组ID或者是当前进程的有效组ID或是该文件所在目录的组ID，但是IPC函数不能假定系统为IPC对象创建了一个在文件系统中的路径。</p>
+</div></div><div class="tab-pane" id="1-2"><p>如果该参数和O_CREAT参数一起指定，那么IPC函数只在所指定名字的消息队列、信号量或共享内存区对象不存在时创建新的对象。如果该对象已经存在，而且指定了O_CREAT | O_EXCL，那么返回一个EEXIST错误。</p>
+<p>考虑到其他进程的存在，检查所指定名字的消息队列、信号量或共享内存区对象的存在与否和创建它（如果它不存在）这两步必须是原子的。</p></div><div class="tab-pane" id="1-3"><p>该标志使一个消息队列在队列为空时的读或队列填满时的写不被阻塞。</p></div><div class="tab-pane" id="1-4"><p>如果以写模式打开了一个已存在的共享内存区对象，那么该标志将使得该对象的长度被截成0.</p></div></div></div>
+
+<p>图2.5给出了打开一个IPC对象的真正逻辑流程。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-08/20200801104130.png"></p>
+<p><strong>注</strong>：如图2.6所示，如果oflag标志只指定O_CREAT，就无法区分是创建了一个新对象，还是引用了一个已经存在的对象。</p>
+<h1 id="2-4-IPC权限"><a href="#2-4-IPC权限" class="headerlink" title="2.4 IPC权限"></a>2.4 IPC权限</h1><p>新的消息队列、有名信号量或共享内存区对象是由其oflag参数中含有O_CREAT标志的mq_open、sem_open或shm_open函数创建的。如图2-4所注，权限位与这些类型的每个对象相关联，就像它们与每个Unix文件一样。<br><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-08/20200801105611.png"></p>
+]]></content>
+      <categories>
+        <category>unix</category>
+      </categories>
+      <tags>
+        <tag>unix</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>win10查看连过的WIFI密码</title>
     <url>/posts/22bb2050/</url>
     <content><![CDATA[<blockquote>
@@ -3761,6 +3743,24 @@ docker部署
 <figure class="highlight bash"><figcaption><span>查看所有WIFI密码.bat</span></figcaption><table><tr><td class="code"><pre><span class="line">netsh wlan show profile * key=clear</span><br></pre></td></tr></table></figure>]]></content>
       <categories>
         <category>技巧</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>linux服务器上传文件到百度网盘</title>
+    <url>/posts/33eb66fd/</url>
+    <content><![CDATA[<blockquote>
+<p>记录linux如何直接上传文件到百度网盘</p>
+</blockquote>
+<span id="more"></span>
+<h1 id="1-安装python3和相关库"><a href="#1-安装python3和相关库" class="headerlink" title="1. 安装python3和相关库"></a>1. 安装python3和相关库</h1><figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line">yum -y <span class="keyword">install</span> python3</span><br><span class="line">pip3 <span class="keyword">install</span> requests</span><br><span class="line">pip3 <span class="keyword">install</span> bypy</span><br></pre></td></tr></table></figure>
+<p><code>bypy</code>就是连接百度网盘的工具</p>
+<h1 id="2-身份认证"><a href="#2-身份认证" class="headerlink" title="2. 身份认证"></a>2. 身份认证</h1><figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="attribute">bypy</span> <span class="literal">info</span></span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415172131.png"><br>访问要求的网址，获得授权码，前提是浏览器需要登录了网页版百度网盘</p>
+<p>将授权码复制到命令行中，按下enter键，就能认证成功</p>
+<p>:warning: 如果输入bypy info提示编码问题，可以修改linux默认编码解决，参考我的另一篇博客 <a href="/archives/%E4%BF%AE%E6%94%B9linux%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%BB%98%E8%AE%A4%E7%BC%96%E7%A0%81%E4%B8%BAutf8#more">修改linux默认编码为utf8</a></p>
+<h1 id="3-一些常用命令"><a href="#3-一些常用命令" class="headerlink" title="3. 一些常用命令"></a>3. 一些常用命令</h1><figure class="highlight mipsasm"><table><tr><td class="code"><pre><span class="line"><span class="keyword">bypy </span>list                 <span class="comment"># 显示文档</span></span><br><span class="line"><span class="keyword">bypy </span>upload filename -v   <span class="comment"># 上传某文件，显示进度</span></span><br><span class="line"><span class="keyword">bypy </span>-c                   <span class="comment"># 取消令牌文件。一段时间后要重新授权</span></span><br><span class="line"><span class="keyword">bypy </span>downdir filename     <span class="comment"># 下载</span></span><br><span class="line"><span class="keyword">bypy </span><span class="built_in">compare</span>              <span class="comment"># 比较本地目录和网盘目录</span></span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>linux</category>
       </categories>
   </entry>
   <entry>
@@ -3926,6 +3926,58 @@ docker部署
       </tags>
   </entry>
   <entry>
+    <title>搭建文件服务器</title>
+    <url>/posts/3937af73/</url>
+    <content><![CDATA[<blockquote>
+<p>记录搭建文件服务器的几种方式</p>
+</blockquote>
+<span id="more"></span>
+
+<h1 id="一、配置nginx文件搭建简单文件服务器"><a href="#一、配置nginx文件搭建简单文件服务器" class="headerlink" title="一、配置nginx文件搭建简单文件服务器"></a>一、配置nginx文件搭建简单文件服务器</h1><ol>
+<li>安装</li>
+</ol>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line">yum -y <span class="keyword">install</span> nginx</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>创建并编辑配置文件</li>
+</ol>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">touch <span class="regexp">/etc/</span>nginx<span class="regexp">/conf.d/</span>file_server.conf</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>配置文件内容模板</li>
+</ol>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">  <span class="attribute">listen</span> <span class="number">2020</span>; </span><br><span class="line">  <span class="attribute">server_name</span> localhost; <span class="comment">#ip或者服务器的域名</span></span><br><span class="line">  <span class="attribute">charset</span> utf-<span class="number">8</span>; <span class="comment"># 避免中文乱码 </span></span><br><span class="line">  <span class="attribute">root</span> /var/file_server; <span class="comment"># 存放文件的目录 </span></span><br><span class="line">  <span class="attribute">location</span> / &#123; </span><br><span class="line">    <span class="attribute">autoindex</span> <span class="literal">on</span>; <span class="comment"># 索引 </span></span><br><span class="line">    <span class="attribute">autoindex_exact_size</span> <span class="literal">on</span>; <span class="comment"># 显示文件大小 </span></span><br><span class="line">    <span class="attribute">autoindex_localtime</span> <span class="literal">on</span>; <span class="comment"># 显示文件时间 </span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>启动nginx</li>
+</ol>
+<figure class="highlight crmsh"><table><tr><td class="code"><pre><span class="line">systemctl <span class="literal">start</span> nginx</span><br></pre></td></tr></table></figure>
+
+<p>创建成功演示：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-05/20200821000816.png"></p>
+<h1 id="二、使用github项目中的FileBrowser"><a href="#二、使用github项目中的FileBrowser" class="headerlink" title="二、使用github项目中的FileBrowser"></a>二、使用github项目中的FileBrowser</h1><p><strong>项目地址</strong>: <a href="https://github.com/filebrowser/filebrowser/">https://github.com/filebrowser/filebrowser/</a></p>
+<p>由于docker配置比较简单并且易于管理，所以选择docker安装filebrowser。</p>
+<p>命令参考：</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">docker run \</span><br><span class="line">    -v <span class="regexp">/var/</span>file_server<span class="regexp">/:/</span>srv \</span><br><span class="line">    -v <span class="regexp">/var/</span>file_server_log<span class="regexp">/filebrowser.db:/</span>database.db \</span><br><span class="line">    -v <span class="regexp">/var/</span>file_server_log<span class="regexp">/.filebrowser.json:/</span>.filebrowser.json \</span><br><span class="line">    -p <span class="number">2020</span>:<span class="number">80</span> \</span><br><span class="line">    -d \</span><br><span class="line">    filebrowser/filebrowser</span><br></pre></td></tr></table></figure>
+
+<p>上述命令指定映射的需要显示文件的系统路径为<code>/var/file_server/</code></p>
+<p>运行上述命令前，需要将其中<code>/var/file_server_log/filebrowser.db</code>和<code>/var/file_server_log/.filebrowser.json</code>这两个文件先创建好，否则会报错。</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">touch <span class="regexp">/var/</span>file_server_log/filebrowser.db</span><br><span class="line">touch <span class="regexp">/var/</span>file_server_log/.filebrowser.json</span><br></pre></td></tr></table></figure>
+
+<p>同时，.filebrowser.json 内容需要初始化一下，官方给出的内容如下：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;port&quot;</span>: <span class="number">80</span>,</span><br><span class="line">  <span class="attr">&quot;baseURL&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;address&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;log&quot;</span>: <span class="string">&quot;stdout&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;database&quot;</span>: <span class="string">&quot;/database.db&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;root&quot;</span>: <span class="string">&quot;/srv&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>创建成功演示如下图，第一次登陆时账号密码可以任意填写，作为新建的管理员账户。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-08/20200821000901.png"></p>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>文件服务器</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>服务器禁止被ping</title>
     <url>/posts/6898a3ea/</url>
     <content><![CDATA[<blockquote>
@@ -3978,58 +4030,6 @@ docker部署
       </categories>
       <tags>
         <tag>安全</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>搭建文件服务器</title>
-    <url>/posts/3937af73/</url>
-    <content><![CDATA[<blockquote>
-<p>记录搭建文件服务器的几种方式</p>
-</blockquote>
-<span id="more"></span>
-
-<h1 id="一、配置nginx文件搭建简单文件服务器"><a href="#一、配置nginx文件搭建简单文件服务器" class="headerlink" title="一、配置nginx文件搭建简单文件服务器"></a>一、配置nginx文件搭建简单文件服务器</h1><ol>
-<li>安装</li>
-</ol>
-<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line">yum -y <span class="keyword">install</span> nginx</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>创建并编辑配置文件</li>
-</ol>
-<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">touch <span class="regexp">/etc/</span>nginx<span class="regexp">/conf.d/</span>file_server.conf</span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li>配置文件内容模板</li>
-</ol>
-<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">  <span class="attribute">listen</span> <span class="number">2020</span>; </span><br><span class="line">  <span class="attribute">server_name</span> localhost; <span class="comment">#ip或者服务器的域名</span></span><br><span class="line">  <span class="attribute">charset</span> utf-<span class="number">8</span>; <span class="comment"># 避免中文乱码 </span></span><br><span class="line">  <span class="attribute">root</span> /var/file_server; <span class="comment"># 存放文件的目录 </span></span><br><span class="line">  <span class="attribute">location</span> / &#123; </span><br><span class="line">    <span class="attribute">autoindex</span> <span class="literal">on</span>; <span class="comment"># 索引 </span></span><br><span class="line">    <span class="attribute">autoindex_exact_size</span> <span class="literal">on</span>; <span class="comment"># 显示文件大小 </span></span><br><span class="line">    <span class="attribute">autoindex_localtime</span> <span class="literal">on</span>; <span class="comment"># 显示文件时间 </span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ol start="4">
-<li>启动nginx</li>
-</ol>
-<figure class="highlight crmsh"><table><tr><td class="code"><pre><span class="line">systemctl <span class="literal">start</span> nginx</span><br></pre></td></tr></table></figure>
-
-<p>创建成功演示：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-05/20200821000816.png"></p>
-<h1 id="二、使用github项目中的FileBrowser"><a href="#二、使用github项目中的FileBrowser" class="headerlink" title="二、使用github项目中的FileBrowser"></a>二、使用github项目中的FileBrowser</h1><p><strong>项目地址</strong>: <a href="https://github.com/filebrowser/filebrowser/">https://github.com/filebrowser/filebrowser/</a></p>
-<p>由于docker配置比较简单并且易于管理，所以选择docker安装filebrowser。</p>
-<p>命令参考：</p>
-<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">docker run \</span><br><span class="line">    -v <span class="regexp">/var/</span>file_server<span class="regexp">/:/</span>srv \</span><br><span class="line">    -v <span class="regexp">/var/</span>file_server_log<span class="regexp">/filebrowser.db:/</span>database.db \</span><br><span class="line">    -v <span class="regexp">/var/</span>file_server_log<span class="regexp">/.filebrowser.json:/</span>.filebrowser.json \</span><br><span class="line">    -p <span class="number">2020</span>:<span class="number">80</span> \</span><br><span class="line">    -d \</span><br><span class="line">    filebrowser/filebrowser</span><br></pre></td></tr></table></figure>
-
-<p>上述命令指定映射的需要显示文件的系统路径为<code>/var/file_server/</code></p>
-<p>运行上述命令前，需要将其中<code>/var/file_server_log/filebrowser.db</code>和<code>/var/file_server_log/.filebrowser.json</code>这两个文件先创建好，否则会报错。</p>
-<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">touch <span class="regexp">/var/</span>file_server_log/filebrowser.db</span><br><span class="line">touch <span class="regexp">/var/</span>file_server_log/.filebrowser.json</span><br></pre></td></tr></table></figure>
-
-<p>同时，.filebrowser.json 内容需要初始化一下，官方给出的内容如下：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;port&quot;</span>: <span class="number">80</span>,</span><br><span class="line">  <span class="attr">&quot;baseURL&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;address&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;log&quot;</span>: <span class="string">&quot;stdout&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;database&quot;</span>: <span class="string">&quot;/database.db&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;root&quot;</span>: <span class="string">&quot;/srv&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>创建成功演示如下图，第一次登陆时账号密码可以任意填写，作为新建的管理员账户。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-08/20200821000901.png"></p>
-]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>文件服务器</tag>
       </tags>
   </entry>
   <entry>
@@ -4279,33 +4279,6 @@ docker部署
       </tags>
   </entry>
   <entry>
-    <title>油猴脚本打印博客文章</title>
-    <url>/posts/41f2aca5/</url>
-    <content><![CDATA[<blockquote>
-<p>写了一个简单的油猴脚本，打印平常阅读的博客文章</p>
-</blockquote>
-<p>目前支持的网站如下：</p>
-<ul>
-<li>CSDN</li>
-<li>知乎</li>
-<li>简书</li>
-<li>SegmentFault</li>
-</ul>
-<span id="more"></span>
-
-<p>博客园由于主题太多，无法使用统一方法打印。</p>
-<p>脚本内容：</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// ==UserScript==</span></span><br><span class="line"><span class="comment">// @name         打印CSDN、知乎、简书、SF文章</span></span><br><span class="line"><span class="comment">// @namespace    http://tampermonkey.net/</span></span><br><span class="line"><span class="comment">// @version      0.1</span></span><br><span class="line"><span class="comment">// @description  CSDN、知乎、简书、SegmentFault</span></span><br><span class="line"><span class="comment">// @author       kervias</span></span><br><span class="line"><span class="comment">// @match        https://zhuanlan.zhihu.com/p/*</span></span><br><span class="line"><span class="comment">// @match        https://blog.csdn.net/*/article/details/*</span></span><br><span class="line"><span class="comment">// @match        https://csdnnews.blog.csdn.net/article/details/*</span></span><br><span class="line"><span class="comment">// @match        https://www.jianshu.com/p/*</span></span><br><span class="line"><span class="comment">// @match        https://segmentfault.com/a/*</span></span><br><span class="line"><span class="comment">// @require      https://cdn.bootcss.com/jquery/3.5.1/jquery.min.js</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// @grant        unsafeWindow</span></span><br><span class="line"><span class="comment">// @grant        GM_openInTab</span></span><br><span class="line"><span class="comment">// @grant        GM.openInTab</span></span><br><span class="line"><span class="comment">// @grant        GM_getValue</span></span><br><span class="line"><span class="comment">// @grant        GM.getValue</span></span><br><span class="line"><span class="comment">// @grant        GM_setValue</span></span><br><span class="line"><span class="comment">// @grant        GM.setValue</span></span><br><span class="line"><span class="comment">// @grant        GM_xmlhttpRequest</span></span><br><span class="line"><span class="comment">// @grant        GM.xmlHttpRequest</span></span><br><span class="line"><span class="comment">// @grant        GM_registerMenuCommand</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ==/UserScript==</span></span><br><span class="line"></span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"><span class="meta">    &#x27;use strict&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> $ = $ || <span class="built_in">window</span>.$;</span><br><span class="line">    <span class="keyword">var</span> CSDN_PRINT = <span class="function"><span class="keyword">function</span> (<span class="params"></span>)</span>&#123;</span><br><span class="line">        $(<span class="string">&quot;#side&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;#comment_title, #comment_list, #comment_bar, #comment_form, .announce, #ad_cen, #ad_bot&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;.nav_top_2011, #header, #navigator&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;.csdn-side-toolbar,.template-box,.reward-user-box&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;.p4course_target, .comment-box, .recommend-box, #csdn-toolbar, #tool-box,#dmp_ad_58&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;aside&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;.tool-box&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;main&quot;</span>).css(<span class="string">&#x27;display&#x27;</span>,<span class="string">&#x27;content&#x27;</span>);</span><br><span class="line">        $(<span class="string">&quot;.left-toolbox&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;#mainBox&quot;</span>).removeClass();</span><br><span class="line">        $(<span class="string">&quot;#mainBox&quot;</span>).parent().removeClass();</span><br><span class="line">        $(<span class="string">&#x27;body&#x27;</span>).attr(<span class="string">&quot;style&quot;</span>, <span class="string">&quot;position: absolute;left: 0px;right: 0px;background-color: white&quot;</span>)</span><br><span class="line">        $(<span class="string">&#x27;main&#x27;</span>).attr(<span class="string">&quot;style&quot;</span>, <span class="string">&quot;position: absolute;left: 0px;right: 0px;margin-bottom: 0px&quot;</span>);</span><br><span class="line">        $(<span class="string">&#x27;main div.blog-content-box&#x27;</span>).attr(<span class="string">&quot;style&quot;</span>, <span class="string">&quot;padding-bottom: 0px&quot;</span>);</span><br><span class="line">        $(<span class="string">&quot;.blog-footer-bottom&quot;</span>).remove();</span><br><span class="line">        <span class="comment">//$(&#x27;.htmledit_views p&#x27;).remove();</span></span><br><span class="line">        <span class="built_in">window</span>.print();</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> ZHIHU_PRINT = <span class="function"><span class="keyword">function</span> (<span class="params"></span>)</span>&#123;</span><br><span class="line">        $(<span class="string">&quot;.ColumnPageHeader&quot;</span>).remove();</span><br><span class="line">        <span class="comment">//$(&quot;.PostIndex-Contributions&quot;).remove();</span></span><br><span class="line">        $(<span class="string">&quot;.Recommendations-Main&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;.Comments-container&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;.ContentItem-actions&quot;</span>).parent().remove();</span><br><span class="line">        $(<span class="string">&quot;.Zi--BackToTop&quot;</span>).remove();</span><br><span class="line">        <span class="built_in">window</span>.print();</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> JIANSHU_PRINT = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        $(<span class="string">&quot;header&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;aside&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;footer, footer+div&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;#note-page-comment, section:gt(0), [role=&#x27;button&#x27;], .ant-back-top, .anticon-caret-up&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;svg&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;section&quot;</span>).attr(<span class="string">&quot;style&quot;</span>, <span class="string">&quot;position: absolute;left: 0px;right: 0px;margin-bottom: 0px&quot;</span>);</span><br><span class="line">        $(<span class="string">&quot;article&quot;</span>).nextAll().remove();</span><br><span class="line">        <span class="built_in">window</span>.print();</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> SF_PRINT = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        $(<span class="string">&quot;#sf-header, #comment-area, footer, .text-center, #fixedTools&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;article&quot;</span>).nextAll().remove();</span><br><span class="line">        $(<span class="string">&quot;div.row&quot;</span>).children().eq(<span class="number">1</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;div.row &gt; div &gt; div&quot;</span>).eq(<span class="number">0</span>).nextAll().remove();</span><br><span class="line">        $(<span class="string">&quot;#sf-article_title h5&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;div.row&quot;</span>).attr(<span class="string">&quot;style&quot;</span>, <span class="string">&quot;position: absolute;left: 0px;right: 0px;margin-bottom: 0px&quot;</span>);</span><br><span class="line">        <span class="built_in">window</span>.print();</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> domain = <span class="built_in">document</span>.domain;</span><br><span class="line">    <span class="keyword">if</span>(domain.endsWith(<span class="string">&#x27;zhihu.com&#x27;</span>))&#123; <span class="comment">// 双击标题打印文章</span></span><br><span class="line">        $(<span class="string">&quot;.Post-Title&quot;</span>).on(<span class="string">&#x27;dblclick&#x27;</span>,<span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">            ZHIHU_PRINT();</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(domain.endsWith(<span class="string">&#x27;csdn.net&#x27;</span>))&#123; <span class="comment">// 双击标题打印文章</span></span><br><span class="line">        $(<span class="string">&quot;#articleContentId&quot;</span>).on(<span class="string">&#x27;dblclick&#x27;</span>,<span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">            CSDN_PRINT();</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(domain.endsWith(<span class="string">&#x27;jianshu.com&#x27;</span>))&#123; <span class="comment">// 双击标题打印文章</span></span><br><span class="line">        $(<span class="string">&quot;section &gt; h1&quot;</span>).on(<span class="string">&#x27;dblclick&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">           JIANSHU_PRINT();</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(domain.endsWith(<span class="string">&#x27;segmentfault.com&#x27;</span>))&#123; <span class="comment">// 点击标题后按钮打印文章</span></span><br><span class="line">        <span class="keyword">var</span> cont = $(<span class="string">&#x27;&lt;h5 style=&quot;display:inline&quot;&gt;&lt;button id=&quot;tm_print&quot;&gt;打印&lt;/button&gt;&lt;/h5&gt;&#x27;</span>);</span><br><span class="line">        $(<span class="string">&quot;#sf-article_title&quot;</span>).append(cont);</span><br><span class="line">        $(<span class="string">&quot;#sf-article_title h5&quot;</span>).on(<span class="string">&#x27;click&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">           SF_PRINT();</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>工具</category>
-      </categories>
-      <tags>
-        <tag>Tampermonkey</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>浪潮AIStation-jupyterlab配置</title>
     <url>/posts/6t685a77/</url>
     <content><![CDATA[<blockquote>
@@ -4343,11 +4316,6 @@ docker部署
 <ul>
 <li><code>--notebook-dir</code>: 工作路径</li>
 </ul>
-<br>
-
-<p>在线初始化</p>
-<figure class="highlight crmsh"><table><tr><td class="code"><pre><span class="line">ipython kernel install --<span class="keyword">user</span> <span class="title">--name</span>=<span class="tag">&lt;虚拟环境名&gt;</span></span><br></pre></td></tr></table></figure>
-
 <h1 id="一些深度学习镜像"><a href="#一些深度学习镜像" class="headerlink" title="一些深度学习镜像"></a>一些深度学习镜像</h1><ul>
 <li><a href="https://hub.docker.com/r/pytorch/pytorch/tags?page=1&amp;ordering=last_updated">https://hub.docker.com/r/pytorch/pytorch/tags?page=1&amp;ordering=last_updated</a></li>
 <li><a href="https://hub.docker.com/r/nvidia/cuda/tags?page=1&amp;ordering=last_updated">https://hub.docker.com/r/nvidia/cuda/tags?page=1&amp;ordering=last_updated</a></li>
@@ -4363,6 +4331,33 @@ docker部署
       </categories>
       <tags>
         <tag>jupyterlab</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>油猴脚本打印博客文章</title>
+    <url>/posts/41f2aca5/</url>
+    <content><![CDATA[<blockquote>
+<p>写了一个简单的油猴脚本，打印平常阅读的博客文章</p>
+</blockquote>
+<p>目前支持的网站如下：</p>
+<ul>
+<li>CSDN</li>
+<li>知乎</li>
+<li>简书</li>
+<li>SegmentFault</li>
+</ul>
+<span id="more"></span>
+
+<p>博客园由于主题太多，无法使用统一方法打印。</p>
+<p>脚本内容：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// ==UserScript==</span></span><br><span class="line"><span class="comment">// @name         打印CSDN、知乎、简书、SF文章</span></span><br><span class="line"><span class="comment">// @namespace    http://tampermonkey.net/</span></span><br><span class="line"><span class="comment">// @version      0.1</span></span><br><span class="line"><span class="comment">// @description  CSDN、知乎、简书、SegmentFault</span></span><br><span class="line"><span class="comment">// @author       kervias</span></span><br><span class="line"><span class="comment">// @match        https://zhuanlan.zhihu.com/p/*</span></span><br><span class="line"><span class="comment">// @match        https://blog.csdn.net/*/article/details/*</span></span><br><span class="line"><span class="comment">// @match        https://csdnnews.blog.csdn.net/article/details/*</span></span><br><span class="line"><span class="comment">// @match        https://www.jianshu.com/p/*</span></span><br><span class="line"><span class="comment">// @match        https://segmentfault.com/a/*</span></span><br><span class="line"><span class="comment">// @require      https://cdn.bootcss.com/jquery/3.5.1/jquery.min.js</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// @grant        unsafeWindow</span></span><br><span class="line"><span class="comment">// @grant        GM_openInTab</span></span><br><span class="line"><span class="comment">// @grant        GM.openInTab</span></span><br><span class="line"><span class="comment">// @grant        GM_getValue</span></span><br><span class="line"><span class="comment">// @grant        GM.getValue</span></span><br><span class="line"><span class="comment">// @grant        GM_setValue</span></span><br><span class="line"><span class="comment">// @grant        GM.setValue</span></span><br><span class="line"><span class="comment">// @grant        GM_xmlhttpRequest</span></span><br><span class="line"><span class="comment">// @grant        GM.xmlHttpRequest</span></span><br><span class="line"><span class="comment">// @grant        GM_registerMenuCommand</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ==/UserScript==</span></span><br><span class="line"></span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"><span class="meta">    &#x27;use strict&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> $ = $ || <span class="built_in">window</span>.$;</span><br><span class="line">    <span class="keyword">var</span> CSDN_PRINT = <span class="function"><span class="keyword">function</span> (<span class="params"></span>)</span>&#123;</span><br><span class="line">        $(<span class="string">&quot;#side&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;#comment_title, #comment_list, #comment_bar, #comment_form, .announce, #ad_cen, #ad_bot&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;.nav_top_2011, #header, #navigator&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;.csdn-side-toolbar,.template-box,.reward-user-box&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;.p4course_target, .comment-box, .recommend-box, #csdn-toolbar, #tool-box,#dmp_ad_58&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;aside&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;.tool-box&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;main&quot;</span>).css(<span class="string">&#x27;display&#x27;</span>,<span class="string">&#x27;content&#x27;</span>);</span><br><span class="line">        $(<span class="string">&quot;.left-toolbox&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;#mainBox&quot;</span>).removeClass();</span><br><span class="line">        $(<span class="string">&quot;#mainBox&quot;</span>).parent().removeClass();</span><br><span class="line">        $(<span class="string">&#x27;body&#x27;</span>).attr(<span class="string">&quot;style&quot;</span>, <span class="string">&quot;position: absolute;left: 0px;right: 0px;background-color: white&quot;</span>)</span><br><span class="line">        $(<span class="string">&#x27;main&#x27;</span>).attr(<span class="string">&quot;style&quot;</span>, <span class="string">&quot;position: absolute;left: 0px;right: 0px;margin-bottom: 0px&quot;</span>);</span><br><span class="line">        $(<span class="string">&#x27;main div.blog-content-box&#x27;</span>).attr(<span class="string">&quot;style&quot;</span>, <span class="string">&quot;padding-bottom: 0px&quot;</span>);</span><br><span class="line">        $(<span class="string">&quot;.blog-footer-bottom&quot;</span>).remove();</span><br><span class="line">        <span class="comment">//$(&#x27;.htmledit_views p&#x27;).remove();</span></span><br><span class="line">        <span class="built_in">window</span>.print();</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> ZHIHU_PRINT = <span class="function"><span class="keyword">function</span> (<span class="params"></span>)</span>&#123;</span><br><span class="line">        $(<span class="string">&quot;.ColumnPageHeader&quot;</span>).remove();</span><br><span class="line">        <span class="comment">//$(&quot;.PostIndex-Contributions&quot;).remove();</span></span><br><span class="line">        $(<span class="string">&quot;.Recommendations-Main&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;.Comments-container&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;.ContentItem-actions&quot;</span>).parent().remove();</span><br><span class="line">        $(<span class="string">&quot;.Zi--BackToTop&quot;</span>).remove();</span><br><span class="line">        <span class="built_in">window</span>.print();</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> JIANSHU_PRINT = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        $(<span class="string">&quot;header&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;aside&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;footer, footer+div&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;#note-page-comment, section:gt(0), [role=&#x27;button&#x27;], .ant-back-top, .anticon-caret-up&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;svg&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;section&quot;</span>).attr(<span class="string">&quot;style&quot;</span>, <span class="string">&quot;position: absolute;left: 0px;right: 0px;margin-bottom: 0px&quot;</span>);</span><br><span class="line">        $(<span class="string">&quot;article&quot;</span>).nextAll().remove();</span><br><span class="line">        <span class="built_in">window</span>.print();</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> SF_PRINT = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        $(<span class="string">&quot;#sf-header, #comment-area, footer, .text-center, #fixedTools&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;article&quot;</span>).nextAll().remove();</span><br><span class="line">        $(<span class="string">&quot;div.row&quot;</span>).children().eq(<span class="number">1</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;div.row &gt; div &gt; div&quot;</span>).eq(<span class="number">0</span>).nextAll().remove();</span><br><span class="line">        $(<span class="string">&quot;#sf-article_title h5&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;div.row&quot;</span>).attr(<span class="string">&quot;style&quot;</span>, <span class="string">&quot;position: absolute;left: 0px;right: 0px;margin-bottom: 0px&quot;</span>);</span><br><span class="line">        <span class="built_in">window</span>.print();</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> domain = <span class="built_in">document</span>.domain;</span><br><span class="line">    <span class="keyword">if</span>(domain.endsWith(<span class="string">&#x27;zhihu.com&#x27;</span>))&#123; <span class="comment">// 双击标题打印文章</span></span><br><span class="line">        $(<span class="string">&quot;.Post-Title&quot;</span>).on(<span class="string">&#x27;dblclick&#x27;</span>,<span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">            ZHIHU_PRINT();</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(domain.endsWith(<span class="string">&#x27;csdn.net&#x27;</span>))&#123; <span class="comment">// 双击标题打印文章</span></span><br><span class="line">        $(<span class="string">&quot;#articleContentId&quot;</span>).on(<span class="string">&#x27;dblclick&#x27;</span>,<span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">            CSDN_PRINT();</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(domain.endsWith(<span class="string">&#x27;jianshu.com&#x27;</span>))&#123; <span class="comment">// 双击标题打印文章</span></span><br><span class="line">        $(<span class="string">&quot;section &gt; h1&quot;</span>).on(<span class="string">&#x27;dblclick&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">           JIANSHU_PRINT();</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(domain.endsWith(<span class="string">&#x27;segmentfault.com&#x27;</span>))&#123; <span class="comment">// 点击标题后按钮打印文章</span></span><br><span class="line">        <span class="keyword">var</span> cont = $(<span class="string">&#x27;&lt;h5 style=&quot;display:inline&quot;&gt;&lt;button id=&quot;tm_print&quot;&gt;打印&lt;/button&gt;&lt;/h5&gt;&#x27;</span>);</span><br><span class="line">        $(<span class="string">&quot;#sf-article_title&quot;</span>).append(cont);</span><br><span class="line">        $(<span class="string">&quot;#sf-article_title h5&quot;</span>).on(<span class="string">&#x27;click&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">           SF_PRINT();</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>工具</category>
+      </categories>
+      <tags>
+        <tag>Tampermonkey</tag>
       </tags>
   </entry>
   <entry>
