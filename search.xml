@@ -425,72 +425,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Halo博客修改密码</title>
-    <url>/posts/f2aea09c/</url>
-    <content><![CDATA[<blockquote>
-<p>记录halo博客控制台登录密码的修改和halo博客h2数据库的密码修改</p>
-</blockquote>
-<span id="more"></span>
-<p>:gem: 环境说明：</p>
-<pre><code>halo版本v1.2
-docker部署
-</code></pre>
-<h1 id="1-配置h2-console"><a href="#1-配置h2-console" class="headerlink" title="1. 配置h2-console"></a>1. 配置h2-console</h1><pre><code> 修改博客配置文件，如下图方框内所示，将false改为true
-</code></pre>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162347.png"></p>
-<pre><code>修改完毕之后，重启docker服务
-</code></pre>
-<h1 id="2-登录h2-console"><a href="#2-登录h2-console" class="headerlink" title="2. 登录h2-console"></a>2. 登录h2-console</h1><pre><code>访问网址：博客域名/h2-console
-</code></pre>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162403.png"></p>
-<pre><code>需要注意图中·JDBC URL·路径。
-用户名密码就是配置文件中的用户名和密码，这里分别为admin和123456
-</code></pre>
-<h1 id="3-修改密码"><a href="#3-修改密码" class="headerlink" title="3. 修改密码"></a>3. 修改密码</h1><blockquote>
-<p>这里主要记录两个密码的修改，一个是控制台密码，另一个是数据库密码</p>
-</blockquote>
-<h2 id="3-1-控制台密码"><a href="#3-1-控制台密码" class="headerlink" title="3.1 控制台密码"></a>3.1 控制台密码</h2><blockquote>
-<p>这里是通过修改数据库的方式修改密码，比较麻烦。其实可以直接登录控制台修改密码就行了。</p>
-</blockquote>
-<ul>
-<li><p>查看用户名</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> USERS</span><br></pre></td></tr></table></figure>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162519.png"></p>
-</li>
-<li><p>根据用户名修改密码</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">update USERS <span class="keyword">set</span> PASSWORD<span class="operator">=</span><span class="string">&#x27;newpsd&#x27;</span> <span class="keyword">where</span> USERNAME<span class="operator">=</span><span class="string">&#x27;xxxxx&#x27;</span> <span class="operator">/</span><span class="operator">/</span> xxxx就是你的用户名, newpsd是新密码</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<hr>
-<p>:warning: <code>注意这里密码应采用Bcrypt密文方式设置</code> :warning:<br>例：将密码abcdef使用Bcrypt加密</p>
-<ul>
-<li>网址：<a href="https://www.jisuan.mobi/p163u3BN66Hm6JWx.html">https://www.jisuan.mobi/p163u3BN66Hm6JWx.html</a></li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162547.png"></p>
-<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">update</span> USERS set PASSWORD=&#x27;$<span class="number">2</span>a$<span class="number">10</span>$<span class="number">8</span>lFd<span class="number">0</span>fpD<span class="number">61</span>VsfknGZUDyo.RV<span class="number">0</span>zpkSSXSyTqgM<span class="number">1</span>P<span class="number">3</span>qzN<span class="number">8</span>Mmb<span class="number">3</span>yPRQm&#x27; where USERNAME=&#x27;xxxxx&#x27;</span><br></pre></td></tr></table></figure>
-<hr>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162605.png"></p>
-<pre><code>到此密码就修改完成，这里不需要再重启服务了。
-</code></pre>
-<h2 id="3-2-数据库密码"><a href="#3-2-数据库密码" class="headerlink" title="3.2 数据库密码"></a>3.2 数据库密码</h2><p>这里的密码不用加密</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">user</span> admin <span class="keyword">set</span> password <span class="string">&#x27;abcdef&#x27;</span> <span class="operator">/</span><span class="operator">/</span>修改admin用户密码为abcdef</span><br></pre></td></tr></table></figure>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162624.png"></p>
-<p>:point_right: 执行上述执行后，按照下列步骤操作：</p>
-<ul>
-<li>停止docker的halo容器服务<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker ps -a //查看当前halo容器对应的ID</span><br><span class="line">docker stop HALO_ID //停止halo服务</span><br></pre></td></tr></table></figure></li>
-<li>修改配置文件中H2数据库密码, 并关闭h2-console功能（修改true为false）</li>
-<li>启动docker的halo容器服务<figure class="highlight arduino"><table><tr><td class="code"><pre><span class="line">docker stop HALO_ID <span class="comment">//启动halo服务</span></span><br></pre></td></tr></table></figure></li>
-</ul>
-]]></content>
-      <categories>
-        <category>博客</category>
-      </categories>
-      <tags>
-        <tag>halo</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Halo博客服务器迁移</title>
     <url>/posts/e2efb148/</url>
     <content><![CDATA[<blockquote>
@@ -550,6 +484,72 @@ docker部署
 <p>这里blog.kerviaxxx.top迁移之前的域名，迁移后的域名为kerviaxxx.top</p>
 </blockquote>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">UPDATE  POSTS <span class="keyword">SET</span> ORIGINAL_CONTENT<span class="operator">=</span>REPLACE(ORIGINAL_CONTENT, <span class="string">&#x27;blog.kerviaxxx.top&#x27;</span>, <span class="string">&#x27;kerviaxxx.top&#x27;</span>) <span class="keyword">WHERE</span> ORIGINAL_CONTENT <span class="keyword">like</span> <span class="string">&#x27;%blog.kerviaxxx.top%&#x27;</span>;</span><br><span class="line">UPDATE  POSTS <span class="keyword">SET</span> FORMAT_CONTENT<span class="operator">=</span>REPLACE(FORMAT_CONTENT, <span class="string">&#x27;blog.kerviaxxx.top&#x27;</span>, <span class="string">&#x27;kerviaxxx.top&#x27;</span>) <span class="keyword">WHERE</span> FORMAT_CONTENT <span class="keyword">like</span> <span class="string">&#x27;%blog.kerviaxxx.top%&#x27;</span>;</span><br><span class="line">UPDATE  POSTS <span class="keyword">SET</span> THUMBNAIL<span class="operator">=</span>REPLACE(THUMBNAIL, <span class="string">&#x27;blog.kerviaxxx.top&#x27;</span>, <span class="string">&#x27;kerviaxxx.top&#x27;</span>) <span class="keyword">WHERE</span> THUMBNAIL <span class="keyword">like</span> <span class="string">&#x27;%blog.kerviaxxx.top%&#x27;</span>;</span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>博客</category>
+      </categories>
+      <tags>
+        <tag>halo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Halo博客修改密码</title>
+    <url>/posts/f2aea09c/</url>
+    <content><![CDATA[<blockquote>
+<p>记录halo博客控制台登录密码的修改和halo博客h2数据库的密码修改</p>
+</blockquote>
+<span id="more"></span>
+<p>:gem: 环境说明：</p>
+<pre><code>halo版本v1.2
+docker部署
+</code></pre>
+<h1 id="1-配置h2-console"><a href="#1-配置h2-console" class="headerlink" title="1. 配置h2-console"></a>1. 配置h2-console</h1><pre><code> 修改博客配置文件，如下图方框内所示，将false改为true
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162347.png"></p>
+<pre><code>修改完毕之后，重启docker服务
+</code></pre>
+<h1 id="2-登录h2-console"><a href="#2-登录h2-console" class="headerlink" title="2. 登录h2-console"></a>2. 登录h2-console</h1><pre><code>访问网址：博客域名/h2-console
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162403.png"></p>
+<pre><code>需要注意图中·JDBC URL·路径。
+用户名密码就是配置文件中的用户名和密码，这里分别为admin和123456
+</code></pre>
+<h1 id="3-修改密码"><a href="#3-修改密码" class="headerlink" title="3. 修改密码"></a>3. 修改密码</h1><blockquote>
+<p>这里主要记录两个密码的修改，一个是控制台密码，另一个是数据库密码</p>
+</blockquote>
+<h2 id="3-1-控制台密码"><a href="#3-1-控制台密码" class="headerlink" title="3.1 控制台密码"></a>3.1 控制台密码</h2><blockquote>
+<p>这里是通过修改数据库的方式修改密码，比较麻烦。其实可以直接登录控制台修改密码就行了。</p>
+</blockquote>
+<ul>
+<li><p>查看用户名</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> USERS</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162519.png"></p>
+</li>
+<li><p>根据用户名修改密码</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">update USERS <span class="keyword">set</span> PASSWORD<span class="operator">=</span><span class="string">&#x27;newpsd&#x27;</span> <span class="keyword">where</span> USERNAME<span class="operator">=</span><span class="string">&#x27;xxxxx&#x27;</span> <span class="operator">/</span><span class="operator">/</span> xxxx就是你的用户名, newpsd是新密码</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<hr>
+<p>:warning: <code>注意这里密码应采用Bcrypt密文方式设置</code> :warning:<br>例：将密码abcdef使用Bcrypt加密</p>
+<ul>
+<li>网址：<a href="https://www.jisuan.mobi/p163u3BN66Hm6JWx.html">https://www.jisuan.mobi/p163u3BN66Hm6JWx.html</a></li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162547.png"></p>
+<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">update</span> USERS set PASSWORD=&#x27;$<span class="number">2</span>a$<span class="number">10</span>$<span class="number">8</span>lFd<span class="number">0</span>fpD<span class="number">61</span>VsfknGZUDyo.RV<span class="number">0</span>zpkSSXSyTqgM<span class="number">1</span>P<span class="number">3</span>qzN<span class="number">8</span>Mmb<span class="number">3</span>yPRQm&#x27; where USERNAME=&#x27;xxxxx&#x27;</span><br></pre></td></tr></table></figure>
+<hr>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162605.png"></p>
+<pre><code>到此密码就修改完成，这里不需要再重启服务了。
+</code></pre>
+<h2 id="3-2-数据库密码"><a href="#3-2-数据库密码" class="headerlink" title="3.2 数据库密码"></a>3.2 数据库密码</h2><p>这里的密码不用加密</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">user</span> admin <span class="keyword">set</span> password <span class="string">&#x27;abcdef&#x27;</span> <span class="operator">/</span><span class="operator">/</span>修改admin用户密码为abcdef</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415162624.png"></p>
+<p>:point_right: 执行上述执行后，按照下列步骤操作：</p>
+<ul>
+<li>停止docker的halo容器服务<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker ps -a //查看当前halo容器对应的ID</span><br><span class="line">docker stop HALO_ID //停止halo服务</span><br></pre></td></tr></table></figure></li>
+<li>修改配置文件中H2数据库密码, 并关闭h2-console功能（修改true为false）</li>
+<li>启动docker的halo容器服务<figure class="highlight arduino"><table><tr><td class="code"><pre><span class="line">docker stop HALO_ID <span class="comment">//启动halo服务</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+]]></content>
       <categories>
         <category>博客</category>
       </categories>
@@ -706,6 +706,80 @@ docker部署
       </tags>
   </entry>
   <entry>
+    <title>LeetCode-001-两数之和</title>
+    <url>/posts/a239384e/</url>
+    <content><![CDATA[<blockquote>
+<p>题目链接：<a href="https://leetcode-cn.com/problems/two-sum/">https://leetcode-cn.com/problems/two-sum/</a></p>
+</blockquote>
+<span id="more"></span>
+
+<blockquote>
+<p>难度：简单</p>
+</blockquote>
+<h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h3><p>给定一个整数数组 <code>nums</code> 和一个目标值 <code>target</code>，请你在该数组中找出和为目标值的那 <strong>两个</strong> 整数，并返回他们的数组下标。</p>
+<p>你可以假设每种输入只会对应一个答案。但是，你不能重复利用这个数组中同样的元素。</p>
+<p><strong>示例</strong>:</p>
+<blockquote>
+<p>给定 nums = [2, 7, 11, 15], target = 9</p>
+<p>因为 nums[<strong>0</strong>] + nums[<strong>1</strong>] = 2 + 7 = 9<br>所以返回 [<strong>0, 1</strong>]</p>
+</blockquote>
+<h3 id="个人题解"><a href="#个人题解" class="headerlink" title="个人题解"></a>个人题解</h3><ul>
+<li>使用C++的<code>map</code>，键： <code>target - 遍历过的元素值</code>  值：<code>遍历过的元素值索引</code></li>
+<li>时间复杂度 <code>O(nlogn)</code></li>
+<li>空间复杂度<code>O(n)</code></li>
+<li>C++中<code>map</code>使用红黑树实现，<code>hash_map</code>使用哈希表实现，<code>hash_map</code>相对来说查找元素更快</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">twoSum</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">        map&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; numMap;</span><br><span class="line">        vector&lt;<span class="keyword">int</span>&gt; v;</span><br><span class="line">        <span class="keyword">int</span> t,i;</span><br><span class="line">        i = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span> it = nums.<span class="built_in">begin</span>(); it != nums.<span class="built_in">end</span>(); it++)</span><br><span class="line">        &#123;</span><br><span class="line">            t = target - *it;</span><br><span class="line">            <span class="keyword">if</span>(numMap.<span class="built_in">find</span>(*it) != numMap.<span class="built_in">end</span>())  <span class="comment">// 之前有元素 + *it = target</span></span><br><span class="line">            &#123;</span><br><span class="line">                v.<span class="built_in">push_back</span>(numMap[*it]);</span><br><span class="line">                v.<span class="built_in">push_back</span>(i);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                numMap[t] = i;</span><br><span class="line">            &#125;</span><br><span class="line">            i++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> v;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="官方题解"><a href="#官方题解" class="headerlink" title="官方题解"></a>官方题解</h3><h4 id="方法一：暴力法"><a href="#方法一：暴力法" class="headerlink" title="方法一：暴力法"></a>方法一：暴力法</h4><p>暴力法很简单，遍历每个元素 x，并查找是否存在一个值与 target−x 相等的目标元素。</p>
+<ul>
+<li>Java</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] twoSum(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> target) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = i + <span class="number">1</span>; j &lt; nums.length; j++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (nums[j] == target - nums[i]) &#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>[] &#123; i, j &#125;;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;No two sum solution&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>复杂度分析：</strong></p>
+<ul>
+<li>时间复杂度：<code>O(n^2)</code><br>对于每个元素，我们试图通过遍历数组的其余部分来寻找它所对应的目标元素，这将耗费 O(n)的时间。因此时间复杂度为 <code>O(n^2)</code>。</li>
+<li>空间复杂度：<code>O(1)</code>。</li>
+</ul>
+<h4 id="方法二：两遍哈希表"><a href="#方法二：两遍哈希表" class="headerlink" title="方法二：两遍哈希表"></a>方法二：两遍哈希表</h4><p>为了对运行时间复杂度进行优化，我们需要一种更有效的方法来检查数组中是否存在目标元素。如果存在，我们需要找出它的索引。保持数组中的每个元素与其索引相互对应的最好方法是什么？哈希表。</p>
+<p>通过以空间换取速度的方式，我们可以将查找时间从 O(n) 降低到 O(1)。哈希表正是为此目的而构建的，它支持以 <em>近似</em> 恒定的时间进行快速查找。我用“近似”来描述，是因为一旦出现冲突，查找用时可能会退化到 O(n)。但只要你仔细地挑选哈希函数，在哈希表中进行查找的用时应当被摊销为 O(1)。</p>
+<p>一个简单的实现使用了两次迭代。在第一次迭代中，我们将每个元素的值和它的索引添加到表中。然后，在第二次迭代中，我们将检查每个元素所对应的目标元素<code>target−nums[i]</code>是否存在于表中。注意，该目标元素不能是 <code>nums[i]</code> 本身！</p>
+<ul>
+<li>Java</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] twoSum(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> target) &#123;</span><br><span class="line">        Map&lt;Integer, Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">            map.put(nums[i], i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">            <span class="keyword">int</span> complement = target - nums[i];</span><br><span class="line">            <span class="keyword">if</span> (map.containsKey(complement) &amp;&amp; map.get(complement) != i) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>[] &#123; i, map.get(complement) &#125;;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;No two sum solution&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>复杂度分析：</strong></p>
+<ul>
+<li>时间复杂度：<code>O(n) </code><br>我们把包含有 n个元素的列表遍历两次。由于哈希表将查找时间缩短到 O(1) ，所以时间复杂度为 O(n)。</li>
+<li>空间复杂度：<code>O(n) </code><br>所需的额外空间取决于哈希表中存储的元素数量，该表中存储了 n个元素。</li>
+</ul>
+<h4 id="方法三：一遍哈希表"><a href="#方法三：一遍哈希表" class="headerlink" title="方法三：一遍哈希表"></a>方法三：一遍哈希表</h4><p>事实证明，我们可以一次完成。在进行迭代并将元素插入到表中的同时，我们还会回过头来检查表中是否已经存在当前元素所对应的目标元素。如果它存在，那我们已经找到了对应解，并立即将其返回。</p>
+<ul>
+<li>Java</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] twoSum(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> target) &#123;</span><br><span class="line">        Map&lt;Integer, Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">            <span class="keyword">int</span> complement = target - nums[i];</span><br><span class="line">            <span class="keyword">if</span> (map.containsKey(complement)) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>[] &#123; map.get(complement), i &#125;;</span><br><span class="line">            &#125;</span><br><span class="line">            map.put(nums[i], i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;No two sum solution&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p><strong>复杂度分析：</strong></p>
+<ul>
+<li>时间复杂度：<code>O(n)</code>，<br>我们只遍历了包含有 n 个元素的列表一次。在表中进行的每次查找只花费 O(1)的时间。</li>
+<li>空间复杂度：<code>O(n)</code>，<br>所需的额外空间取决于哈希表中存储的元素数量，该表最多需要存储 n个元素。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>leetcode</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>LeetCode-002-两数相加</title>
     <url>/posts/b190b0aa/</url>
     <content><![CDATA[<blockquote>
@@ -845,123 +919,6 @@ docker部署
       </categories>
   </entry>
   <entry>
-    <title>LeetCode-001-两数之和</title>
-    <url>/posts/a239384e/</url>
-    <content><![CDATA[<blockquote>
-<p>题目链接：<a href="https://leetcode-cn.com/problems/two-sum/">https://leetcode-cn.com/problems/two-sum/</a></p>
-</blockquote>
-<span id="more"></span>
-
-<blockquote>
-<p>难度：简单</p>
-</blockquote>
-<h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h3><p>给定一个整数数组 <code>nums</code> 和一个目标值 <code>target</code>，请你在该数组中找出和为目标值的那 <strong>两个</strong> 整数，并返回他们的数组下标。</p>
-<p>你可以假设每种输入只会对应一个答案。但是，你不能重复利用这个数组中同样的元素。</p>
-<p><strong>示例</strong>:</p>
-<blockquote>
-<p>给定 nums = [2, 7, 11, 15], target = 9</p>
-<p>因为 nums[<strong>0</strong>] + nums[<strong>1</strong>] = 2 + 7 = 9<br>所以返回 [<strong>0, 1</strong>]</p>
-</blockquote>
-<h3 id="个人题解"><a href="#个人题解" class="headerlink" title="个人题解"></a>个人题解</h3><ul>
-<li>使用C++的<code>map</code>，键： <code>target - 遍历过的元素值</code>  值：<code>遍历过的元素值索引</code></li>
-<li>时间复杂度 <code>O(nlogn)</code></li>
-<li>空间复杂度<code>O(n)</code></li>
-<li>C++中<code>map</code>使用红黑树实现，<code>hash_map</code>使用哈希表实现，<code>hash_map</code>相对来说查找元素更快</li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">twoSum</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">        map&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; numMap;</span><br><span class="line">        vector&lt;<span class="keyword">int</span>&gt; v;</span><br><span class="line">        <span class="keyword">int</span> t,i;</span><br><span class="line">        i = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span> it = nums.<span class="built_in">begin</span>(); it != nums.<span class="built_in">end</span>(); it++)</span><br><span class="line">        &#123;</span><br><span class="line">            t = target - *it;</span><br><span class="line">            <span class="keyword">if</span>(numMap.<span class="built_in">find</span>(*it) != numMap.<span class="built_in">end</span>())  <span class="comment">// 之前有元素 + *it = target</span></span><br><span class="line">            &#123;</span><br><span class="line">                v.<span class="built_in">push_back</span>(numMap[*it]);</span><br><span class="line">                v.<span class="built_in">push_back</span>(i);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                numMap[t] = i;</span><br><span class="line">            &#125;</span><br><span class="line">            i++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> v;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="官方题解"><a href="#官方题解" class="headerlink" title="官方题解"></a>官方题解</h3><h4 id="方法一：暴力法"><a href="#方法一：暴力法" class="headerlink" title="方法一：暴力法"></a>方法一：暴力法</h4><p>暴力法很简单，遍历每个元素 x，并查找是否存在一个值与 target−x 相等的目标元素。</p>
-<ul>
-<li>Java</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] twoSum(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> target) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = i + <span class="number">1</span>; j &lt; nums.length; j++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (nums[j] == target - nums[i]) &#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>[] &#123; i, j &#125;;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;No two sum solution&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>复杂度分析：</strong></p>
-<ul>
-<li>时间复杂度：<code>O(n^2)</code><br>对于每个元素，我们试图通过遍历数组的其余部分来寻找它所对应的目标元素，这将耗费 O(n)的时间。因此时间复杂度为 <code>O(n^2)</code>。</li>
-<li>空间复杂度：<code>O(1)</code>。</li>
-</ul>
-<h4 id="方法二：两遍哈希表"><a href="#方法二：两遍哈希表" class="headerlink" title="方法二：两遍哈希表"></a>方法二：两遍哈希表</h4><p>为了对运行时间复杂度进行优化，我们需要一种更有效的方法来检查数组中是否存在目标元素。如果存在，我们需要找出它的索引。保持数组中的每个元素与其索引相互对应的最好方法是什么？哈希表。</p>
-<p>通过以空间换取速度的方式，我们可以将查找时间从 O(n) 降低到 O(1)。哈希表正是为此目的而构建的，它支持以 <em>近似</em> 恒定的时间进行快速查找。我用“近似”来描述，是因为一旦出现冲突，查找用时可能会退化到 O(n)。但只要你仔细地挑选哈希函数，在哈希表中进行查找的用时应当被摊销为 O(1)。</p>
-<p>一个简单的实现使用了两次迭代。在第一次迭代中，我们将每个元素的值和它的索引添加到表中。然后，在第二次迭代中，我们将检查每个元素所对应的目标元素<code>target−nums[i]</code>是否存在于表中。注意，该目标元素不能是 <code>nums[i]</code> 本身！</p>
-<ul>
-<li>Java</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] twoSum(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> target) &#123;</span><br><span class="line">        Map&lt;Integer, Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">            map.put(nums[i], i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">            <span class="keyword">int</span> complement = target - nums[i];</span><br><span class="line">            <span class="keyword">if</span> (map.containsKey(complement) &amp;&amp; map.get(complement) != i) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>[] &#123; i, map.get(complement) &#125;;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;No two sum solution&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>复杂度分析：</strong></p>
-<ul>
-<li>时间复杂度：<code>O(n) </code><br>我们把包含有 n个元素的列表遍历两次。由于哈希表将查找时间缩短到 O(1) ，所以时间复杂度为 O(n)。</li>
-<li>空间复杂度：<code>O(n) </code><br>所需的额外空间取决于哈希表中存储的元素数量，该表中存储了 n个元素。</li>
-</ul>
-<h4 id="方法三：一遍哈希表"><a href="#方法三：一遍哈希表" class="headerlink" title="方法三：一遍哈希表"></a>方法三：一遍哈希表</h4><p>事实证明，我们可以一次完成。在进行迭代并将元素插入到表中的同时，我们还会回过头来检查表中是否已经存在当前元素所对应的目标元素。如果它存在，那我们已经找到了对应解，并立即将其返回。</p>
-<ul>
-<li>Java</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] twoSum(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> target) &#123;</span><br><span class="line">        Map&lt;Integer, Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">            <span class="keyword">int</span> complement = target - nums[i];</span><br><span class="line">            <span class="keyword">if</span> (map.containsKey(complement)) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>[] &#123; map.get(complement), i &#125;;</span><br><span class="line">            &#125;</span><br><span class="line">            map.put(nums[i], i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;No two sum solution&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<p><strong>复杂度分析：</strong></p>
-<ul>
-<li>时间复杂度：<code>O(n)</code>，<br>我们只遍历了包含有 n 个元素的列表一次。在表中进行的每次查找只花费 O(1)的时间。</li>
-<li>空间复杂度：<code>O(n)</code>，<br>所需的额外空间取决于哈希表中存储的元素数量，该表最多需要存储 n个元素。</li>
-</ul>
-]]></content>
-      <categories>
-        <category>算法</category>
-      </categories>
-      <tags>
-        <tag>leetcode</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>MySQL常用命令</title>
-    <url>/posts/92cd9797/</url>
-    <content><![CDATA[<blockquote>
-<p>常用的MySQL命令，记录下来，以便查询</p>
-</blockquote>
-<span id="more"></span>
-
-<ol>
-<li><p>压缩版Mysql下载安装教程: <a href="https://blog.csdn.net/Recky_wiers/article/details/79243804">https://blog.csdn.net/Recky_wiers/article/details/79243804</a></p>
-</li>
-<li><p>mysql教程: <a href="https://blog.csdn.net/qq_34115899/article/details/81190461">https://blog.csdn.net/qq_34115899/article/details/81190461</a></p>
-</li>
-<li><p>查看mysql版本</p>
-<figure class="highlight diff"><figcaption><span>查看版本</span></figcaption><table><tr><td class="code"><pre><span class="line">mysql -V</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>启动和关闭mysql服务</p>
-<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">net start mysql <span class="regexp">//</span>启动mysql服务</span><br><span class="line">net stop mysql <span class="regexp">//</span>停止mysql服务</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>修改密码</p>
-<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">mysqladmin -u root -p password <span class="regexp">//</span>执行后会让用户输入旧密码，再输入两次新密码</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>登录mysql账户</p>
-<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">mysql -u root -p <span class="regexp">//</span>命令完成后输入密码登录</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>连接远程主机上的mysql</p>
-<figure class="highlight armasm"><table><tr><td class="code"><pre><span class="line"><span class="symbol">mysql</span> -h <span class="built_in">ip</span> -u root -p password</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>查看mysql数据库的存储位置</p>
-<figure class="highlight pgsql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">show</span> <span class="keyword">global</span> variables <span class="keyword">like</span> &quot;%datadir%&quot;;</span><br></pre></td></tr></table></figure>
-
-
-
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>数据库</category>
-      </categories>
-      <tags>
-        <tag>MySQL</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Linux操作系统源</title>
     <url>/posts/2480d896/</url>
     <content><![CDATA[<p>记录常见linux操作系统的源以及换源方式。</p>
@@ -1065,22 +1022,46 @@ docker部署
       </tags>
   </entry>
   <entry>
-    <title>Linux服务查看SSH登录失败日志</title>
-    <url>/posts/26caa900/</url>
+    <title>MySQL常用命令</title>
+    <url>/posts/92cd9797/</url>
     <content><![CDATA[<blockquote>
-<p>查询主要依据 <code>/var/log/secure</code> 文件，有些系统是<code>/var/log/auth.log</code>文件，以下以<code>/var/log/secure</code> 文件为例查询。</p>
+<p>常用的MySQL命令，记录下来，以便查询</p>
 </blockquote>
 <span id="more"></span>
-<figure class="highlight stata"><table><tr><td class="code"><pre><span class="line"># 查看哪些IP破解你SSH密码以及次数</span><br><span class="line"><span class="keyword">cat</span> /<span class="keyword">var</span>/<span class="keyword">log</span>/secure | awk &#x27;/Failed/&#123;<span class="keyword">print</span> $(NF-3)&#125;&#x27; | <span class="keyword">sort</span> | uniq -c | awk &#x27;&#123;<span class="keyword">print</span> <span class="variable">$2</span><span class="string">&quot; = &quot;</span><span class="variable">$1</span>;&#125;&#x27;</span><br><span class="line"></span><br><span class="line"># 登录失败的记录</span><br><span class="line">grep -o <span class="string">&quot;Failed password&quot;</span> /<span class="keyword">var</span>/<span class="keyword">log</span>/secure|uniq -c</span><br><span class="line"></span><br><span class="line"># 登录成功的记录</span><br><span class="line">1. grep <span class="string">&quot;Accepted &quot;</span> /<span class="keyword">var</span>/<span class="keyword">log</span>/secure | awk &#x27;&#123;<span class="keyword">print</span> <span class="variable">$1</span>,<span class="variable">$2</span>,<span class="variable">$3</span>,<span class="variable">$9</span>,<span class="variable">$11&#125;</span>&#x27;</span><br><span class="line">2. grep <span class="string">&quot;Accepted password for root&quot;</span> /<span class="keyword">var</span>/<span class="keyword">log</span>/secure | awk &#x27;&#123;<span class="keyword">print</span> <span class="variable">$11&#125;</span>&#x27; | <span class="keyword">sort</span> | uniq -c | <span class="keyword">sort</span> -nr | <span class="keyword">more</span></span><br><span class="line"></span><br><span class="line"># 排序查看哪些IP破解你SSH密码以及次数</span><br><span class="line">1. <span class="keyword">cat</span>  | awk &#x27;/Failed/&#123;<span class="keyword">print</span> $(NF-3)&#125;&#x27; /<span class="keyword">var</span>/<span class="keyword">log</span>/secure | <span class="keyword">sort</span> | uniq -c | <span class="keyword">sort</span> -rn</span><br><span class="line">2. grep <span class="string">&quot;Failed password for root&quot;</span> /<span class="keyword">var</span>/<span class="keyword">log</span>/secure | awk &#x27;&#123;<span class="keyword">print</span> <span class="variable">$11&#125;</span>&#x27; | <span class="keyword">sort</span> | uniq -c | <span class="keyword">sort</span> -nr | <span class="keyword">more</span></span><br></pre></td></tr></table></figure>
 
-<h2 id="恶意IP检测工具"><a href="#恶意IP检测工具" class="headerlink" title="恶意IP检测工具"></a>恶意IP检测工具</h2><p>网址：<a href="https://www.abuseipdb.com/">https://www.abuseipdb.com/</a><br>显示结果如下图所示:</p>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415171504.png"></p>
+<ol>
+<li><p>压缩版Mysql下载安装教程: <a href="https://blog.csdn.net/Recky_wiers/article/details/79243804">https://blog.csdn.net/Recky_wiers/article/details/79243804</a></p>
+</li>
+<li><p>mysql教程: <a href="https://blog.csdn.net/qq_34115899/article/details/81190461">https://blog.csdn.net/qq_34115899/article/details/81190461</a></p>
+</li>
+<li><p>查看mysql版本</p>
+<figure class="highlight diff"><figcaption><span>查看版本</span></figcaption><table><tr><td class="code"><pre><span class="line">mysql -V</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动和关闭mysql服务</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">net start mysql <span class="regexp">//</span>启动mysql服务</span><br><span class="line">net stop mysql <span class="regexp">//</span>停止mysql服务</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改密码</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">mysqladmin -u root -p password <span class="regexp">//</span>执行后会让用户输入旧密码，再输入两次新密码</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>登录mysql账户</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">mysql -u root -p <span class="regexp">//</span>命令完成后输入密码登录</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>连接远程主机上的mysql</p>
+<figure class="highlight armasm"><table><tr><td class="code"><pre><span class="line"><span class="symbol">mysql</span> -h <span class="built_in">ip</span> -u root -p password</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看mysql数据库的存储位置</p>
+<figure class="highlight pgsql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">show</span> <span class="keyword">global</span> variables <span class="keyword">like</span> &quot;%datadir%&quot;;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>数据库</category>
       </categories>
       <tags>
-        <tag>安全</tag>
+        <tag>MySQL</tag>
       </tags>
   </entry>
   <entry>
@@ -1117,6 +1098,25 @@ docker部署
       </categories>
       <tags>
         <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux服务查看SSH登录失败日志</title>
+    <url>/posts/26caa900/</url>
+    <content><![CDATA[<blockquote>
+<p>查询主要依据 <code>/var/log/secure</code> 文件，有些系统是<code>/var/log/auth.log</code>文件，以下以<code>/var/log/secure</code> 文件为例查询。</p>
+</blockquote>
+<span id="more"></span>
+<figure class="highlight stata"><table><tr><td class="code"><pre><span class="line"># 查看哪些IP破解你SSH密码以及次数</span><br><span class="line"><span class="keyword">cat</span> /<span class="keyword">var</span>/<span class="keyword">log</span>/secure | awk &#x27;/Failed/&#123;<span class="keyword">print</span> $(NF-3)&#125;&#x27; | <span class="keyword">sort</span> | uniq -c | awk &#x27;&#123;<span class="keyword">print</span> <span class="variable">$2</span><span class="string">&quot; = &quot;</span><span class="variable">$1</span>;&#125;&#x27;</span><br><span class="line"></span><br><span class="line"># 登录失败的记录</span><br><span class="line">grep -o <span class="string">&quot;Failed password&quot;</span> /<span class="keyword">var</span>/<span class="keyword">log</span>/secure|uniq -c</span><br><span class="line"></span><br><span class="line"># 登录成功的记录</span><br><span class="line">1. grep <span class="string">&quot;Accepted &quot;</span> /<span class="keyword">var</span>/<span class="keyword">log</span>/secure | awk &#x27;&#123;<span class="keyword">print</span> <span class="variable">$1</span>,<span class="variable">$2</span>,<span class="variable">$3</span>,<span class="variable">$9</span>,<span class="variable">$11&#125;</span>&#x27;</span><br><span class="line">2. grep <span class="string">&quot;Accepted password for root&quot;</span> /<span class="keyword">var</span>/<span class="keyword">log</span>/secure | awk &#x27;&#123;<span class="keyword">print</span> <span class="variable">$11&#125;</span>&#x27; | <span class="keyword">sort</span> | uniq -c | <span class="keyword">sort</span> -nr | <span class="keyword">more</span></span><br><span class="line"></span><br><span class="line"># 排序查看哪些IP破解你SSH密码以及次数</span><br><span class="line">1. <span class="keyword">cat</span>  | awk &#x27;/Failed/&#123;<span class="keyword">print</span> $(NF-3)&#125;&#x27; /<span class="keyword">var</span>/<span class="keyword">log</span>/secure | <span class="keyword">sort</span> | uniq -c | <span class="keyword">sort</span> -rn</span><br><span class="line">2. grep <span class="string">&quot;Failed password for root&quot;</span> /<span class="keyword">var</span>/<span class="keyword">log</span>/secure | awk &#x27;&#123;<span class="keyword">print</span> <span class="variable">$11&#125;</span>&#x27; | <span class="keyword">sort</span> | uniq -c | <span class="keyword">sort</span> -nr | <span class="keyword">more</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="恶意IP检测工具"><a href="#恶意IP检测工具" class="headerlink" title="恶意IP检测工具"></a>恶意IP检测工具</h2><p>网址：<a href="https://www.abuseipdb.com/">https://www.abuseipdb.com/</a><br>显示结果如下图所示:</p>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415171504.png"></p>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>安全</tag>
       </tags>
   </entry>
   <entry>
@@ -1410,6 +1410,53 @@ docker部署
       </tags>
   </entry>
   <entry>
+    <title>Python爬虫下载长江雨课堂课程音频文件</title>
+    <url>/posts/35873/</url>
+    <content><![CDATA[<blockquote>
+<p>近日疫情原因，各学校采用线上教学。软件工程这门课采用长江雨课堂，由于马上就期中测试，准备回放复习一下课程，但是长江雨课堂的回放功能不支持倍速播放，于是准备将音频文件下载到本地播放。</p>
+</blockquote>
+<span id="more"></span>
+<h2 id="爬取分析"><a href="#爬取分析" class="headerlink" title="爬取分析"></a>爬取分析</h2><ul>
+<li><code>m3u8</code>音频格式</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/Snipaste_2020-03-27_15-58-54.png"></p>
+<p>可以看出其音频格式为<code>m3u8</code>。爬取步骤如下：</p>
+<ol>
+<li>获取课程信息</li>
+<li>根据课程信息获取m3u8文件地址</li>
+<li>根据m3u8文件中ts文件名下载ts文件</li>
+<li>合并ts文件</li>
+</ol>
+<ul>
+<li><code>mp3</code>音频格式</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/Snipaste_2020-03-27_16-05-31.png"></p>
+<p>可以看出其音频格式为<code>mp3</code>, 并且包含多段。爬取步骤如下：</p>
+<ol>
+<li>获取课程信息</li>
+<li>根据课程信息获取mp3文件地址</li>
+<li>下载mp3文件</li>
+<li>合并mp3文件</li>
+</ol>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p><strong>环境说明</strong></p>
+<ul>
+<li>语言：Python</li>
+<li>库：requests</li>
+</ul>
+<p><strong>使用说明</strong></p>
+<ul>
+<li>输入lessonID，每次下载一个课程的音频文件</li>
+<li>lessonID获取方式，见图片</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/Snipaste_2020-03-27_16-14-30.png"></p>
+<p><strong>Python代码</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> json,time</span><br><span class="line"></span><br><span class="line">lessonID = <span class="string">&quot;4003249&quot;</span></span><br><span class="line"></span><br><span class="line">header = &#123;</span><br><span class="line">    <span class="string">&#x27;cookie&#x27;</span>:<span class="string">&quot;_ga=GA1.2.1597694283.1582103010; _did=web_2408385821B4C392; _gid=GA1.2.237363874.1585559892; csrftoken=UFomwya8SZP3HFR5gv9GnTQ6ChyipTSI; sessionid=o3lwkaqztkxg629ahwfnf3037jvwl9kl; django_language=zh-cn&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">url_lesson = <span class="string">&quot;https://changjiang.yuketang.cn/v/lesson/get_lesson_replay_timeline/?lesson_id=&#123;&#125;&quot;</span>.<span class="built_in">format</span>(lessonID)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 0. 获取m3u8路径</span></span><br><span class="line">resp = requests.get(url_lesson, headers=header)</span><br><span class="line">dic_info = json.loads(resp.text)</span><br><span class="line"></span><br><span class="line">m3u8_list = dic_info[<span class="string">&#x27;data&#x27;</span>][<span class="string">&#x27;live_timeline&#x27;</span>]</span><br><span class="line"></span><br><span class="line">num = <span class="number">1</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> m3u8_list:  <span class="comment">#可能存在多个文件</span></span><br><span class="line">    url_m3u8 = i[<span class="string">&quot;replay_url&quot;</span>]</span><br><span class="line">    <span class="built_in">print</span>(url_m3u8)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(<span class="string">&#x27;./&#123;&#125;/&#x27;</span>.<span class="built_in">format</span>(lessonID)):</span><br><span class="line">        os.mkdir(<span class="string">&#x27;./&#123;&#125;/&#x27;</span>.<span class="built_in">format</span>(lessonID))</span><br><span class="line">    <span class="keyword">if</span> <span class="string">&#x27;.m3u8&#x27;</span> <span class="keyword">in</span> url_m3u8: <span class="comment">#TS格式</span></span><br><span class="line">        <span class="comment"># 1. 下载m3u8文件</span></span><br><span class="line">        filename_m3u8 = <span class="string">&quot;./&#123;&#125;/&#123;&#125;&quot;</span>.<span class="built_in">format</span>(lessonID,url_m3u8.split(<span class="string">&#x27;/&#x27;</span>)[-<span class="number">1</span>])</span><br><span class="line">        resp = requests.get(url_m3u8, headers=header)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(filename_m3u8, <span class="string">&#x27;w&#x27;</span>, encoding=<span class="string">&#x27;utf8&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            f.write(resp.text)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 2. 获得TS文件名</span></span><br><span class="line">        dataTS = []</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(filename_m3u8, <span class="string">&#x27;r&#x27;</span>, encoding=<span class="string">&#x27;utf8&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            data = f.readlines();</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> data:</span><br><span class="line">                <span class="keyword">if</span> i.endswith(<span class="string">&quot;.ts\n&quot;</span>):</span><br><span class="line">                    dataTS.append(i[<span class="number">0</span>:-<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line">        url_ts_prefix = os.path.dirname(url_m3u8)+<span class="string">&quot;/&quot;</span></span><br><span class="line">        <span class="comment"># 2. 下载TS音频文件</span></span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;./&#123;&#125;/&#123;&#125;.ts&quot;</span>.<span class="built_in">format</span>(lessonID,url_m3u8.split(<span class="string">&#x27;/&#x27;</span>)[-<span class="number">1</span>].split(<span class="string">&#x27;.&#x27;</span>)[<span class="number">0</span>]), <span class="string">&#x27;wb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            <span class="keyword">for</span> ts <span class="keyword">in</span> dataTS:</span><br><span class="line">                nurl = url_ts_prefix + ts</span><br><span class="line">                <span class="built_in">print</span>(nurl)</span><br><span class="line">                resp = requests.get(nurl)</span><br><span class="line">                f.write(resp.content)</span><br><span class="line">    <span class="keyword">elif</span> <span class="string">&#x27;.mp3&#x27;</span> <span class="keyword">in</span> url_m3u8:</span><br><span class="line">        resp = requests.get(url_m3u8) <span class="comment">#mp3文件</span></span><br><span class="line">        filename = <span class="string">&quot;together_&quot;</span>+url_m3u8.split(<span class="string">&#x27;?&#x27;</span>)[<span class="number">0</span>].split(<span class="string">&#x27;/&#x27;</span>)[-<span class="number">1</span>]</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;./&#123;&#125;/&#123;&#125;&quot;</span>.<span class="built_in">format</span>(lessonID, filename), <span class="string">&#x27;ab+&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            f.write(resp.content) </span><br><span class="line"></span><br><span class="line">        filename = <span class="built_in">str</span>(num)+<span class="string">&quot;_&quot;</span>+url_m3u8.split(<span class="string">&#x27;?&#x27;</span>)[<span class="number">0</span>].split(<span class="string">&#x27;/&#x27;</span>)[-<span class="number">1</span>]</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;./&#123;&#125;/&#123;&#125;&quot;</span>.<span class="built_in">format</span>(lessonID, filename), <span class="string">&#x27;wb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            f.write(resp.content) </span><br><span class="line">        num += <span class="number">1</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">    	<span class="built_in">print</span>(<span class="string">&quot;未知URL &#123;&#125;&quot;</span>.<span class="built_in">format</span>(url_m3u8))</span><br><span class="line"></span><br><span class="line">url_lesson_info = <span class="string">&quot;https://changjiang.yuketang.cn/v/lesson/get_lesson_replay_content/?lesson_id=&#123;&#125;&quot;</span>.<span class="built_in">format</span>(lessonID)</span><br><span class="line">resp = requests.get(url_lesson_info, headers=header)</span><br><span class="line">title = json.loads(resp.text)[<span class="string">&quot;data&quot;</span>][<span class="string">&#x27;lesson&#x27;</span>][<span class="string">&#x27;title&#x27;</span>]</span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(<span class="string">&#x27;./&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(lessonID+<span class="string">&quot;_&quot;</span>+title)):</span><br><span class="line">    os.rename(<span class="string">&#x27;./&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(lessonID), <span class="string">&#x27;./&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(lessonID+<span class="string">&quot;_&quot;</span>+title))</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    os.rename(<span class="string">&#x27;./&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(lessonID+<span class="string">&quot;_&quot;</span>+title),<span class="string">&#x27;./&#123;&#125;_&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(lessonID+<span class="string">&quot;_&quot;</span>+title, <span class="built_in">int</span>(time.time())))</span><br><span class="line">    os.rename(<span class="string">&#x27;./&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(lessonID), <span class="string">&#x27;./&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(lessonID+<span class="string">&quot;_&quot;</span>+title))</span><br></pre></td></tr></table></figure>
+<p><strong>下载结果</strong><br><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/Snipaste_2020-03-27_16-22-33.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/Snipaste_2020-03-27_16-22-55.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/Snipaste_2020-03-27_16-23-08.png"></p>
+]]></content>
+  </entry>
+  <entry>
     <title>Python爬虫下载腾讯课堂回放视频</title>
     <url>/posts/21543/</url>
     <content><![CDATA[<blockquote>
@@ -1504,53 +1551,6 @@ docker部署
 ]]></content>
   </entry>
   <entry>
-    <title>Python爬虫下载长江雨课堂课程音频文件</title>
-    <url>/posts/35873/</url>
-    <content><![CDATA[<blockquote>
-<p>近日疫情原因，各学校采用线上教学。软件工程这门课采用长江雨课堂，由于马上就期中测试，准备回放复习一下课程，但是长江雨课堂的回放功能不支持倍速播放，于是准备将音频文件下载到本地播放。</p>
-</blockquote>
-<span id="more"></span>
-<h2 id="爬取分析"><a href="#爬取分析" class="headerlink" title="爬取分析"></a>爬取分析</h2><ul>
-<li><code>m3u8</code>音频格式</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/Snipaste_2020-03-27_15-58-54.png"></p>
-<p>可以看出其音频格式为<code>m3u8</code>。爬取步骤如下：</p>
-<ol>
-<li>获取课程信息</li>
-<li>根据课程信息获取m3u8文件地址</li>
-<li>根据m3u8文件中ts文件名下载ts文件</li>
-<li>合并ts文件</li>
-</ol>
-<ul>
-<li><code>mp3</code>音频格式</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/Snipaste_2020-03-27_16-05-31.png"></p>
-<p>可以看出其音频格式为<code>mp3</code>, 并且包含多段。爬取步骤如下：</p>
-<ol>
-<li>获取课程信息</li>
-<li>根据课程信息获取mp3文件地址</li>
-<li>下载mp3文件</li>
-<li>合并mp3文件</li>
-</ol>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p><strong>环境说明</strong></p>
-<ul>
-<li>语言：Python</li>
-<li>库：requests</li>
-</ul>
-<p><strong>使用说明</strong></p>
-<ul>
-<li>输入lessonID，每次下载一个课程的音频文件</li>
-<li>lessonID获取方式，见图片</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/Snipaste_2020-03-27_16-14-30.png"></p>
-<p><strong>Python代码</strong></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> json,time</span><br><span class="line"></span><br><span class="line">lessonID = <span class="string">&quot;4003249&quot;</span></span><br><span class="line"></span><br><span class="line">header = &#123;</span><br><span class="line">    <span class="string">&#x27;cookie&#x27;</span>:<span class="string">&quot;_ga=GA1.2.1597694283.1582103010; _did=web_2408385821B4C392; _gid=GA1.2.237363874.1585559892; csrftoken=UFomwya8SZP3HFR5gv9GnTQ6ChyipTSI; sessionid=o3lwkaqztkxg629ahwfnf3037jvwl9kl; django_language=zh-cn&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">url_lesson = <span class="string">&quot;https://changjiang.yuketang.cn/v/lesson/get_lesson_replay_timeline/?lesson_id=&#123;&#125;&quot;</span>.<span class="built_in">format</span>(lessonID)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 0. 获取m3u8路径</span></span><br><span class="line">resp = requests.get(url_lesson, headers=header)</span><br><span class="line">dic_info = json.loads(resp.text)</span><br><span class="line"></span><br><span class="line">m3u8_list = dic_info[<span class="string">&#x27;data&#x27;</span>][<span class="string">&#x27;live_timeline&#x27;</span>]</span><br><span class="line"></span><br><span class="line">num = <span class="number">1</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> m3u8_list:  <span class="comment">#可能存在多个文件</span></span><br><span class="line">    url_m3u8 = i[<span class="string">&quot;replay_url&quot;</span>]</span><br><span class="line">    <span class="built_in">print</span>(url_m3u8)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(<span class="string">&#x27;./&#123;&#125;/&#x27;</span>.<span class="built_in">format</span>(lessonID)):</span><br><span class="line">        os.mkdir(<span class="string">&#x27;./&#123;&#125;/&#x27;</span>.<span class="built_in">format</span>(lessonID))</span><br><span class="line">    <span class="keyword">if</span> <span class="string">&#x27;.m3u8&#x27;</span> <span class="keyword">in</span> url_m3u8: <span class="comment">#TS格式</span></span><br><span class="line">        <span class="comment"># 1. 下载m3u8文件</span></span><br><span class="line">        filename_m3u8 = <span class="string">&quot;./&#123;&#125;/&#123;&#125;&quot;</span>.<span class="built_in">format</span>(lessonID,url_m3u8.split(<span class="string">&#x27;/&#x27;</span>)[-<span class="number">1</span>])</span><br><span class="line">        resp = requests.get(url_m3u8, headers=header)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(filename_m3u8, <span class="string">&#x27;w&#x27;</span>, encoding=<span class="string">&#x27;utf8&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            f.write(resp.text)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 2. 获得TS文件名</span></span><br><span class="line">        dataTS = []</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(filename_m3u8, <span class="string">&#x27;r&#x27;</span>, encoding=<span class="string">&#x27;utf8&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            data = f.readlines();</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> data:</span><br><span class="line">                <span class="keyword">if</span> i.endswith(<span class="string">&quot;.ts\n&quot;</span>):</span><br><span class="line">                    dataTS.append(i[<span class="number">0</span>:-<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line">        url_ts_prefix = os.path.dirname(url_m3u8)+<span class="string">&quot;/&quot;</span></span><br><span class="line">        <span class="comment"># 2. 下载TS音频文件</span></span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;./&#123;&#125;/&#123;&#125;.ts&quot;</span>.<span class="built_in">format</span>(lessonID,url_m3u8.split(<span class="string">&#x27;/&#x27;</span>)[-<span class="number">1</span>].split(<span class="string">&#x27;.&#x27;</span>)[<span class="number">0</span>]), <span class="string">&#x27;wb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            <span class="keyword">for</span> ts <span class="keyword">in</span> dataTS:</span><br><span class="line">                nurl = url_ts_prefix + ts</span><br><span class="line">                <span class="built_in">print</span>(nurl)</span><br><span class="line">                resp = requests.get(nurl)</span><br><span class="line">                f.write(resp.content)</span><br><span class="line">    <span class="keyword">elif</span> <span class="string">&#x27;.mp3&#x27;</span> <span class="keyword">in</span> url_m3u8:</span><br><span class="line">        resp = requests.get(url_m3u8) <span class="comment">#mp3文件</span></span><br><span class="line">        filename = <span class="string">&quot;together_&quot;</span>+url_m3u8.split(<span class="string">&#x27;?&#x27;</span>)[<span class="number">0</span>].split(<span class="string">&#x27;/&#x27;</span>)[-<span class="number">1</span>]</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;./&#123;&#125;/&#123;&#125;&quot;</span>.<span class="built_in">format</span>(lessonID, filename), <span class="string">&#x27;ab+&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            f.write(resp.content) </span><br><span class="line"></span><br><span class="line">        filename = <span class="built_in">str</span>(num)+<span class="string">&quot;_&quot;</span>+url_m3u8.split(<span class="string">&#x27;?&#x27;</span>)[<span class="number">0</span>].split(<span class="string">&#x27;/&#x27;</span>)[-<span class="number">1</span>]</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;./&#123;&#125;/&#123;&#125;&quot;</span>.<span class="built_in">format</span>(lessonID, filename), <span class="string">&#x27;wb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            f.write(resp.content) </span><br><span class="line">        num += <span class="number">1</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">    	<span class="built_in">print</span>(<span class="string">&quot;未知URL &#123;&#125;&quot;</span>.<span class="built_in">format</span>(url_m3u8))</span><br><span class="line"></span><br><span class="line">url_lesson_info = <span class="string">&quot;https://changjiang.yuketang.cn/v/lesson/get_lesson_replay_content/?lesson_id=&#123;&#125;&quot;</span>.<span class="built_in">format</span>(lessonID)</span><br><span class="line">resp = requests.get(url_lesson_info, headers=header)</span><br><span class="line">title = json.loads(resp.text)[<span class="string">&quot;data&quot;</span>][<span class="string">&#x27;lesson&#x27;</span>][<span class="string">&#x27;title&#x27;</span>]</span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(<span class="string">&#x27;./&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(lessonID+<span class="string">&quot;_&quot;</span>+title)):</span><br><span class="line">    os.rename(<span class="string">&#x27;./&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(lessonID), <span class="string">&#x27;./&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(lessonID+<span class="string">&quot;_&quot;</span>+title))</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    os.rename(<span class="string">&#x27;./&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(lessonID+<span class="string">&quot;_&quot;</span>+title),<span class="string">&#x27;./&#123;&#125;_&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(lessonID+<span class="string">&quot;_&quot;</span>+title, <span class="built_in">int</span>(time.time())))</span><br><span class="line">    os.rename(<span class="string">&#x27;./&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(lessonID), <span class="string">&#x27;./&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(lessonID+<span class="string">&quot;_&quot;</span>+title))</span><br></pre></td></tr></table></figure>
-<p><strong>下载结果</strong><br><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/Snipaste_2020-03-27_16-22-33.png"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/Snipaste_2020-03-27_16-22-55.png"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/Snipaste_2020-03-27_16-23-08.png"></p>
-]]></content>
-  </entry>
-  <entry>
     <title>StarUML破解教程</title>
     <url>/posts/b785abd2/</url>
     <content><![CDATA[<blockquote>
@@ -1624,6 +1624,178 @@ docker部署
 </ul>
 <hr>
 <p><strong>更多命令尚待学习….</strong></p>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>telegram</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python爬虫解析库-XPath</title>
+    <url>/posts/853cdf86/</url>
+    <content><![CDATA[<blockquote>
+<p>除了使用正则表达式提取网页中数据之外, XPath也是一个强大的网页文本内容提取工具, XPath全称XML Path Language, 即XML路径语言, 最初用来在XML文档的, 但是同样适用于HTML文档的搜索.</p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="1-安装"><a href="#1-安装" class="headerlink" title="1. 安装"></a>1. 安装</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">pip install lxml</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="2-XPath常用规则"><a href="#2-XPath常用规则" class="headerlink" title="2. XPath常用规则"></a>2. XPath常用规则</h2><table>
+<thead>
+<tr>
+<th align="center">表达式</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">nodename</td>
+<td align="center">选取此节点的所有子节点</td>
+</tr>
+<tr>
+<td align="center">/</td>
+<td align="center">从当前节点选择直接子节点</td>
+</tr>
+<tr>
+<td align="center">//</td>
+<td align="center">从当前节点选取子孙节点</td>
+</tr>
+<tr>
+<td align="center">.</td>
+<td align="center">选取当前节点</td>
+</tr>
+<tr>
+<td align="center">..</td>
+<td align="center">选取当前节点的父节点</td>
+</tr>
+<tr>
+<td align="center">@</td>
+<td align="center">选取属性</td>
+</tr>
+</tbody></table>
+<h2 id="3-html文本引入和预处理"><a href="#3-html文本引入和预处理" class="headerlink" title="3.  html文本引入和预处理"></a>3.  html文本引入和预处理</h2><blockquote>
+<p>文本引入可以在内存中和外部文件中获取.</p>
+<p>tostring函数可以对一段html文本进行完善和补全(自动修正), 如果缺少某个封闭标记, 执行后可以添加上去. </p>
+</blockquote>
+<figure class="highlight python"><figcaption><span>从内存中获取</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> lxml <span class="keyword">import</span> etree</span><br><span class="line">text = <span class="string">&#x27;待解析文本&#x27;</span></span><br><span class="line">html = etree.HTML(text) <span class="comment">#传入字符串文本,并生成XPath对象</span></span><br><span class="line">result = etree.tostring(html) <span class="comment"># 对文本进行完善处理, 自动修正</span></span><br><span class="line"><span class="built_in">print</span>(result.decode(<span class="string">&#x27;utf8&#x27;</span>)) <span class="comment"># tostring后的文本是bytes类型, 需要转换为str类型</span></span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight python"><figcaption><span>从文件中获取</span></figcaption><table><tr><td class="code"><pre><span class="line">html = etree.parse(<span class="string">&#x27;./test.html&#x27;</span>, etree.HTMLParser())</span><br><span class="line">result = etree.tostring(html) <span class="comment"># 对文本进行完善处理, 自动修正</span></span><br><span class="line"><span class="built_in">print</span>(result.decode(<span class="string">&#x27;utf8&#x27;</span>)) <span class="comment"># tostring后的文本是bytes类型, 需要转换为str类型</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="4-具体内容"><a href="#4-具体内容" class="headerlink" title="4. 具体内容"></a>4. 具体内容</h2><h4 id="1-所有节点"><a href="#1-所有节点" class="headerlink" title="1. 所有节点"></a>1. 所有节点</h4><blockquote>
+<p>我们一般会用//开头的XPath规则来选取所有符合要求的节点.</p>
+<p>例如:</p>
+<p>(1) //*: 获取所有节点</p>
+<p>(2) //li: 获取所有子孙节点中的li节点</p>
+</blockquote>
+<figure class="highlight python"><figcaption><span>使用方法</span></figcaption><table><tr><td class="code"><pre><span class="line">html.xpath(<span class="string">&quot;//*&quot;</span>) <span class="comment">#这里html是XPath对象, 返回的是列表对象</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="2-子节点"><a href="#2-子节点" class="headerlink" title="2. 子节点"></a>2. 子节点</h4><blockquote>
+<p>通过//或/来获取所有子孙节点或直接子节点.</p>
+<p>例如:</p>
+<p>(1) //li/a: 获取所有li节点的直接子节点a</p>
+<p>(2) //li//a: 获取所有li节点中的所有子孙节点a</p>
+</blockquote>
+<h4 id="3-父节点"><a href="#3-父节点" class="headerlink" title="3. 父节点"></a>3. 父节点</h4><blockquote>
+<p>通过..来获取父节点, 这里需要注意/的作用</p>
+</blockquote>
+<figure class="highlight python"><figcaption><span>例</span></figcaption><table><tr><td class="code"><pre><span class="line">text = <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">&lt;a class=&quot;item&quot; target=&quot;_blank&quot; href=&quot;https://movie.douban.com/subject/34454003/?tag=热门&amp;amp;from=gaia&quot;&gt;</span></span><br><span class="line"><span class="string">        </span></span><br><span class="line"><span class="string">            &lt;div class=&quot;cover-wp&quot; data-isnew=&quot;true&quot; data-id=&quot;34454003&quot;&gt;</span></span><br><span class="line"><span class="string">                &lt;img src=&quot;https://img1.doubanio.com/view/photo/s_ratio_poster/public/p2561672299.jpg&quot; alt=&quot;夺爱之夏&quot; data-x=&quot;1648&quot; data-y=&quot;928&quot;&gt;</span></span><br><span class="line"><span class="string">            &lt;/div&gt;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line">html = etree.HTML(text)</span><br><span class="line">res = html.xpath(<span class="string">&#x27;//div[@data-id=&quot;26849758&quot;]/../@href&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(res)</span><br></pre></td></tr></table></figure>
+
+<p>上面使用//div[@data-id=”26849758”]来先找出所有属性为该属性的div节点, 再用..找出父节点, 最后使用@href来获取父节点的href属性</p>
+<h4 id="4-属性匹配和属性获取"><a href="#4-属性匹配和属性获取" class="headerlink" title="4. 属性匹配和属性获取"></a>4. 属性匹配和属性获取</h4><blockquote>
+<p>属性匹配中[]括起来的内容表示选取节点的条件, 使用@表示属性, 不用方括号使用@表示直接属性的获取</p>
+</blockquote>
+<p><strong>具体案例看上节父节点相关内容</strong></p>
+<h4 id="5-文本内容获取"><a href="#5-文本内容获取" class="headerlink" title="5. 文本内容获取"></a>5. 文本内容获取</h4><blockquote>
+<p>我们使用text()来获取节点中的文本</p>
+<p>例:</p>
+<p>//a//text(): 获取所有li节点的内容</p>
+</blockquote>
+<p>需要注意的是, 在获取一个节点的内容,其子孙节点的内容是不会被获取的, 并且经常加载\n等符号, 使得结果不纯净, 还需要在提取</p>
+<h4 id="6-属性多值匹配"><a href="#6-属性多值匹配" class="headerlink" title="6.  属性多值匹配"></a>6.  属性多值匹配</h4><blockquote>
+<p>有时候一个属性有多个值, 这时需要使用contains来提取</p>
+</blockquote>
+<figure class="highlight python"><figcaption><span>例</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> lxml <span class="keyword">import</span> etree</span><br><span class="line">text = <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&lt;li class=&quot;li li-first&quot; name=&quot;item&quot;&gt;&lt;a href=&quot;link.html&quot;&gt;firstitem&lt;/a&gt;&lt;/li&gt;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line">html = etree.HTML(text)</span><br><span class="line">result = html.xpath(<span class="string">&#x27;//li[contains(@class,&quot;li&quot;)]/a/text()&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure>
+
+<p>上面例子中, li的class属性有两个值, li和li-first,如果直接用//li[@class=”li”]/a/text()就会获取不到了.</p>
+<p>利用contains可以有效解决这一问题</p>
+<p>PS: 在实际测试中，发现直接写@class=”li li-first”也能获取出来…</p>
+<h4 id="7-多属性匹配"><a href="#7-多属性匹配" class="headerlink" title="7. 多属性匹配"></a>7. 多属性匹配</h4><blockquote>
+<p>有时候一个节点有多个属性, 如果要精确定位该节点, 可以使用多个属性值来定位.</p>
+</blockquote>
+<figure class="highlight python"><figcaption><span>例:</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> lxml <span class="keyword">import</span> etree</span><br><span class="line">text = <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&lt;li class=&quot;li li-first&quot; name=&quot;item&quot;&gt;&lt;a href=&quot;link.html&quot;&gt;firstitem&lt;/a&gt;&lt;/li&gt;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line">html = etree.HTML(text)</span><br><span class="line">result = html.xpath(<span class="string">&#x27;//li[contains(@class,&quot;li&quot;) and name=&quot;item&quot;]/a/text()&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure>
+
+<p><strong>拓展: XPath运算符</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200410205628.png"></p>
+<h4 id="8-按序选择"><a href="#8-按序选择" class="headerlink" title="8. 按序选择"></a>8. 按序选择</h4><blockquote>
+<p>有时候在选择某些属性的时候可能匹配了多个节点, 但是指向要其中的某个节点, 第一个节点等, 这时候可以使用中括号传入索引的方法获取特定次序的节点.</p>
+</blockquote>
+<figure class="highlight python"><figcaption><span>例:</span></figcaption><table><tr><td class="code"><pre><span class="line">html.xpath(<span class="string">&#x27;//li[1]/a/text()&#x27;</span>) <span class="comment">#获取第一个节点, 注意是序号从1开始</span></span><br><span class="line">html.xpath(<span class="string">&#x27;//li[last()]/a/text()&#x27;</span>) <span class="comment">#获取最后一个节点</span></span><br><span class="line">html.xpath(<span class="string">&#x27;//li[last()-2]/a/text()&#x27;</span>) <span class="comment">#获取倒数第二个</span></span><br><span class="line">html.xpath(<span class="string">&#x27;//li[position()&lt;3]/a/text()&#x27;</span>) <span class="comment">#获取第1和2个节点</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>拓展: XPath函数</strong></p>
+<p>具体看网址: <a href="https://www.w3school.com.cn/xpath/xpath_functions.asp">https://www.w3school.com.cn/xpath/xpath_functions.asp</a></p>
+<h4 id="9-XPath节点轴"><a href="#9-XPath节点轴" class="headerlink" title="9. XPath节点轴"></a>9. XPath节点轴</h4><p>具体看网址: <a href="https://www.w3school.com.cn/xpath/xpath_axes.asp">https://www.w3school.com.cn/xpath/xpath_axes.asp</a></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li>崔庆才: 《Python3网络爬虫开发实战》</li>
+<li>W3C_School: <a href="https://www.w3school.com.cn/xpath/xpath_syntax.asp">https://www.w3school.com.cn/xpath/xpath_syntax.asp</a></li>
+</ol>
+]]></content>
+      <categories>
+        <category>爬虫</category>
+      </categories>
+      <tags>
+        <tag>xpath</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Telegram-cli安装教程</title>
+    <url>/posts/e82je8eeq/</url>
+    <content><![CDATA[<blockquote>
+<p>Telegram-cli可以在没有图形界面的linux服务器上使用，记录下其安装教程。</p>
+</blockquote>
+<span id="more"></span>
+
+<p>github项目地址：<a href="https://github.com/vysheng/tg/">https://github.com/vysheng/tg/</a>    </p>
+<h2 id="安装Telegram-cli"><a href="#安装Telegram-cli" class="headerlink" title="安装Telegram-cli"></a>安装Telegram-cli</h2><h2 id="Centos-7"><a href="#Centos-7" class="headerlink" title="Centos 7"></a>Centos 7</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --recursive https://github.com/vysheng/tg.git &amp;&amp; <span class="built_in">cd</span> tg</span><br><span class="line">yum -y install lua-devel openssl-devel libconfig-devel readline-devel libevent-devel jansson-devel python-devel</span><br><span class="line">./configure</span><br><span class="line">make</span><br></pre></td></tr></table></figure>
+
+<h2 id="ubuntu-18-04"><a href="#ubuntu-18-04" class="headerlink" title="ubuntu 18.04"></a>ubuntu 18.04</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get install libreadline-dev libconfig-dev lua5.2 liblua5.2-dev libevent-dev libjansson-dev libpython-dev make zlib1g-dev libssl1.0-dev</span><br><span class="line">./configure</span><br><span class="line">make</span><br></pre></td></tr></table></figure>
+
+<p>依次运行上述命令后，telegram-cli已经安装完成，可执行文件在当前目录下的<code>bin/telegram-cli</code></p>
+<h2 id="登录Telegram-cli"><a href="#登录Telegram-cli" class="headerlink" title="登录Telegram-cli"></a>登录Telegram-cli</h2><p>在登录Telegram-cli之前需要在<code>https://my.telegram.org/apps</code>获取pub密钥。我选择创建的application类型为desktop。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/20200329170931.png"></p>
+<p>将<code>Public keys</code>复制，回到服务器端。执行以下命令，将密钥保存到<code>mytg-server.pub</code>文件中。</p>
+<figure class="highlight axapta"><table><tr><td class="code"><pre><span class="line">vim mytg-<span class="keyword">server</span>.pub</span><br></pre></td></tr></table></figure>
+
+<p>上述操作完毕之后，就可以登录了。</p>
+<p>执行命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">bin/telegram-cli -k mytg-server.pub</span><br></pre></td></tr></table></figure>
+
+<p>之后会让你输入电话号码和验证码，登录就是了。</p>
+<p>登录完毕后可以按<code>ctrl-c</code>键退出，或者使用命令<code>quit</code>或<code>safe_quit</code>退出。</p>
+<h2 id="发送消息"><a href="#发送消息" class="headerlink" title="发送消息"></a>发送消息</h2><p>如果之前登录过，后面就不需要重新登录，这里发送消息测试一下。</p>
+<ol>
+<li><p>交互命令行模式</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">bin/telegram-cli -W</span><br></pre></td></tr></table></figure>
+
+<p>执行上述命令进入命令行模式。</p>
+<ul>
+<li>向用户或群组发送消息：<code>msg &lt;username/channelname&gt; &lt;msg&gt;</code></li>
+</ul>
+</li>
+<li><p>直接发消息</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">bin/telegram-cli -W -e <span class="string">&quot;msg &lt;username/channelname&gt; &lt;msg&gt;&quot;</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p>注：用户名或者群组名包含<code>空格</code>或者<code>#</code>​字符需要替换为<code>_</code></p>
 ]]></content>
       <categories>
         <category>linux</category>
@@ -1842,39 +2014,6 @@ docker部署
       </tags>
   </entry>
   <entry>
-    <title>crontab定时任务发邮件的问题</title>
-    <url>/posts/a50980cb/</url>
-    <content><![CDATA[<p>在用 crontab -e 命令创建定时任务后，发现定时任务中的发邮件并未执行。</p>
-<span id="more"></span>
-
-<p>通过上网查询，可以看crontab的日志。命令如下：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tail /var/<span class="built_in">log</span>/cron</span><br></pre></td></tr></table></figure>
-
-<p>执行结果如下图：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-06/20200622132839.png"></p>
-<p>发现发送邮件报错为 mailed 284 bytes of output but got status 0x004b#012</p>
-<br>
-
-<p>通过查询资料，最终解决方案如下</p>
-<p>文字说明：修改 <code>/etc/postfix/main.cf</code>文件，将其中的 inet_interfaces 设置为all。</p>
-<p>操作：</p>
-<p>执行命令, 修改文件内容</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim /etc/postfix/main.cf</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-06/20200622133227.png"></p>
-<p>最终可以解决，但并不知道原理，不知道会不会影响系统安全性。</p>
-<p>参考执行</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">nohup  python3 -u /root/services/ISL.py  &gt;&gt; /root/services/ISL.log 2&gt;&amp;1  &amp;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>cron</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>centos防火墙设置</title>
     <url>/posts/751f4e41/</url>
     <content><![CDATA[<blockquote>
@@ -1923,178 +2062,6 @@ docker部署
       </categories>
   </entry>
   <entry>
-    <title>Telegram-cli安装教程</title>
-    <url>/posts/e82je8eeq/</url>
-    <content><![CDATA[<blockquote>
-<p>Telegram-cli可以在没有图形界面的linux服务器上使用，记录下其安装教程。</p>
-</blockquote>
-<span id="more"></span>
-
-<p>github项目地址：<a href="https://github.com/vysheng/tg/">https://github.com/vysheng/tg/</a>    </p>
-<h2 id="安装Telegram-cli"><a href="#安装Telegram-cli" class="headerlink" title="安装Telegram-cli"></a>安装Telegram-cli</h2><h2 id="Centos-7"><a href="#Centos-7" class="headerlink" title="Centos 7"></a>Centos 7</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --recursive https://github.com/vysheng/tg.git &amp;&amp; <span class="built_in">cd</span> tg</span><br><span class="line">yum -y install lua-devel openssl-devel libconfig-devel readline-devel libevent-devel jansson-devel python-devel</span><br><span class="line">./configure</span><br><span class="line">make</span><br></pre></td></tr></table></figure>
-
-<h2 id="ubuntu-18-04"><a href="#ubuntu-18-04" class="headerlink" title="ubuntu 18.04"></a>ubuntu 18.04</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get install libreadline-dev libconfig-dev lua5.2 liblua5.2-dev libevent-dev libjansson-dev libpython-dev make zlib1g-dev libssl1.0-dev</span><br><span class="line">./configure</span><br><span class="line">make</span><br></pre></td></tr></table></figure>
-
-<p>依次运行上述命令后，telegram-cli已经安装完成，可执行文件在当前目录下的<code>bin/telegram-cli</code></p>
-<h2 id="登录Telegram-cli"><a href="#登录Telegram-cli" class="headerlink" title="登录Telegram-cli"></a>登录Telegram-cli</h2><p>在登录Telegram-cli之前需要在<code>https://my.telegram.org/apps</code>获取pub密钥。我选择创建的application类型为desktop。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-03/20200329170931.png"></p>
-<p>将<code>Public keys</code>复制，回到服务器端。执行以下命令，将密钥保存到<code>mytg-server.pub</code>文件中。</p>
-<figure class="highlight axapta"><table><tr><td class="code"><pre><span class="line">vim mytg-<span class="keyword">server</span>.pub</span><br></pre></td></tr></table></figure>
-
-<p>上述操作完毕之后，就可以登录了。</p>
-<p>执行命令：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">bin/telegram-cli -k mytg-server.pub</span><br></pre></td></tr></table></figure>
-
-<p>之后会让你输入电话号码和验证码，登录就是了。</p>
-<p>登录完毕后可以按<code>ctrl-c</code>键退出，或者使用命令<code>quit</code>或<code>safe_quit</code>退出。</p>
-<h2 id="发送消息"><a href="#发送消息" class="headerlink" title="发送消息"></a>发送消息</h2><p>如果之前登录过，后面就不需要重新登录，这里发送消息测试一下。</p>
-<ol>
-<li><p>交互命令行模式</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">bin/telegram-cli -W</span><br></pre></td></tr></table></figure>
-
-<p>执行上述命令进入命令行模式。</p>
-<ul>
-<li>向用户或群组发送消息：<code>msg &lt;username/channelname&gt; &lt;msg&gt;</code></li>
-</ul>
-</li>
-<li><p>直接发消息</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">bin/telegram-cli -W -e <span class="string">&quot;msg &lt;username/channelname&gt; &lt;msg&gt;&quot;</span></span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-<p>注：用户名或者群组名包含<code>空格</code>或者<code>#</code>​字符需要替换为<code>_</code></p>
-]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>telegram</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Python爬虫解析库-XPath</title>
-    <url>/posts/853cdf86/</url>
-    <content><![CDATA[<blockquote>
-<p>除了使用正则表达式提取网页中数据之外, XPath也是一个强大的网页文本内容提取工具, XPath全称XML Path Language, 即XML路径语言, 最初用来在XML文档的, 但是同样适用于HTML文档的搜索.</p>
-</blockquote>
-<span id="more"></span>
-
-<h2 id="1-安装"><a href="#1-安装" class="headerlink" title="1. 安装"></a>1. 安装</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">pip install lxml</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="2-XPath常用规则"><a href="#2-XPath常用规则" class="headerlink" title="2. XPath常用规则"></a>2. XPath常用规则</h2><table>
-<thead>
-<tr>
-<th align="center">表达式</th>
-<th align="center">描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">nodename</td>
-<td align="center">选取此节点的所有子节点</td>
-</tr>
-<tr>
-<td align="center">/</td>
-<td align="center">从当前节点选择直接子节点</td>
-</tr>
-<tr>
-<td align="center">//</td>
-<td align="center">从当前节点选取子孙节点</td>
-</tr>
-<tr>
-<td align="center">.</td>
-<td align="center">选取当前节点</td>
-</tr>
-<tr>
-<td align="center">..</td>
-<td align="center">选取当前节点的父节点</td>
-</tr>
-<tr>
-<td align="center">@</td>
-<td align="center">选取属性</td>
-</tr>
-</tbody></table>
-<h2 id="3-html文本引入和预处理"><a href="#3-html文本引入和预处理" class="headerlink" title="3.  html文本引入和预处理"></a>3.  html文本引入和预处理</h2><blockquote>
-<p>文本引入可以在内存中和外部文件中获取.</p>
-<p>tostring函数可以对一段html文本进行完善和补全(自动修正), 如果缺少某个封闭标记, 执行后可以添加上去. </p>
-</blockquote>
-<figure class="highlight python"><figcaption><span>从内存中获取</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> lxml <span class="keyword">import</span> etree</span><br><span class="line">text = <span class="string">&#x27;待解析文本&#x27;</span></span><br><span class="line">html = etree.HTML(text) <span class="comment">#传入字符串文本,并生成XPath对象</span></span><br><span class="line">result = etree.tostring(html) <span class="comment"># 对文本进行完善处理, 自动修正</span></span><br><span class="line"><span class="built_in">print</span>(result.decode(<span class="string">&#x27;utf8&#x27;</span>)) <span class="comment"># tostring后的文本是bytes类型, 需要转换为str类型</span></span><br></pre></td></tr></table></figure>
-
-
-
-<figure class="highlight python"><figcaption><span>从文件中获取</span></figcaption><table><tr><td class="code"><pre><span class="line">html = etree.parse(<span class="string">&#x27;./test.html&#x27;</span>, etree.HTMLParser())</span><br><span class="line">result = etree.tostring(html) <span class="comment"># 对文本进行完善处理, 自动修正</span></span><br><span class="line"><span class="built_in">print</span>(result.decode(<span class="string">&#x27;utf8&#x27;</span>)) <span class="comment"># tostring后的文本是bytes类型, 需要转换为str类型</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="4-具体内容"><a href="#4-具体内容" class="headerlink" title="4. 具体内容"></a>4. 具体内容</h2><h4 id="1-所有节点"><a href="#1-所有节点" class="headerlink" title="1. 所有节点"></a>1. 所有节点</h4><blockquote>
-<p>我们一般会用//开头的XPath规则来选取所有符合要求的节点.</p>
-<p>例如:</p>
-<p>(1) //*: 获取所有节点</p>
-<p>(2) //li: 获取所有子孙节点中的li节点</p>
-</blockquote>
-<figure class="highlight python"><figcaption><span>使用方法</span></figcaption><table><tr><td class="code"><pre><span class="line">html.xpath(<span class="string">&quot;//*&quot;</span>) <span class="comment">#这里html是XPath对象, 返回的是列表对象</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h4 id="2-子节点"><a href="#2-子节点" class="headerlink" title="2. 子节点"></a>2. 子节点</h4><blockquote>
-<p>通过//或/来获取所有子孙节点或直接子节点.</p>
-<p>例如:</p>
-<p>(1) //li/a: 获取所有li节点的直接子节点a</p>
-<p>(2) //li//a: 获取所有li节点中的所有子孙节点a</p>
-</blockquote>
-<h4 id="3-父节点"><a href="#3-父节点" class="headerlink" title="3. 父节点"></a>3. 父节点</h4><blockquote>
-<p>通过..来获取父节点, 这里需要注意/的作用</p>
-</blockquote>
-<figure class="highlight python"><figcaption><span>例</span></figcaption><table><tr><td class="code"><pre><span class="line">text = <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">&lt;a class=&quot;item&quot; target=&quot;_blank&quot; href=&quot;https://movie.douban.com/subject/34454003/?tag=热门&amp;amp;from=gaia&quot;&gt;</span></span><br><span class="line"><span class="string">        </span></span><br><span class="line"><span class="string">            &lt;div class=&quot;cover-wp&quot; data-isnew=&quot;true&quot; data-id=&quot;34454003&quot;&gt;</span></span><br><span class="line"><span class="string">                &lt;img src=&quot;https://img1.doubanio.com/view/photo/s_ratio_poster/public/p2561672299.jpg&quot; alt=&quot;夺爱之夏&quot; data-x=&quot;1648&quot; data-y=&quot;928&quot;&gt;</span></span><br><span class="line"><span class="string">            &lt;/div&gt;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line">html = etree.HTML(text)</span><br><span class="line">res = html.xpath(<span class="string">&#x27;//div[@data-id=&quot;26849758&quot;]/../@href&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(res)</span><br></pre></td></tr></table></figure>
-
-<p>上面使用//div[@data-id=”26849758”]来先找出所有属性为该属性的div节点, 再用..找出父节点, 最后使用@href来获取父节点的href属性</p>
-<h4 id="4-属性匹配和属性获取"><a href="#4-属性匹配和属性获取" class="headerlink" title="4. 属性匹配和属性获取"></a>4. 属性匹配和属性获取</h4><blockquote>
-<p>属性匹配中[]括起来的内容表示选取节点的条件, 使用@表示属性, 不用方括号使用@表示直接属性的获取</p>
-</blockquote>
-<p><strong>具体案例看上节父节点相关内容</strong></p>
-<h4 id="5-文本内容获取"><a href="#5-文本内容获取" class="headerlink" title="5. 文本内容获取"></a>5. 文本内容获取</h4><blockquote>
-<p>我们使用text()来获取节点中的文本</p>
-<p>例:</p>
-<p>//a//text(): 获取所有li节点的内容</p>
-</blockquote>
-<p>需要注意的是, 在获取一个节点的内容,其子孙节点的内容是不会被获取的, 并且经常加载\n等符号, 使得结果不纯净, 还需要在提取</p>
-<h4 id="6-属性多值匹配"><a href="#6-属性多值匹配" class="headerlink" title="6.  属性多值匹配"></a>6.  属性多值匹配</h4><blockquote>
-<p>有时候一个属性有多个值, 这时需要使用contains来提取</p>
-</blockquote>
-<figure class="highlight python"><figcaption><span>例</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> lxml <span class="keyword">import</span> etree</span><br><span class="line">text = <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&lt;li class=&quot;li li-first&quot; name=&quot;item&quot;&gt;&lt;a href=&quot;link.html&quot;&gt;firstitem&lt;/a&gt;&lt;/li&gt;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line">html = etree.HTML(text)</span><br><span class="line">result = html.xpath(<span class="string">&#x27;//li[contains(@class,&quot;li&quot;)]/a/text()&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure>
-
-<p>上面例子中, li的class属性有两个值, li和li-first,如果直接用//li[@class=”li”]/a/text()就会获取不到了.</p>
-<p>利用contains可以有效解决这一问题</p>
-<p>PS: 在实际测试中，发现直接写@class=”li li-first”也能获取出来…</p>
-<h4 id="7-多属性匹配"><a href="#7-多属性匹配" class="headerlink" title="7. 多属性匹配"></a>7. 多属性匹配</h4><blockquote>
-<p>有时候一个节点有多个属性, 如果要精确定位该节点, 可以使用多个属性值来定位.</p>
-</blockquote>
-<figure class="highlight python"><figcaption><span>例:</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> lxml <span class="keyword">import</span> etree</span><br><span class="line">text = <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&lt;li class=&quot;li li-first&quot; name=&quot;item&quot;&gt;&lt;a href=&quot;link.html&quot;&gt;firstitem&lt;/a&gt;&lt;/li&gt;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line">html = etree.HTML(text)</span><br><span class="line">result = html.xpath(<span class="string">&#x27;//li[contains(@class,&quot;li&quot;) and name=&quot;item&quot;]/a/text()&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure>
-
-<p><strong>拓展: XPath运算符</strong></p>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200410205628.png"></p>
-<h4 id="8-按序选择"><a href="#8-按序选择" class="headerlink" title="8. 按序选择"></a>8. 按序选择</h4><blockquote>
-<p>有时候在选择某些属性的时候可能匹配了多个节点, 但是指向要其中的某个节点, 第一个节点等, 这时候可以使用中括号传入索引的方法获取特定次序的节点.</p>
-</blockquote>
-<figure class="highlight python"><figcaption><span>例:</span></figcaption><table><tr><td class="code"><pre><span class="line">html.xpath(<span class="string">&#x27;//li[1]/a/text()&#x27;</span>) <span class="comment">#获取第一个节点, 注意是序号从1开始</span></span><br><span class="line">html.xpath(<span class="string">&#x27;//li[last()]/a/text()&#x27;</span>) <span class="comment">#获取最后一个节点</span></span><br><span class="line">html.xpath(<span class="string">&#x27;//li[last()-2]/a/text()&#x27;</span>) <span class="comment">#获取倒数第二个</span></span><br><span class="line">html.xpath(<span class="string">&#x27;//li[position()&lt;3]/a/text()&#x27;</span>) <span class="comment">#获取第1和2个节点</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>拓展: XPath函数</strong></p>
-<p>具体看网址: <a href="https://www.w3school.com.cn/xpath/xpath_functions.asp">https://www.w3school.com.cn/xpath/xpath_functions.asp</a></p>
-<h4 id="9-XPath节点轴"><a href="#9-XPath节点轴" class="headerlink" title="9. XPath节点轴"></a>9. XPath节点轴</h4><p>具体看网址: <a href="https://www.w3school.com.cn/xpath/xpath_axes.asp">https://www.w3school.com.cn/xpath/xpath_axes.asp</a></p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
-<li>崔庆才: 《Python3网络爬虫开发实战》</li>
-<li>W3C_School: <a href="https://www.w3school.com.cn/xpath/xpath_syntax.asp">https://www.w3school.com.cn/xpath/xpath_syntax.asp</a></li>
-</ol>
-]]></content>
-      <categories>
-        <category>爬虫</category>
-      </categories>
-      <tags>
-        <tag>xpath</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>crontab相关</title>
     <url>/posts/1bfd1149/</url>
     <content><![CDATA[<blockquote>
@@ -2124,36 +2091,37 @@ docker部署
       </tags>
   </entry>
   <entry>
-    <title>docker安装forsaken mail</title>
-    <url>/posts/918f076b/</url>
-    <content><![CDATA[<blockquote>
-<p>记录安装forsaken mail的步骤</p>
-</blockquote>
+    <title>crontab定时任务发邮件的问题</title>
+    <url>/posts/a50980cb/</url>
+    <content><![CDATA[<p>在用 crontab -e 命令创建定时任务后，发现定时任务中的发邮件并未执行。</p>
 <span id="more"></span>
 
-<p>服务器系统：Centos7<br>docker版本：Docker version 19.03.5, build 633a0ea</p>
-<h2 id="1-docker拉取镜像并创建容器运行"><a href="#1-docker拉取镜像并创建容器运行" class="headerlink" title="1. docker拉取镜像并创建容器运行"></a>1. docker拉取镜像并创建容器运行</h2><figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">docker</span> run --name forsaken-mail --restart=always -d -p <span class="number">25</span>:<span class="number">25</span> -p <span class="number">3000</span>:<span class="number">3000</span> denghongcai/forsaken-mail </span><br></pre></td></tr></table></figure>
-<p>:warning: 如果创建了镜像但是因为端口被占用无法运行, 可以在杀死端口对应进程后执行以下命令</p>
-<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">docker</span> run -d -p <span class="number">25</span>:<span class="number">25</span> -p <span class="number">3000</span>:<span class="number">3000</span> denghongcai/forsaken-mail:latest </span><br></pre></td></tr></table></figure>
-<h2 id="2-配置Caddy"><a href="#2-配置Caddy" class="headerlink" title="2. 配置Caddy"></a>2. 配置Caddy</h2><p>:point_right: <a href="/archives/d392dh">Caddy安装教程</a><br>（1） 打开文件</p>
-<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">vim <span class="regexp">/etc/</span>caddy<span class="regexp">/conf.d/</span>Caddyfile.conf</span><br></pre></td></tr></table></figure>
-<p>（2）向文件中添加配置信息</p>
-<figure class="highlight angelscript"><table><tr><td class="code"><pre><span class="line">https:<span class="comment">//yourdomain &#123;</span></span><br><span class="line">    gzip</span><br><span class="line">    tls <span class="symbol">xx@</span>xx.xx</span><br><span class="line">    proxy / localhost:yourport </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>注意： <code>域名</code> <code>邮箱</code> <code>端口</code> 三者的填写<br>(3) 重启caddy服务</p>
-<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">systemctl restart caddy</span></span><br></pre></td></tr></table></figure>
+<p>通过上网查询，可以看crontab的日志。命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tail /var/<span class="built_in">log</span>/cron</span><br></pre></td></tr></table></figure>
 
-<h2 id="3-forsaken-mail一键安装脚本"><a href="#3-forsaken-mail一键安装脚本" class="headerlink" title="3. forsaken mail一键安装脚本"></a>3. forsaken mail一键安装脚本</h2><p><strong>前提</strong>：</p>
-<ul>
-<li>OS: Centos7+</li>
-<li>国外服务器</li>
-<li>确保端口25和3000没有进程占用</li>
-</ul>
-<figure class="highlight vim"><table><tr><td class="code"><pre><span class="line">sudo yum -<span class="keyword">y</span> install wget curl <span class="keyword">vim</span> lsof</span><br><span class="line">sudo yum <span class="built_in">remove</span> docker docker-client docker-client-latest \</span><br><span class="line">                  docker-common docker-latest \</span><br><span class="line">                  docker-latest-logrotate docker-logrotate \</span><br><span class="line">                  docker-engine</span><br><span class="line">sudo yum install -<span class="keyword">y</span> yum-utils device-mapper-persistent-data lvm2</span><br><span class="line">sudo yum-config-manager \</span><br><span class="line">    --<span class="built_in">add</span>-repo \</span><br><span class="line">    http<span class="variable">s:</span>//download.docker.<span class="keyword">com</span>/linux/centos/docker-<span class="keyword">ce</span>.repo</span><br><span class="line">sudo yum install docker-<span class="keyword">ce</span> docker-<span class="keyword">ce</span>-cli containerd.io</span><br><span class="line">systemctl enable docker </span><br><span class="line">systemctl start docker</span><br><span class="line">docker run -d -<span class="keyword">p</span> <span class="number">25</span>:<span class="number">25</span> -<span class="keyword">p</span> <span class="number">3000</span>:<span class="number">3000</span> denghongcai/forsaken-mai<span class="variable">l:latest</span></span><br><span class="line">sudo yum install epel-release</span><br><span class="line">yum -<span class="keyword">y</span> install caddy</span><br><span class="line">systemctl enable caddy</span><br></pre></td></tr></table></figure>
-<p>上述命令执行完毕后，进行文章中的第二步操作，配置caddy</p>
+<p>执行结果如下图：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-06/20200622132839.png"></p>
+<p>发现发送邮件报错为 mailed 284 bytes of output but got status 0x004b#012</p>
+<br>
+
+<p>通过查询资料，最终解决方案如下</p>
+<p>文字说明：修改 <code>/etc/postfix/main.cf</code>文件，将其中的 inet_interfaces 设置为all。</p>
+<p>操作：</p>
+<p>执行命令, 修改文件内容</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim /etc/postfix/main.cf</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-06/20200622133227.png"></p>
+<p>最终可以解决，但并不知道原理，不知道会不会影响系统安全性。</p>
+<p>参考执行</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">nohup  python3 -u /root/services/ISL.py  &gt;&gt; /root/services/ISL.log 2&gt;&amp;1  &amp;</span><br></pre></td></tr></table></figure>
+
 ]]></content>
       <categories>
         <category>linux</category>
       </categories>
+      <tags>
+        <tag>cron</tag>
+      </tags>
   </entry>
   <entry>
     <title>docker常用命令总结</title>
@@ -2234,6 +2202,38 @@ docker部署
 <p>:key: <code>--link mysql_git:db</code><br>&emsp;&emsp;:point_right:<code>db</code> 就是在gitea容器中mysql_git数据库的地址</p>
 <h2 id="7-最后"><a href="#7-最后" class="headerlink" title="7.最后"></a>7.最后</h2><p>访问地址 <code>http://ip:10081/</code> 即是 gitea 地址，首先要配置好你的数据库。</p>
 <p>仓库风格如下<br><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415172100.png"></p>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>docker安装forsaken mail</title>
+    <url>/posts/918f076b/</url>
+    <content><![CDATA[<blockquote>
+<p>记录安装forsaken mail的步骤</p>
+</blockquote>
+<span id="more"></span>
+
+<p>服务器系统：Centos7<br>docker版本：Docker version 19.03.5, build 633a0ea</p>
+<h2 id="1-docker拉取镜像并创建容器运行"><a href="#1-docker拉取镜像并创建容器运行" class="headerlink" title="1. docker拉取镜像并创建容器运行"></a>1. docker拉取镜像并创建容器运行</h2><figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">docker</span> run --name forsaken-mail --restart=always -d -p <span class="number">25</span>:<span class="number">25</span> -p <span class="number">3000</span>:<span class="number">3000</span> denghongcai/forsaken-mail </span><br></pre></td></tr></table></figure>
+<p>:warning: 如果创建了镜像但是因为端口被占用无法运行, 可以在杀死端口对应进程后执行以下命令</p>
+<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">docker</span> run -d -p <span class="number">25</span>:<span class="number">25</span> -p <span class="number">3000</span>:<span class="number">3000</span> denghongcai/forsaken-mail:latest </span><br></pre></td></tr></table></figure>
+<h2 id="2-配置Caddy"><a href="#2-配置Caddy" class="headerlink" title="2. 配置Caddy"></a>2. 配置Caddy</h2><p>:point_right: <a href="/archives/d392dh">Caddy安装教程</a><br>（1） 打开文件</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">vim <span class="regexp">/etc/</span>caddy<span class="regexp">/conf.d/</span>Caddyfile.conf</span><br></pre></td></tr></table></figure>
+<p>（2）向文件中添加配置信息</p>
+<figure class="highlight angelscript"><table><tr><td class="code"><pre><span class="line">https:<span class="comment">//yourdomain &#123;</span></span><br><span class="line">    gzip</span><br><span class="line">    tls <span class="symbol">xx@</span>xx.xx</span><br><span class="line">    proxy / localhost:yourport </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意： <code>域名</code> <code>邮箱</code> <code>端口</code> 三者的填写<br>(3) 重启caddy服务</p>
+<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">systemctl restart caddy</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="3-forsaken-mail一键安装脚本"><a href="#3-forsaken-mail一键安装脚本" class="headerlink" title="3. forsaken mail一键安装脚本"></a>3. forsaken mail一键安装脚本</h2><p><strong>前提</strong>：</p>
+<ul>
+<li>OS: Centos7+</li>
+<li>国外服务器</li>
+<li>确保端口25和3000没有进程占用</li>
+</ul>
+<figure class="highlight vim"><table><tr><td class="code"><pre><span class="line">sudo yum -<span class="keyword">y</span> install wget curl <span class="keyword">vim</span> lsof</span><br><span class="line">sudo yum <span class="built_in">remove</span> docker docker-client docker-client-latest \</span><br><span class="line">                  docker-common docker-latest \</span><br><span class="line">                  docker-latest-logrotate docker-logrotate \</span><br><span class="line">                  docker-engine</span><br><span class="line">sudo yum install -<span class="keyword">y</span> yum-utils device-mapper-persistent-data lvm2</span><br><span class="line">sudo yum-config-manager \</span><br><span class="line">    --<span class="built_in">add</span>-repo \</span><br><span class="line">    http<span class="variable">s:</span>//download.docker.<span class="keyword">com</span>/linux/centos/docker-<span class="keyword">ce</span>.repo</span><br><span class="line">sudo yum install docker-<span class="keyword">ce</span> docker-<span class="keyword">ce</span>-cli containerd.io</span><br><span class="line">systemctl enable docker </span><br><span class="line">systemctl start docker</span><br><span class="line">docker run -d -<span class="keyword">p</span> <span class="number">25</span>:<span class="number">25</span> -<span class="keyword">p</span> <span class="number">3000</span>:<span class="number">3000</span> denghongcai/forsaken-mai<span class="variable">l:latest</span></span><br><span class="line">sudo yum install epel-release</span><br><span class="line">yum -<span class="keyword">y</span> install caddy</span><br><span class="line">systemctl enable caddy</span><br></pre></td></tr></table></figure>
+<p>上述命令执行完毕后，进行文章中的第二步操作，配置caddy</p>
 ]]></content>
       <categories>
         <category>linux</category>
@@ -3091,6 +3091,62 @@ docker部署
       </categories>
   </entry>
   <entry>
+    <title>linux常用命令总结</title>
+    <url>/posts/1d063ae7/</url>
+    <content><![CDATA[<blockquote>
+<p>记录一些linux容易忘的linux操作命令</p>
+</blockquote>
+<span id="more"></span>
+<h1 id="systemctl"><a href="#systemctl" class="headerlink" title="systemctl"></a>systemctl</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl start xxx     // 开启服务</span><br><span class="line">systemctl stop xxx      // 停止服务</span><br><span class="line">systemctl restart xxx   // 重启服务</span><br><span class="line">systemctl <span class="built_in">enable</span> xxx    // 设置服务开机自启</span><br><span class="line">systemctl <span class="built_in">disable</span> xxx   // 取消服务开机自启</span><br><span class="line">systemctl status xxx    // 查看服务运行状态</span><br></pre></td></tr></table></figure>
+
+<h1 id="查看当前公网ip"><a href="#查看当前公网ip" class="headerlink" title="查看当前公网ip"></a>查看当前公网ip</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl icanhazip.com  </span><br><span class="line">curl ifconfig.me  </span><br><span class="line">curl curlmyip.com  </span><br><span class="line">curl ip.appspot.com  </span><br><span class="line">curl ipinfo.io/ip  </span><br><span class="line">curl ipecho.net/plain  </span><br><span class="line">curl www.trackip.net/i</span><br></pre></td></tr></table></figure>
+
+<h1 id="端口查看"><a href="#端口查看" class="headerlink" title="端口查看"></a>端口查看</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">lsof -i -P <span class="comment"># 查看所有端口被占用情况</span></span><br><span class="line">netstat -anp |grep [port] <span class="comment"># 查看端口port被那个进程占用</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="刷新dns缓存"><a href="#刷新dns缓存" class="headerlink" title="刷新dns缓存"></a>刷新dns缓存</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get install nscd</span><br><span class="line">sudo /etc/init.d/nscd restart</span><br></pre></td></tr></table></figure>
+
+<h1 id="其他命令"><a href="#其他命令" class="headerlink" title="其他命令"></a>其他命令</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/etc/init.d/ssh start</span><br><span class="line">cat /proc/version</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="string">&quot;<span class="variable">$PATH</span>:/xxx&quot;</span></span><br><span class="line">du -hs <span class="comment"># 查看某个文件夹占用大小</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$SHELL</span> &amp;&amp; <span class="built_in">echo</span> <span class="variable">$0</span> <span class="comment"># 查看当前终端类型</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="一些常见包"><a href="#一些常见包" class="headerlink" title="一些常见包"></a>一些常见包</h2><h3 id="ubuntu"><a href="#ubuntu" class="headerlink" title="ubuntu"></a>ubuntu</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">apt-get install lsb-release -y <span class="comment"># lsb_release -a</span></span><br><span class="line">apt-get install net-tools -y <span class="comment"># ifconfig</span></span><br><span class="line">apt-get install inetutils-ping -y <span class="comment">#ping www.baidu.com</span></span><br><span class="line">apt-get install aria2 -y</span><br></pre></td></tr></table></figure>
+
+<p>必备组件：</p>
+<figure class="highlight dos"><table><tr><td class="code"><pre><span class="line">vim curl wget git lsb-release <span class="built_in">net</span>-tools inetutils-<span class="built_in">ping</span> <span class="built_in">tree</span> lsof unzip zip socat aria2 </span><br></pre></td></tr></table></figure>
+
+<h1 id="进程符号"><a href="#进程符号" class="headerlink" title="进程符号"></a>进程符号</h1><figure class="highlight tp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">R</span>    正在运行，或在队列中的进程</span><br><span class="line">S    处于休眠状态</span><br><span class="line">T    停止或被追踪</span><br><span class="line"><span class="keyword">Z</span>    僵尸进程</span><br><span class="line"><span class="keyword">W</span>    进入内存交换（从内核<span class="number">2</span><span class="number">.6</span>开始无效）</span><br><span class="line"><span class="keyword">X</span>    死掉的进程</span><br><span class="line">&lt;    高优先级</span><br><span class="line">N    低优先级</span><br><span class="line">L    有些页被锁进内存</span><br><span class="line">s    包含子进程</span><br><span class="line">+    位于后台的进程组；</span><br><span class="line">l    多线程，克隆线程  </span><br></pre></td></tr></table></figure>
+
+<h1 id="开启BBR加速"><a href="#开启BBR加速" class="headerlink" title="开启BBR加速"></a>开启BBR加速</h1><p>若linux内核大于等于4.9，则直接用以下命令开启bbr加速:</p>
+<figure class="highlight gradle"><table><tr><td class="code"><pre><span class="line">echo <span class="string">&quot;net.core.default_qdisc=fq&quot;</span> &gt;&gt; <span class="regexp">/etc/</span>sysctl.conf</span><br><span class="line">echo <span class="string">&quot;net.ipv4.tcp_congestion_control=bbr&quot;</span> &gt;&gt; <span class="regexp">/etc/</span>sysctl.conf</span><br><span class="line">sysctl -p</span><br><span class="line">lsmod | <span class="keyword">grep</span> bbr</span><br></pre></td></tr></table></figure>
+
+<p>若出现如下包含<code>tcp_bbr</code>的字样，说明开启成功。</p>
+<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">tcp_bbr</span>                <span class="number">20480</span>  <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="docker安装"><a href="#docker安装" class="headerlink" title="docker安装"></a>docker安装</h1><ol>
+<li><p>docker安装</p>
+<figure class="highlight dsconfig"><table><tr><td class="code"><pre><span class="line"><span class="string">curl</span> -<span class="string">fsSL</span> <span class="string">https</span>://<span class="string">get</span>.<span class="string">docker</span>.<span class="string">com</span> -<span class="string">o</span> <span class="built_in">get-docker.sh</span></span><br><span class="line"><span class="string">sudo</span> <span class="string">sh</span> <span class="built_in">get-docker.sh</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>docker-compose安装</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">curl -L <span class="string">&quot;https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)&quot;</span> -o <span class="regexp">/usr/</span>local<span class="regexp">/bin/</span>docker-compose</span><br><span class="line">chmod +x <span class="regexp">/usr/</span>local<span class="regexp">/bin/</span>docker-compose</span><br><span class="line">ln -s <span class="regexp">/usr/</span>local<span class="regexp">/bin/</span>docker-compose <span class="regexp">/usr/</span>bin/docker-compose</span><br></pre></td></tr></table></figure>
+
+<p>注：1.29.2是目前最新版本，安装时进<a href="https://github.com/docker/compose/releases">github</a>项目查看最新release选择对应版本。</p>
+</li>
+</ol>
+<h1 id="安装指定python版本"><a href="#安装指定python版本" class="headerlink" title="安装指定python版本"></a>安装指定python版本</h1><figure class="highlight smali"><table><tr><td class="code"><pre><span class="line">apt install software-properties-common<span class="built_in"></span></span><br><span class="line"><span class="built_in">add-apt-repository </span>ppa:deadsnakes/ppa <span class="comment"># 添加deadsnakes PPA源</span></span><br><span class="line">apt install python3.8 <span class="comment"># 安装python3.8</span></span><br></pre></td></tr></table></figure>
+
+<p>参考：<a href="https://segmentfault.com/a/1190000021967408">https://segmentfault.com/a/1190000021967408</a></p>
+<h1 id="压缩包相关"><a href="#压缩包相关" class="headerlink" title="压缩包相关"></a>压缩包相关</h1><p>详见<a href="https://www.runoob.com/w3cnote/linux-tar-gz.html">菜鸟教程</a></p>
+<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line">tar -zxvf 压缩文件名<span class="selector-class">.tar</span><span class="selector-class">.gz</span></span><br><span class="line">tar -zcvf 压缩文件名 <span class="selector-class">.tar</span><span class="selector-class">.gz</span> 被压缩文件名</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line">*<span class="selector-class">.tar</span> 用 tar –xvf 解压</span><br><span class="line">*<span class="selector-class">.gz</span> 用 gzip -d或者gunzip 解压</span><br><span class="line">*<span class="selector-class">.tar</span>.gz和*<span class="selector-class">.tgz</span> 用 tar –xzf 解压</span><br><span class="line">*<span class="selector-class">.bz2</span> 用 bzip2 -d或者用bunzip2 解压</span><br><span class="line">*<span class="selector-class">.tar</span>.bz2用tar –xjf 解压</span><br><span class="line">*<span class="selector-class">.Z</span> 用 uncompress 解压</span><br><span class="line">*<span class="selector-class">.tar</span><span class="selector-class">.Z</span> 用tar –xZf 解压</span><br><span class="line">*<span class="selector-class">.rar</span> 用 unrar e解压</span><br><span class="line">*<span class="selector-class">.zip</span> 用 unzip 解压</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>命令总结</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>linux服务器数据备份</title>
     <url>/posts/7bb08ef0/</url>
     <content><![CDATA[<blockquote>
@@ -3158,62 +3214,6 @@ docker部署
       <categories>
         <category>linux</category>
       </categories>
-  </entry>
-  <entry>
-    <title>linux常用命令总结</title>
-    <url>/posts/1d063ae7/</url>
-    <content><![CDATA[<blockquote>
-<p>记录一些linux容易忘的linux操作命令</p>
-</blockquote>
-<span id="more"></span>
-<h1 id="systemctl"><a href="#systemctl" class="headerlink" title="systemctl"></a>systemctl</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl start xxx     // 开启服务</span><br><span class="line">systemctl stop xxx      // 停止服务</span><br><span class="line">systemctl restart xxx   // 重启服务</span><br><span class="line">systemctl <span class="built_in">enable</span> xxx    // 设置服务开机自启</span><br><span class="line">systemctl <span class="built_in">disable</span> xxx   // 取消服务开机自启</span><br><span class="line">systemctl status xxx    // 查看服务运行状态</span><br></pre></td></tr></table></figure>
-
-<h1 id="查看当前公网ip"><a href="#查看当前公网ip" class="headerlink" title="查看当前公网ip"></a>查看当前公网ip</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl icanhazip.com  </span><br><span class="line">curl ifconfig.me  </span><br><span class="line">curl curlmyip.com  </span><br><span class="line">curl ip.appspot.com  </span><br><span class="line">curl ipinfo.io/ip  </span><br><span class="line">curl ipecho.net/plain  </span><br><span class="line">curl www.trackip.net/i</span><br></pre></td></tr></table></figure>
-
-<h1 id="端口查看"><a href="#端口查看" class="headerlink" title="端口查看"></a>端口查看</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">lsof -i -P <span class="comment"># 查看所有端口被占用情况</span></span><br><span class="line">netstat -anp |grep [port] <span class="comment"># 查看端口port被那个进程占用</span></span><br></pre></td></tr></table></figure>
-
-<h1 id="刷新dns缓存"><a href="#刷新dns缓存" class="headerlink" title="刷新dns缓存"></a>刷新dns缓存</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get install nscd</span><br><span class="line">sudo /etc/init.d/nscd restart</span><br></pre></td></tr></table></figure>
-
-<h1 id="其他命令"><a href="#其他命令" class="headerlink" title="其他命令"></a>其他命令</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/etc/init.d/ssh start</span><br><span class="line">cat /proc/version</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="string">&quot;<span class="variable">$PATH</span>:/xxx&quot;</span></span><br><span class="line">du -hs <span class="comment"># 查看某个文件夹占用大小</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$SHELL</span> &amp;&amp; <span class="built_in">echo</span> <span class="variable">$0</span> <span class="comment"># 查看当前终端类型</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="一些常见包"><a href="#一些常见包" class="headerlink" title="一些常见包"></a>一些常见包</h2><h3 id="ubuntu"><a href="#ubuntu" class="headerlink" title="ubuntu"></a>ubuntu</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">apt-get install lsb-release -y <span class="comment"># lsb_release -a</span></span><br><span class="line">apt-get install net-tools -y <span class="comment"># ifconfig</span></span><br><span class="line">apt-get install inetutils-ping -y <span class="comment">#ping www.baidu.com</span></span><br><span class="line">apt-get install aria2 -y</span><br></pre></td></tr></table></figure>
-
-<p>必备组件：</p>
-<figure class="highlight dos"><table><tr><td class="code"><pre><span class="line">vim curl wget git lsb-release <span class="built_in">net</span>-tools inetutils-<span class="built_in">ping</span> <span class="built_in">tree</span> lsof unzip zip socat aria2 </span><br></pre></td></tr></table></figure>
-
-<h1 id="进程符号"><a href="#进程符号" class="headerlink" title="进程符号"></a>进程符号</h1><figure class="highlight tp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">R</span>    正在运行，或在队列中的进程</span><br><span class="line">S    处于休眠状态</span><br><span class="line">T    停止或被追踪</span><br><span class="line"><span class="keyword">Z</span>    僵尸进程</span><br><span class="line"><span class="keyword">W</span>    进入内存交换（从内核<span class="number">2</span><span class="number">.6</span>开始无效）</span><br><span class="line"><span class="keyword">X</span>    死掉的进程</span><br><span class="line">&lt;    高优先级</span><br><span class="line">N    低优先级</span><br><span class="line">L    有些页被锁进内存</span><br><span class="line">s    包含子进程</span><br><span class="line">+    位于后台的进程组；</span><br><span class="line">l    多线程，克隆线程  </span><br></pre></td></tr></table></figure>
-
-<h1 id="开启BBR加速"><a href="#开启BBR加速" class="headerlink" title="开启BBR加速"></a>开启BBR加速</h1><p>若linux内核大于等于4.9，则直接用以下命令开启bbr加速:</p>
-<figure class="highlight gradle"><table><tr><td class="code"><pre><span class="line">echo <span class="string">&quot;net.core.default_qdisc=fq&quot;</span> &gt;&gt; <span class="regexp">/etc/</span>sysctl.conf</span><br><span class="line">echo <span class="string">&quot;net.ipv4.tcp_congestion_control=bbr&quot;</span> &gt;&gt; <span class="regexp">/etc/</span>sysctl.conf</span><br><span class="line">sysctl -p</span><br><span class="line">lsmod | <span class="keyword">grep</span> bbr</span><br></pre></td></tr></table></figure>
-
-<p>若出现如下包含<code>tcp_bbr</code>的字样，说明开启成功。</p>
-<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">tcp_bbr</span>                <span class="number">20480</span>  <span class="number">1</span></span><br></pre></td></tr></table></figure>
-
-<h1 id="docker安装"><a href="#docker安装" class="headerlink" title="docker安装"></a>docker安装</h1><ol>
-<li><p>docker安装</p>
-<figure class="highlight dsconfig"><table><tr><td class="code"><pre><span class="line"><span class="string">curl</span> -<span class="string">fsSL</span> <span class="string">https</span>://<span class="string">get</span>.<span class="string">docker</span>.<span class="string">com</span> -<span class="string">o</span> <span class="built_in">get-docker.sh</span></span><br><span class="line"><span class="string">sudo</span> <span class="string">sh</span> <span class="built_in">get-docker.sh</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>docker-compose安装</p>
-<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">curl -L <span class="string">&quot;https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)&quot;</span> -o <span class="regexp">/usr/</span>local<span class="regexp">/bin/</span>docker-compose</span><br><span class="line">chmod +x <span class="regexp">/usr/</span>local<span class="regexp">/bin/</span>docker-compose</span><br><span class="line">ln -s <span class="regexp">/usr/</span>local<span class="regexp">/bin/</span>docker-compose <span class="regexp">/usr/</span>bin/docker-compose</span><br></pre></td></tr></table></figure>
-
-<p>注：1.29.2是目前最新版本，安装时进<a href="https://github.com/docker/compose/releases">github</a>项目查看最新release选择对应版本。</p>
-</li>
-</ol>
-<h1 id="安装指定python版本"><a href="#安装指定python版本" class="headerlink" title="安装指定python版本"></a>安装指定python版本</h1><figure class="highlight smali"><table><tr><td class="code"><pre><span class="line">apt install software-properties-common<span class="built_in"></span></span><br><span class="line"><span class="built_in">add-apt-repository </span>ppa:deadsnakes/ppa <span class="comment"># 添加deadsnakes PPA源</span></span><br><span class="line">apt install python3.8 <span class="comment"># 安装python3.8</span></span><br></pre></td></tr></table></figure>
-
-<p>参考：<a href="https://segmentfault.com/a/1190000021967408">https://segmentfault.com/a/1190000021967408</a></p>
-<h1 id="压缩包相关"><a href="#压缩包相关" class="headerlink" title="压缩包相关"></a>压缩包相关</h1><p>详见<a href="https://www.runoob.com/w3cnote/linux-tar-gz.html">菜鸟教程</a></p>
-<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line">tar -zxvf 压缩文件名<span class="selector-class">.tar</span><span class="selector-class">.gz</span></span><br><span class="line">tar -zcvf 压缩文件名 <span class="selector-class">.tar</span><span class="selector-class">.gz</span> 被压缩文件名</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line">*<span class="selector-class">.tar</span> 用 tar –xvf 解压</span><br><span class="line">*<span class="selector-class">.gz</span> 用 gzip -d或者gunzip 解压</span><br><span class="line">*<span class="selector-class">.tar</span>.gz和*<span class="selector-class">.tgz</span> 用 tar –xzf 解压</span><br><span class="line">*<span class="selector-class">.bz2</span> 用 bzip2 -d或者用bunzip2 解压</span><br><span class="line">*<span class="selector-class">.tar</span>.bz2用tar –xjf 解压</span><br><span class="line">*<span class="selector-class">.Z</span> 用 uncompress 解压</span><br><span class="line">*<span class="selector-class">.tar</span><span class="selector-class">.Z</span> 用tar –xZf 解压</span><br><span class="line">*<span class="selector-class">.rar</span> 用 unrar e解压</span><br><span class="line">*<span class="selector-class">.zip</span> 用 unzip 解压</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>命令总结</tag>
-      </tags>
   </entry>
   <entry>
     <title>linux时间</title>
@@ -3414,39 +3414,6 @@ docker部署
       </tags>
   </entry>
   <entry>
-    <title>Python的pip缓存</title>
-    <url>/posts/5e683b0e/</url>
-    <content><![CDATA[<blockquote>
-<p>pip安装时默认会有缓存，存储在C盘占用空间</p>
-</blockquote>
-<span id="more"></span>
-
-<h1 id="查看缓存位置"><a href="#查看缓存位置" class="headerlink" title="查看缓存位置"></a>查看缓存位置</h1><ul>
-<li>win10下默认缓存路径为：<code>C:\Users\用户名\AppData\Local\pip\cache</code></li>
-<li>linux下默认缓存路径为：<code>~/.cache/pip</code></li>
-</ul>
-<h2 id="通过Python命令查看"><a href="#通过Python命令查看" class="headerlink" title="通过Python命令查看"></a>通过Python命令查看</h2><figure class="highlight coffeescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pip.utils.appdirs <span class="keyword">import</span> user_cache_dir  <span class="comment"># before pip v.10</span></span><br><span class="line"><span class="keyword">from</span> pip._internal.utils.appdirs <span class="keyword">import</span> user_cache_dir  <span class="comment"># since pip v.10</span></span><br><span class="line"><span class="built_in">print</span>(user_cache_dir(<span class="string">&#x27;pip&#x27;</span>))</span><br><span class="line"><span class="built_in">print</span>(user_cache_dir(<span class="string">&#x27;wheel&#x27;</span>))</span><br></pre></td></tr></table></figure>
-
-<h1 id="修改缓存位置"><a href="#修改缓存位置" class="headerlink" title="修改缓存位置"></a>修改缓存位置</h1><h2 id="通过命令的方式"><a href="#通过命令的方式" class="headerlink" title="通过命令的方式"></a>通过命令的方式</h2><figure class="highlight lasso"><table><tr><td class="code"><pre><span class="line">pip config <span class="built_in">set</span> <span class="built_in">global</span>.<span class="keyword">cache</span><span class="params">-dir</span> <span class="string">&quot;新的路径&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="通过修改配置文件的方式"><a href="#通过修改配置文件的方式" class="headerlink" title="通过修改配置文件的方式"></a>通过修改配置文件的方式</h2><ul>
-<li><p>win10配置文件路径: <code>%APPDATA%\pip\pip.ini</code></p>
-</li>
-<li><p>linux配置文件路径：<code>~/.config/pip/pip.conf</code></p>
-<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="section">[global]</span></span><br><span class="line"><span class="attr">index-url</span> = http://pypi.douban.com/simple/</span><br><span class="line"><span class="attr">extra-index-url</span> = http://mirrors.aliyun.com/pypi/simple/ https://pypi.python.org/simple https://download.pytorch.org/whl/torch_stable.html</span><br><span class="line"><span class="attr">trusted-host</span> = pypi.douban.com mirrors.aliyun.com pypi.python.org download.pytorch.org</span><br><span class="line"><span class="attr">cache-dir</span> = D:\BCache\python-cache</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<h2 id="设置某次pip安装没有缓存"><a href="#设置某次pip安装没有缓存" class="headerlink" title="设置某次pip安装没有缓存"></a>设置某次pip安装没有缓存</h2><figure class="highlight stata"><table><tr><td class="code"><pre><span class="line"># pip安装时添加--<span class="keyword">no</span>-cache-<span class="keyword">dir</span>参数</span><br><span class="line">pip install requests --<span class="keyword">no</span>-cache-<span class="keyword">dir</span></span><br></pre></td></tr></table></figure>
-
-
-
-]]></content>
-      <categories>
-        <category>技巧</category>
-      </categories>
-  </entry>
-  <entry>
     <title>npm命令总结</title>
     <url>/posts/dj8392A/</url>
     <content><![CDATA[<blockquote>
@@ -3492,35 +3459,37 @@ docker部署
       </tags>
   </entry>
   <entry>
-    <title>unix网络编程2-IPC-0-前言</title>
-    <url>/posts/3b3b119c/</url>
-    <content><![CDATA[<p>由于本学期操作系统课设选择了linux的进程通信，准备学习《unix网络编程卷2: 进程间通信》。这门书英文版为《UNIX NETWORK Programming, volume 2, Second Edition: Interprocss Communications》，该版出版于2015年。</p>
+    <title>Python的pip缓存</title>
+    <url>/posts/5e683b0e/</url>
+    <content><![CDATA[<blockquote>
+<p>pip安装时默认会有缓存，存储在C盘占用空间</p>
+</blockquote>
 <span id="more"></span>
 
-<p>目前不太了解linux和unix在IPC这一部分的区别，希望大致相同吧，准备写博客记录这些知识。</p>
-<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>大部分程序都涉及到进程间通信（Interprocess Communication, IPC），这是受这个设计原则影响的结果：<strong>把应用程序设计为一组相互通信的小片段比将其设计为单个庞大的程序更好</strong>。</p>
-<p>从历史角度看，应用程序有以下几种构建方法：</p>
-<p>(1) 用一个庞大的的程序完成全部工作。程序的各部分实现为<strong>函数</strong>，函数之间通过<strong>参数</strong>、<strong>返回值</strong>和<strong>全局变量</strong>来交换 信息。<br>(2) 使用多个程序(个人理解为进程)，程序之间用某种形式的IPC通信。许多标准的unix工具都是按照这种风格设计的，它们使用shell管道（IPC的一种形式）在程序之间的传递信息。</p>
-<p>(3) 使用一个包含多个线程的程序，线程之间通过某种IPC（假定认为是在进程之间进行的）</p>
-<div class="note default"><p>还可以把后两种设计形式结合起来：用多个进程实现，每个进程包含几个线程，进程内部线程之间可以通信，不同进程之间也可以通信。</p>
-</div>
-
-<h1 id="本书主要描述的IPC形式"><a href="#本书主要描述的IPC形式" class="headerlink" title="本书主要描述的IPC形式"></a>本书主要描述的IPC形式</h1><p>IPC可以分为非网络IPC（本书第2卷）和网络IPC（本书第1卷）。本书主要讲述非网络IPC，详细描述了以下4种不同的IPC形式：</p>
-<ul>
-<li>消息传递（管道、FIFO和消息队列）</li>
-<li>同步（互斥量、条件变量、读写锁、文件与记录锁、信号量）</li>
-<li>共享内存（匿名的和有名的）</li>
-<li>远程过程调用（Solaris门和Sun RPC）</li>
+<h1 id="查看缓存位置"><a href="#查看缓存位置" class="headerlink" title="查看缓存位置"></a>查看缓存位置</h1><ul>
+<li>win10下默认缓存路径为：<code>C:\Users\用户名\AppData\Local\pip\cache</code></li>
+<li>linux下默认缓存路径为：<code>~/.cache/pip</code></li>
 </ul>
-<h1 id="代码下载"><a href="#代码下载" class="headerlink" title="代码下载"></a>代码下载</h1><p><a href="https://www.ituring.com.cn/book/156">https://www.ituring.com.cn/book/156</a></p>
-<h1 id="Linux的进程通信"><a href="#Linux的进程通信" class="headerlink" title="Linux的进程通信"></a>Linux的进程通信</h1><p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-07/20200731220232.png"></p>
+<h2 id="通过Python命令查看"><a href="#通过Python命令查看" class="headerlink" title="通过Python命令查看"></a>通过Python命令查看</h2><figure class="highlight coffeescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pip.utils.appdirs <span class="keyword">import</span> user_cache_dir  <span class="comment"># before pip v.10</span></span><br><span class="line"><span class="keyword">from</span> pip._internal.utils.appdirs <span class="keyword">import</span> user_cache_dir  <span class="comment"># since pip v.10</span></span><br><span class="line"><span class="built_in">print</span>(user_cache_dir(<span class="string">&#x27;pip&#x27;</span>))</span><br><span class="line"><span class="built_in">print</span>(user_cache_dir(<span class="string">&#x27;wheel&#x27;</span>))</span><br></pre></td></tr></table></figure>
+
+<h1 id="修改缓存位置"><a href="#修改缓存位置" class="headerlink" title="修改缓存位置"></a>修改缓存位置</h1><h2 id="通过命令的方式"><a href="#通过命令的方式" class="headerlink" title="通过命令的方式"></a>通过命令的方式</h2><figure class="highlight lasso"><table><tr><td class="code"><pre><span class="line">pip config <span class="built_in">set</span> <span class="built_in">global</span>.<span class="keyword">cache</span><span class="params">-dir</span> <span class="string">&quot;新的路径&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="通过修改配置文件的方式"><a href="#通过修改配置文件的方式" class="headerlink" title="通过修改配置文件的方式"></a>通过修改配置文件的方式</h2><ul>
+<li><p>win10配置文件路径: <code>%APPDATA%\pip\pip.ini</code></p>
+</li>
+<li><p>linux配置文件路径：<code>~/.config/pip/pip.conf</code></p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="section">[global]</span></span><br><span class="line"><span class="attr">index-url</span> = http://pypi.douban.com/simple/</span><br><span class="line"><span class="attr">extra-index-url</span> = http://mirrors.aliyun.com/pypi/simple/ https://pypi.python.org/simple https://download.pytorch.org/whl/torch_stable.html</span><br><span class="line"><span class="attr">trusted-host</span> = pypi.douban.com mirrors.aliyun.com pypi.python.org download.pytorch.org</span><br><span class="line"><span class="attr">cache-dir</span> = D:\BCache\python-cache</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="设置某次pip安装没有缓存"><a href="#设置某次pip安装没有缓存" class="headerlink" title="设置某次pip安装没有缓存"></a>设置某次pip安装没有缓存</h2><figure class="highlight stata"><table><tr><td class="code"><pre><span class="line"># pip安装时添加--<span class="keyword">no</span>-cache-<span class="keyword">dir</span>参数</span><br><span class="line">pip install requests --<span class="keyword">no</span>-cache-<span class="keyword">dir</span></span><br></pre></td></tr></table></figure>
+
+
+
 ]]></content>
       <categories>
-        <category>unix</category>
+        <category>技巧</category>
       </categories>
-      <tags>
-        <tag>unix</tag>
-      </tags>
   </entry>
   <entry>
     <title>ubuntu安装最新稳定版nginx</title>
@@ -3572,6 +3541,37 @@ docker部署
       <categories>
         <category>linux</category>
       </categories>
+  </entry>
+  <entry>
+    <title>unix网络编程2-IPC-0-前言</title>
+    <url>/posts/3b3b119c/</url>
+    <content><![CDATA[<p>由于本学期操作系统课设选择了linux的进程通信，准备学习《unix网络编程卷2: 进程间通信》。这门书英文版为《UNIX NETWORK Programming, volume 2, Second Edition: Interprocss Communications》，该版出版于2015年。</p>
+<span id="more"></span>
+
+<p>目前不太了解linux和unix在IPC这一部分的区别，希望大致相同吧，准备写博客记录这些知识。</p>
+<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>大部分程序都涉及到进程间通信（Interprocess Communication, IPC），这是受这个设计原则影响的结果：<strong>把应用程序设计为一组相互通信的小片段比将其设计为单个庞大的程序更好</strong>。</p>
+<p>从历史角度看，应用程序有以下几种构建方法：</p>
+<p>(1) 用一个庞大的的程序完成全部工作。程序的各部分实现为<strong>函数</strong>，函数之间通过<strong>参数</strong>、<strong>返回值</strong>和<strong>全局变量</strong>来交换 信息。<br>(2) 使用多个程序(个人理解为进程)，程序之间用某种形式的IPC通信。许多标准的unix工具都是按照这种风格设计的，它们使用shell管道（IPC的一种形式）在程序之间的传递信息。</p>
+<p>(3) 使用一个包含多个线程的程序，线程之间通过某种IPC（假定认为是在进程之间进行的）</p>
+<div class="note default"><p>还可以把后两种设计形式结合起来：用多个进程实现，每个进程包含几个线程，进程内部线程之间可以通信，不同进程之间也可以通信。</p>
+</div>
+
+<h1 id="本书主要描述的IPC形式"><a href="#本书主要描述的IPC形式" class="headerlink" title="本书主要描述的IPC形式"></a>本书主要描述的IPC形式</h1><p>IPC可以分为非网络IPC（本书第2卷）和网络IPC（本书第1卷）。本书主要讲述非网络IPC，详细描述了以下4种不同的IPC形式：</p>
+<ul>
+<li>消息传递（管道、FIFO和消息队列）</li>
+<li>同步（互斥量、条件变量、读写锁、文件与记录锁、信号量）</li>
+<li>共享内存（匿名的和有名的）</li>
+<li>远程过程调用（Solaris门和Sun RPC）</li>
+</ul>
+<h1 id="代码下载"><a href="#代码下载" class="headerlink" title="代码下载"></a>代码下载</h1><p><a href="https://www.ituring.com.cn/book/156">https://www.ituring.com.cn/book/156</a></p>
+<h1 id="Linux的进程通信"><a href="#Linux的进程通信" class="headerlink" title="Linux的进程通信"></a>Linux的进程通信</h1><p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-07/20200731220232.png"></p>
+]]></content>
+      <categories>
+        <category>unix</category>
+      </categories>
+      <tags>
+        <tag>unix</tag>
+      </tags>
   </entry>
   <entry>
     <title>unix网络编程2-IPC-1-简介</title>
@@ -3764,23 +3764,6 @@ docker部署
       </tags>
   </entry>
   <entry>
-    <title>修改linux服务器默认编码为utf8</title>
-    <url>/posts/6c7dab33/</url>
-    <content><![CDATA[<blockquote>
-<p>修改linux默认编码</p>
-</blockquote>
-<span id="more"></span>
-<h2 id="1-修改-etc-profile文件"><a href="#1-修改-etc-profile文件" class="headerlink" title="1. 修改/etc/profile文件"></a>1. 修改/etc/profile文件</h2><figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">vim <span class="regexp">/etc/</span>profile</span><br></pre></td></tr></table></figure>
-<p>在文件最后一行添加<code>export LANG=zh_CN.UTF-8</code></p>
-<h2 id="2-使配置生效"><a href="#2-使配置生效" class="headerlink" title="2. 使配置生效"></a>2. 使配置生效</h2><figure class="highlight gradle"><table><tr><td class="code"><pre><span class="line"><span class="keyword">source</span> <span class="regexp">/etc/</span>profile</span><br></pre></td></tr></table></figure>
-<h2 id="3-验证结果"><a href="#3-验证结果" class="headerlink" title="3. 验证结果"></a>3. 验证结果</h2><figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">locale</span></span><br></pre></td></tr></table></figure>
-<p>结果显示如下：<br><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415172159.png"></p>
-]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-  </entry>
-  <entry>
     <title>xshell密钥登录服务器的配置过程</title>
     <url>/posts/344ac519/</url>
     <content><![CDATA[<ul>
@@ -3827,6 +3810,75 @@ docker部署
       </categories>
       <tags>
         <tag>安全</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>修改linux服务器默认编码为utf8</title>
+    <url>/posts/6c7dab33/</url>
+    <content><![CDATA[<blockquote>
+<p>修改linux默认编码</p>
+</blockquote>
+<span id="more"></span>
+<h2 id="1-修改-etc-profile文件"><a href="#1-修改-etc-profile文件" class="headerlink" title="1. 修改/etc/profile文件"></a>1. 修改/etc/profile文件</h2><figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">vim <span class="regexp">/etc/</span>profile</span><br></pre></td></tr></table></figure>
+<p>在文件最后一行添加<code>export LANG=zh_CN.UTF-8</code></p>
+<h2 id="2-使配置生效"><a href="#2-使配置生效" class="headerlink" title="2. 使配置生效"></a>2. 使配置生效</h2><figure class="highlight gradle"><table><tr><td class="code"><pre><span class="line"><span class="keyword">source</span> <span class="regexp">/etc/</span>profile</span><br></pre></td></tr></table></figure>
+<h2 id="3-验证结果"><a href="#3-验证结果" class="headerlink" title="3. 验证结果"></a>3. 验证结果</h2><figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">locale</span></span><br></pre></td></tr></table></figure>
+<p>结果显示如下：<br><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415172159.png"></p>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>搭建文件服务器</title>
+    <url>/posts/3937af73/</url>
+    <content><![CDATA[<blockquote>
+<p>记录搭建文件服务器的几种方式</p>
+</blockquote>
+<span id="more"></span>
+
+<h1 id="一、配置nginx文件搭建简单文件服务器"><a href="#一、配置nginx文件搭建简单文件服务器" class="headerlink" title="一、配置nginx文件搭建简单文件服务器"></a>一、配置nginx文件搭建简单文件服务器</h1><ol>
+<li>安装</li>
+</ol>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line">yum -y <span class="keyword">install</span> nginx</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>创建并编辑配置文件</li>
+</ol>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">touch <span class="regexp">/etc/</span>nginx<span class="regexp">/conf.d/</span>file_server.conf</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>配置文件内容模板</li>
+</ol>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">  <span class="attribute">listen</span> <span class="number">2020</span>; </span><br><span class="line">  <span class="attribute">server_name</span> localhost; <span class="comment">#ip或者服务器的域名</span></span><br><span class="line">  <span class="attribute">charset</span> utf-<span class="number">8</span>; <span class="comment"># 避免中文乱码 </span></span><br><span class="line">  <span class="attribute">root</span> /var/file_server; <span class="comment"># 存放文件的目录 </span></span><br><span class="line">  <span class="attribute">location</span> / &#123; </span><br><span class="line">    <span class="attribute">autoindex</span> <span class="literal">on</span>; <span class="comment"># 索引 </span></span><br><span class="line">    <span class="attribute">autoindex_exact_size</span> <span class="literal">on</span>; <span class="comment"># 显示文件大小 </span></span><br><span class="line">    <span class="attribute">autoindex_localtime</span> <span class="literal">on</span>; <span class="comment"># 显示文件时间 </span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>启动nginx</li>
+</ol>
+<figure class="highlight crmsh"><table><tr><td class="code"><pre><span class="line">systemctl <span class="literal">start</span> nginx</span><br></pre></td></tr></table></figure>
+
+<p>创建成功演示：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-05/20200821000816.png"></p>
+<h1 id="二、使用github项目中的FileBrowser"><a href="#二、使用github项目中的FileBrowser" class="headerlink" title="二、使用github项目中的FileBrowser"></a>二、使用github项目中的FileBrowser</h1><p><strong>项目地址</strong>: <a href="https://github.com/filebrowser/filebrowser/">https://github.com/filebrowser/filebrowser/</a></p>
+<p>由于docker配置比较简单并且易于管理，所以选择docker安装filebrowser。</p>
+<p>命令参考：</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">docker run \</span><br><span class="line">    -v <span class="regexp">/var/</span>file_server<span class="regexp">/:/</span>srv \</span><br><span class="line">    -v <span class="regexp">/var/</span>file_server_log<span class="regexp">/filebrowser.db:/</span>database.db \</span><br><span class="line">    -v <span class="regexp">/var/</span>file_server_log<span class="regexp">/.filebrowser.json:/</span>.filebrowser.json \</span><br><span class="line">    -p <span class="number">2020</span>:<span class="number">80</span> \</span><br><span class="line">    -d \</span><br><span class="line">    filebrowser/filebrowser</span><br></pre></td></tr></table></figure>
+
+<p>上述命令指定映射的需要显示文件的系统路径为<code>/var/file_server/</code></p>
+<p>运行上述命令前，需要将其中<code>/var/file_server_log/filebrowser.db</code>和<code>/var/file_server_log/.filebrowser.json</code>这两个文件先创建好，否则会报错。</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">touch <span class="regexp">/var/</span>file_server_log/filebrowser.db</span><br><span class="line">touch <span class="regexp">/var/</span>file_server_log/.filebrowser.json</span><br></pre></td></tr></table></figure>
+
+<p>同时，.filebrowser.json 内容需要初始化一下，官方给出的内容如下：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;port&quot;</span>: <span class="number">80</span>,</span><br><span class="line">  <span class="attr">&quot;baseURL&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;address&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;log&quot;</span>: <span class="string">&quot;stdout&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;database&quot;</span>: <span class="string">&quot;/database.db&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;root&quot;</span>: <span class="string">&quot;/srv&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>创建成功演示如下图，第一次登陆时账号密码可以任意填写，作为新建的管理员账户。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-08/20200821000901.png"></p>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>文件服务器</tag>
       </tags>
   </entry>
   <entry>
@@ -3926,58 +3978,6 @@ docker部署
       </tags>
   </entry>
   <entry>
-    <title>搭建文件服务器</title>
-    <url>/posts/3937af73/</url>
-    <content><![CDATA[<blockquote>
-<p>记录搭建文件服务器的几种方式</p>
-</blockquote>
-<span id="more"></span>
-
-<h1 id="一、配置nginx文件搭建简单文件服务器"><a href="#一、配置nginx文件搭建简单文件服务器" class="headerlink" title="一、配置nginx文件搭建简单文件服务器"></a>一、配置nginx文件搭建简单文件服务器</h1><ol>
-<li>安装</li>
-</ol>
-<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line">yum -y <span class="keyword">install</span> nginx</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>创建并编辑配置文件</li>
-</ol>
-<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">touch <span class="regexp">/etc/</span>nginx<span class="regexp">/conf.d/</span>file_server.conf</span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li>配置文件内容模板</li>
-</ol>
-<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">  <span class="attribute">listen</span> <span class="number">2020</span>; </span><br><span class="line">  <span class="attribute">server_name</span> localhost; <span class="comment">#ip或者服务器的域名</span></span><br><span class="line">  <span class="attribute">charset</span> utf-<span class="number">8</span>; <span class="comment"># 避免中文乱码 </span></span><br><span class="line">  <span class="attribute">root</span> /var/file_server; <span class="comment"># 存放文件的目录 </span></span><br><span class="line">  <span class="attribute">location</span> / &#123; </span><br><span class="line">    <span class="attribute">autoindex</span> <span class="literal">on</span>; <span class="comment"># 索引 </span></span><br><span class="line">    <span class="attribute">autoindex_exact_size</span> <span class="literal">on</span>; <span class="comment"># 显示文件大小 </span></span><br><span class="line">    <span class="attribute">autoindex_localtime</span> <span class="literal">on</span>; <span class="comment"># 显示文件时间 </span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ol start="4">
-<li>启动nginx</li>
-</ol>
-<figure class="highlight crmsh"><table><tr><td class="code"><pre><span class="line">systemctl <span class="literal">start</span> nginx</span><br></pre></td></tr></table></figure>
-
-<p>创建成功演示：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-05/20200821000816.png"></p>
-<h1 id="二、使用github项目中的FileBrowser"><a href="#二、使用github项目中的FileBrowser" class="headerlink" title="二、使用github项目中的FileBrowser"></a>二、使用github项目中的FileBrowser</h1><p><strong>项目地址</strong>: <a href="https://github.com/filebrowser/filebrowser/">https://github.com/filebrowser/filebrowser/</a></p>
-<p>由于docker配置比较简单并且易于管理，所以选择docker安装filebrowser。</p>
-<p>命令参考：</p>
-<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">docker run \</span><br><span class="line">    -v <span class="regexp">/var/</span>file_server<span class="regexp">/:/</span>srv \</span><br><span class="line">    -v <span class="regexp">/var/</span>file_server_log<span class="regexp">/filebrowser.db:/</span>database.db \</span><br><span class="line">    -v <span class="regexp">/var/</span>file_server_log<span class="regexp">/.filebrowser.json:/</span>.filebrowser.json \</span><br><span class="line">    -p <span class="number">2020</span>:<span class="number">80</span> \</span><br><span class="line">    -d \</span><br><span class="line">    filebrowser/filebrowser</span><br></pre></td></tr></table></figure>
-
-<p>上述命令指定映射的需要显示文件的系统路径为<code>/var/file_server/</code></p>
-<p>运行上述命令前，需要将其中<code>/var/file_server_log/filebrowser.db</code>和<code>/var/file_server_log/.filebrowser.json</code>这两个文件先创建好，否则会报错。</p>
-<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">touch <span class="regexp">/var/</span>file_server_log/filebrowser.db</span><br><span class="line">touch <span class="regexp">/var/</span>file_server_log/.filebrowser.json</span><br></pre></td></tr></table></figure>
-
-<p>同时，.filebrowser.json 内容需要初始化一下，官方给出的内容如下：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;port&quot;</span>: <span class="number">80</span>,</span><br><span class="line">  <span class="attr">&quot;baseURL&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;address&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;log&quot;</span>: <span class="string">&quot;stdout&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;database&quot;</span>: <span class="string">&quot;/database.db&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;root&quot;</span>: <span class="string">&quot;/srv&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>创建成功演示如下图，第一次登陆时账号密码可以任意填写，作为新建的管理员账户。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-08/20200821000901.png"></p>
-]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>文件服务器</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>服务器禁止被ping</title>
     <url>/posts/6898a3ea/</url>
     <content><![CDATA[<blockquote>
@@ -4030,33 +4030,6 @@ docker部署
       </categories>
       <tags>
         <tag>安全</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>油猴脚本打印博客文章</title>
-    <url>/posts/41f2aca5/</url>
-    <content><![CDATA[<blockquote>
-<p>写了一个简单的油猴脚本，打印平常阅读的博客文章</p>
-</blockquote>
-<p>目前支持的网站如下：</p>
-<ul>
-<li>CSDN</li>
-<li>知乎</li>
-<li>简书</li>
-<li>SegmentFault</li>
-</ul>
-<span id="more"></span>
-
-<p>博客园由于主题太多，无法使用统一方法打印。</p>
-<p>脚本内容：</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// ==UserScript==</span></span><br><span class="line"><span class="comment">// @name         打印CSDN、知乎、简书、SF文章</span></span><br><span class="line"><span class="comment">// @namespace    http://tampermonkey.net/</span></span><br><span class="line"><span class="comment">// @version      0.1</span></span><br><span class="line"><span class="comment">// @description  CSDN、知乎、简书、SegmentFault</span></span><br><span class="line"><span class="comment">// @author       kervias</span></span><br><span class="line"><span class="comment">// @match        https://zhuanlan.zhihu.com/p/*</span></span><br><span class="line"><span class="comment">// @match        https://blog.csdn.net/*/article/details/*</span></span><br><span class="line"><span class="comment">// @match        https://csdnnews.blog.csdn.net/article/details/*</span></span><br><span class="line"><span class="comment">// @match        https://www.jianshu.com/p/*</span></span><br><span class="line"><span class="comment">// @match        https://segmentfault.com/a/*</span></span><br><span class="line"><span class="comment">// @require      https://cdn.bootcss.com/jquery/3.5.1/jquery.min.js</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// @grant        unsafeWindow</span></span><br><span class="line"><span class="comment">// @grant        GM_openInTab</span></span><br><span class="line"><span class="comment">// @grant        GM.openInTab</span></span><br><span class="line"><span class="comment">// @grant        GM_getValue</span></span><br><span class="line"><span class="comment">// @grant        GM.getValue</span></span><br><span class="line"><span class="comment">// @grant        GM_setValue</span></span><br><span class="line"><span class="comment">// @grant        GM.setValue</span></span><br><span class="line"><span class="comment">// @grant        GM_xmlhttpRequest</span></span><br><span class="line"><span class="comment">// @grant        GM.xmlHttpRequest</span></span><br><span class="line"><span class="comment">// @grant        GM_registerMenuCommand</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ==/UserScript==</span></span><br><span class="line"></span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"><span class="meta">    &#x27;use strict&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> $ = $ || <span class="built_in">window</span>.$;</span><br><span class="line">    <span class="keyword">var</span> CSDN_PRINT = <span class="function"><span class="keyword">function</span> (<span class="params"></span>)</span>&#123;</span><br><span class="line">        $(<span class="string">&quot;#side&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;#comment_title, #comment_list, #comment_bar, #comment_form, .announce, #ad_cen, #ad_bot&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;.nav_top_2011, #header, #navigator&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;.csdn-side-toolbar,.template-box,.reward-user-box&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;.p4course_target, .comment-box, .recommend-box, #csdn-toolbar, #tool-box,#dmp_ad_58&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;aside&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;.tool-box&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;main&quot;</span>).css(<span class="string">&#x27;display&#x27;</span>,<span class="string">&#x27;content&#x27;</span>);</span><br><span class="line">        $(<span class="string">&quot;.left-toolbox&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;#mainBox&quot;</span>).removeClass();</span><br><span class="line">        $(<span class="string">&quot;#mainBox&quot;</span>).parent().removeClass();</span><br><span class="line">        $(<span class="string">&#x27;body&#x27;</span>).attr(<span class="string">&quot;style&quot;</span>, <span class="string">&quot;position: absolute;left: 0px;right: 0px;background-color: white&quot;</span>)</span><br><span class="line">        $(<span class="string">&#x27;main&#x27;</span>).attr(<span class="string">&quot;style&quot;</span>, <span class="string">&quot;position: absolute;left: 0px;right: 0px;margin-bottom: 0px&quot;</span>);</span><br><span class="line">        $(<span class="string">&#x27;main div.blog-content-box&#x27;</span>).attr(<span class="string">&quot;style&quot;</span>, <span class="string">&quot;padding-bottom: 0px&quot;</span>);</span><br><span class="line">        $(<span class="string">&quot;.blog-footer-bottom&quot;</span>).remove();</span><br><span class="line">        <span class="comment">//$(&#x27;.htmledit_views p&#x27;).remove();</span></span><br><span class="line">        <span class="built_in">window</span>.print();</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> ZHIHU_PRINT = <span class="function"><span class="keyword">function</span> (<span class="params"></span>)</span>&#123;</span><br><span class="line">        $(<span class="string">&quot;.ColumnPageHeader&quot;</span>).remove();</span><br><span class="line">        <span class="comment">//$(&quot;.PostIndex-Contributions&quot;).remove();</span></span><br><span class="line">        $(<span class="string">&quot;.Recommendations-Main&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;.Comments-container&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;.ContentItem-actions&quot;</span>).parent().remove();</span><br><span class="line">        $(<span class="string">&quot;.Zi--BackToTop&quot;</span>).remove();</span><br><span class="line">        <span class="built_in">window</span>.print();</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> JIANSHU_PRINT = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        $(<span class="string">&quot;header&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;aside&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;footer, footer+div&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;#note-page-comment, section:gt(0), [role=&#x27;button&#x27;], .ant-back-top, .anticon-caret-up&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;svg&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;section&quot;</span>).attr(<span class="string">&quot;style&quot;</span>, <span class="string">&quot;position: absolute;left: 0px;right: 0px;margin-bottom: 0px&quot;</span>);</span><br><span class="line">        $(<span class="string">&quot;article&quot;</span>).nextAll().remove();</span><br><span class="line">        <span class="built_in">window</span>.print();</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> SF_PRINT = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        $(<span class="string">&quot;#sf-header, #comment-area, footer, .text-center, #fixedTools&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;article&quot;</span>).nextAll().remove();</span><br><span class="line">        $(<span class="string">&quot;div.row&quot;</span>).children().eq(<span class="number">1</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;div.row &gt; div &gt; div&quot;</span>).eq(<span class="number">0</span>).nextAll().remove();</span><br><span class="line">        $(<span class="string">&quot;#sf-article_title h5&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;div.row&quot;</span>).attr(<span class="string">&quot;style&quot;</span>, <span class="string">&quot;position: absolute;left: 0px;right: 0px;margin-bottom: 0px&quot;</span>);</span><br><span class="line">        <span class="built_in">window</span>.print();</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> domain = <span class="built_in">document</span>.domain;</span><br><span class="line">    <span class="keyword">if</span>(domain.endsWith(<span class="string">&#x27;zhihu.com&#x27;</span>))&#123; <span class="comment">// 双击标题打印文章</span></span><br><span class="line">        $(<span class="string">&quot;.Post-Title&quot;</span>).on(<span class="string">&#x27;dblclick&#x27;</span>,<span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">            ZHIHU_PRINT();</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(domain.endsWith(<span class="string">&#x27;csdn.net&#x27;</span>))&#123; <span class="comment">// 双击标题打印文章</span></span><br><span class="line">        $(<span class="string">&quot;#articleContentId&quot;</span>).on(<span class="string">&#x27;dblclick&#x27;</span>,<span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">            CSDN_PRINT();</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(domain.endsWith(<span class="string">&#x27;jianshu.com&#x27;</span>))&#123; <span class="comment">// 双击标题打印文章</span></span><br><span class="line">        $(<span class="string">&quot;section &gt; h1&quot;</span>).on(<span class="string">&#x27;dblclick&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">           JIANSHU_PRINT();</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(domain.endsWith(<span class="string">&#x27;segmentfault.com&#x27;</span>))&#123; <span class="comment">// 点击标题后按钮打印文章</span></span><br><span class="line">        <span class="keyword">var</span> cont = $(<span class="string">&#x27;&lt;h5 style=&quot;display:inline&quot;&gt;&lt;button id=&quot;tm_print&quot;&gt;打印&lt;/button&gt;&lt;/h5&gt;&#x27;</span>);</span><br><span class="line">        $(<span class="string">&quot;#sf-article_title&quot;</span>).append(cont);</span><br><span class="line">        $(<span class="string">&quot;#sf-article_title h5&quot;</span>).on(<span class="string">&#x27;click&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">           SF_PRINT();</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>工具</category>
-      </categories>
-      <tags>
-        <tag>Tampermonkey</tag>
       </tags>
   </entry>
   <entry>
@@ -4306,42 +4279,83 @@ docker部署
       </tags>
   </entry>
   <entry>
-    <title>解决Unix-like、Windows系统之间文本换行符不同的问题</title>
-    <url>/posts/8af9e030/</url>
+    <title>油猴脚本打印博客文章</title>
+    <url>/posts/41f2aca5/</url>
     <content><![CDATA[<blockquote>
-<p>参考博客 :point_right: <a href="https://sphenginx.github.io/2014/12/24/CRLF-in-Unix-like_Windows-os/">网址</a></p>
+<p>写了一个简单的油猴脚本，打印平常阅读的博客文章</p>
 </blockquote>
+<p>目前支持的网站如下：</p>
+<ul>
+<li>CSDN</li>
+<li>知乎</li>
+<li>简书</li>
+<li>SegmentFault</li>
+</ul>
 <span id="more"></span>
-<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>\r是回车符,\n是换行符，各个系统的换行标志：</p>
-<blockquote>
-<p>win 用 \r\n<br>linux/unix 用 \n<br>Mac OS 用 \r</p>
-</blockquote>
-<p>CR用符号’\r’表示, 十进制ASCII代码是13, 十六进制代码为OxOD<br>LF使用’\n’符号表示, ASCII代码是10, 十六制为0x0A<br>所以：<br>Windows下用的是OAOD，即CR&amp;LF，<br>linux/unix用的是OA，即LF<br>MacOS用的是OD，即CR</p>
-<h2 id="CRLF来历"><a href="#CRLF来历" class="headerlink" title="CRLF来历"></a>CRLF来历</h2><p>计算机还没有出现之前，有一种叫做电传打字机（Teletype Model 33）的玩意，每秒钟可以打10个字符。但是它有一个问题，就是打完一行换行的时候，要用去0.2秒，正好可以打两个字符。要是在这0.2秒里面，又有新的字符传过来，那么这个字符将丢失。</p>
-<p>于是，研制人员想了个办法解决这个问题，就是在每行后面加两个表示结束的字符。一个叫做“回车”，告诉打字机把打印头定位在左边界；另一个叫做“换行”，告诉打字机把纸向下移一行。这就是“换行”和“回车”的来历，从它们的英语名字上也可以看出一二。</p>
-<p>后来，计算机发明了，这两个概念也就被般到了计算机上。那时，存储器很贵，一些科学家认为在每行结尾加两个字符太浪费了，加一个就可以。于是，就出现了分歧。Unix 系统里，每行结尾只有“&lt;换行&gt;”，即“\n”；Windows系统里面，每行结尾是“&lt;回车&gt;&lt;换行&gt;”，即“ \r\n”；Mac系统里，每行结尾是“&lt;回车&gt;”。一个直接后果是，Unix/Mac系统下的文件在Windows里打开的话，所有文字会变成一行；而Windows里的文件在Unix/Mac下打开的话，在每行的结尾可能会多出一个^M符号。</p>
-<h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><h3 id="问题一：文本类型文件互转"><a href="#问题一：文本类型文件互转" class="headerlink" title="问题一：文本类型文件互转"></a>问题一：文本类型文件互转</h3><blockquote>
-<p>包括 <code>txt</code> <code>sh</code>等文件</p>
-</blockquote>
-<p><strong>方法一</strong><br>使用<code>notepad++</code>中的格式转换功能，见图</p>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415172001.png"></p>
-<p><strong>方法二</strong><br>针对<code>sh</code>文件，可以使用vim工具<br>在vim模式下，输入<code>set ff</code>发现文件类型为<code>format=dos</code><br>在vim模式下，可以使用<code>set ff=unix</code>改变format为<code>unix</code></p>
-<h3 id="问题二：doc文档乱码"><a href="#问题二：doc文档乱码" class="headerlink" title="问题二：doc文档乱码"></a>问题二：doc文档乱码</h3><blockquote>
-<p>Windows下编写的doc文档，在Linux下查看（用Open Office）一般都会乱码</p>
-</blockquote>
-<ul>
-<li>  解决方法：先用Open Office打开，然后再全选，把字体设置为SYSong18030，OK中文简体和繁体都显示正常了。</li>
-</ul>
-<h3 id="问题三：FTP传文件时乱码"><a href="#问题三：FTP传文件时乱码" class="headerlink" title="问题三：FTP传文件时乱码"></a>问题三：FTP传文件时乱码</h3><blockquote>
-<p>在不同平台间使用FTP软件传送文件时, 在ascii文本模式传输模式下, 一些FTP客户端程序会自动对换行格式进行转换，经过这种传输的文件字节数可能会发生变化”)问题四：在不同平台间使用FTP软件传送文件时, 在ascii文本模式传输模式下, 一些FTP客户端程序会自动对换行格式进行转换，经过这种传输的文件字节数可能会发生变化</p>
-</blockquote>
-<ul>
-<li>  解决方法：如果你不想ftp修改原文件, 可以使用bin模式(二进制模式)传输文本。</li>
-</ul>
+
+<p>博客园由于主题太多，无法使用统一方法打印。</p>
+<p>脚本内容：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// ==UserScript==</span></span><br><span class="line"><span class="comment">// @name         打印CSDN、知乎、简书、SF文章</span></span><br><span class="line"><span class="comment">// @namespace    http://tampermonkey.net/</span></span><br><span class="line"><span class="comment">// @version      0.1</span></span><br><span class="line"><span class="comment">// @description  CSDN、知乎、简书、SegmentFault</span></span><br><span class="line"><span class="comment">// @author       kervias</span></span><br><span class="line"><span class="comment">// @match        https://zhuanlan.zhihu.com/p/*</span></span><br><span class="line"><span class="comment">// @match        https://blog.csdn.net/*/article/details/*</span></span><br><span class="line"><span class="comment">// @match        https://csdnnews.blog.csdn.net/article/details/*</span></span><br><span class="line"><span class="comment">// @match        https://www.jianshu.com/p/*</span></span><br><span class="line"><span class="comment">// @match        https://segmentfault.com/a/*</span></span><br><span class="line"><span class="comment">// @require      https://cdn.bootcss.com/jquery/3.5.1/jquery.min.js</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// @grant        unsafeWindow</span></span><br><span class="line"><span class="comment">// @grant        GM_openInTab</span></span><br><span class="line"><span class="comment">// @grant        GM.openInTab</span></span><br><span class="line"><span class="comment">// @grant        GM_getValue</span></span><br><span class="line"><span class="comment">// @grant        GM.getValue</span></span><br><span class="line"><span class="comment">// @grant        GM_setValue</span></span><br><span class="line"><span class="comment">// @grant        GM.setValue</span></span><br><span class="line"><span class="comment">// @grant        GM_xmlhttpRequest</span></span><br><span class="line"><span class="comment">// @grant        GM.xmlHttpRequest</span></span><br><span class="line"><span class="comment">// @grant        GM_registerMenuCommand</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ==/UserScript==</span></span><br><span class="line"></span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"><span class="meta">    &#x27;use strict&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> $ = $ || <span class="built_in">window</span>.$;</span><br><span class="line">    <span class="keyword">var</span> CSDN_PRINT = <span class="function"><span class="keyword">function</span> (<span class="params"></span>)</span>&#123;</span><br><span class="line">        $(<span class="string">&quot;#side&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;#comment_title, #comment_list, #comment_bar, #comment_form, .announce, #ad_cen, #ad_bot&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;.nav_top_2011, #header, #navigator&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;.csdn-side-toolbar,.template-box,.reward-user-box&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;.p4course_target, .comment-box, .recommend-box, #csdn-toolbar, #tool-box,#dmp_ad_58&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;aside&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;.tool-box&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;main&quot;</span>).css(<span class="string">&#x27;display&#x27;</span>,<span class="string">&#x27;content&#x27;</span>);</span><br><span class="line">        $(<span class="string">&quot;.left-toolbox&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;#mainBox&quot;</span>).removeClass();</span><br><span class="line">        $(<span class="string">&quot;#mainBox&quot;</span>).parent().removeClass();</span><br><span class="line">        $(<span class="string">&#x27;body&#x27;</span>).attr(<span class="string">&quot;style&quot;</span>, <span class="string">&quot;position: absolute;left: 0px;right: 0px;background-color: white&quot;</span>)</span><br><span class="line">        $(<span class="string">&#x27;main&#x27;</span>).attr(<span class="string">&quot;style&quot;</span>, <span class="string">&quot;position: absolute;left: 0px;right: 0px;margin-bottom: 0px&quot;</span>);</span><br><span class="line">        $(<span class="string">&#x27;main div.blog-content-box&#x27;</span>).attr(<span class="string">&quot;style&quot;</span>, <span class="string">&quot;padding-bottom: 0px&quot;</span>);</span><br><span class="line">        $(<span class="string">&quot;.blog-footer-bottom&quot;</span>).remove();</span><br><span class="line">        <span class="comment">//$(&#x27;.htmledit_views p&#x27;).remove();</span></span><br><span class="line">        <span class="built_in">window</span>.print();</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> ZHIHU_PRINT = <span class="function"><span class="keyword">function</span> (<span class="params"></span>)</span>&#123;</span><br><span class="line">        $(<span class="string">&quot;.ColumnPageHeader&quot;</span>).remove();</span><br><span class="line">        <span class="comment">//$(&quot;.PostIndex-Contributions&quot;).remove();</span></span><br><span class="line">        $(<span class="string">&quot;.Recommendations-Main&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;.Comments-container&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;.ContentItem-actions&quot;</span>).parent().remove();</span><br><span class="line">        $(<span class="string">&quot;.Zi--BackToTop&quot;</span>).remove();</span><br><span class="line">        <span class="built_in">window</span>.print();</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> JIANSHU_PRINT = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        $(<span class="string">&quot;header&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;aside&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;footer, footer+div&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;#note-page-comment, section:gt(0), [role=&#x27;button&#x27;], .ant-back-top, .anticon-caret-up&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;svg&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;section&quot;</span>).attr(<span class="string">&quot;style&quot;</span>, <span class="string">&quot;position: absolute;left: 0px;right: 0px;margin-bottom: 0px&quot;</span>);</span><br><span class="line">        $(<span class="string">&quot;article&quot;</span>).nextAll().remove();</span><br><span class="line">        <span class="built_in">window</span>.print();</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> SF_PRINT = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        $(<span class="string">&quot;#sf-header, #comment-area, footer, .text-center, #fixedTools&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;article&quot;</span>).nextAll().remove();</span><br><span class="line">        $(<span class="string">&quot;div.row&quot;</span>).children().eq(<span class="number">1</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;div.row &gt; div &gt; div&quot;</span>).eq(<span class="number">0</span>).nextAll().remove();</span><br><span class="line">        $(<span class="string">&quot;#sf-article_title h5&quot;</span>).remove();</span><br><span class="line">        $(<span class="string">&quot;div.row&quot;</span>).attr(<span class="string">&quot;style&quot;</span>, <span class="string">&quot;position: absolute;left: 0px;right: 0px;margin-bottom: 0px&quot;</span>);</span><br><span class="line">        <span class="built_in">window</span>.print();</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> domain = <span class="built_in">document</span>.domain;</span><br><span class="line">    <span class="keyword">if</span>(domain.endsWith(<span class="string">&#x27;zhihu.com&#x27;</span>))&#123; <span class="comment">// 双击标题打印文章</span></span><br><span class="line">        $(<span class="string">&quot;.Post-Title&quot;</span>).on(<span class="string">&#x27;dblclick&#x27;</span>,<span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">            ZHIHU_PRINT();</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(domain.endsWith(<span class="string">&#x27;csdn.net&#x27;</span>))&#123; <span class="comment">// 双击标题打印文章</span></span><br><span class="line">        $(<span class="string">&quot;#articleContentId&quot;</span>).on(<span class="string">&#x27;dblclick&#x27;</span>,<span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">            CSDN_PRINT();</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(domain.endsWith(<span class="string">&#x27;jianshu.com&#x27;</span>))&#123; <span class="comment">// 双击标题打印文章</span></span><br><span class="line">        $(<span class="string">&quot;section &gt; h1&quot;</span>).on(<span class="string">&#x27;dblclick&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">           JIANSHU_PRINT();</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(domain.endsWith(<span class="string">&#x27;segmentfault.com&#x27;</span>))&#123; <span class="comment">// 点击标题后按钮打印文章</span></span><br><span class="line">        <span class="keyword">var</span> cont = $(<span class="string">&#x27;&lt;h5 style=&quot;display:inline&quot;&gt;&lt;button id=&quot;tm_print&quot;&gt;打印&lt;/button&gt;&lt;/h5&gt;&#x27;</span>);</span><br><span class="line">        $(<span class="string">&quot;#sf-article_title&quot;</span>).append(cont);</span><br><span class="line">        $(<span class="string">&quot;#sf-article_title h5&quot;</span>).on(<span class="string">&#x27;click&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">           SF_PRINT();</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>工具</category>
       </categories>
+      <tags>
+        <tag>Tampermonkey</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>环形链表</title>
+    <url>/posts/45daaf11/</url>
+    <content><![CDATA[<blockquote>
+<p>LeetCode题目环形链表集合<br><a href="https://leetcode-cn.com/problems/linked-list-cycle/">环形链表I</a><br><a href="https://leetcode-cn.com/problems/linked-list-cycle-ii/">环形链表II</a></p>
+<span id="more"></span>
+</blockquote>
+<h1 id="环形链表I"><a href="#环形链表I" class="headerlink" title="环形链表I"></a>环形链表I</h1><blockquote>
+<p>题目描述：给定一个链表，判断链表中是否有环。<br>样例输入：head = [3,2,0,-4]<br>输出：true<br><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200410205711.png"></p>
+</blockquote>
+<h2 id="思路1-快慢指针"><a href="#思路1-快慢指针" class="headerlink" title="思路1-快慢指针"></a>思路1-快慢指针</h2><blockquote>
+<p>从给定的头指针开始，设立两个快慢指针，快指针fast每次走两步(fast-&gt;next-&gt;next),慢指针slow每次走一步(slow-&gt;next)，如果存在环，最终必定相遇。<br>如果fast和slow指针走的过程中遇到NULL,说明其中没有环,返回false。<br>如果fast和slow指针相遇(不全为空),说明其中有环,返回true。</p>
+</blockquote>
+<p><strong>AC代码:</strong></p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode *next;</span></span><br><span class="line"><span class="comment"> *     ListNode(int x) : val(x), next(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">hasCycle</span><span class="params">(ListNode *head)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(head == <span class="literal">NULL</span> || head-&gt;next == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        ListNode *fast = head, *slow = head;</span><br><span class="line">        <span class="keyword">while</span>(fast-&gt;next != <span class="literal">NULL</span> &amp;&amp; fast-&gt;next-&gt;next != <span class="literal">NULL</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            fast = fast-&gt;next-&gt;next;</span><br><span class="line">            slow = slow-&gt;next;</span><br><span class="line">            <span class="keyword">if</span>(fast == slow) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="思路2-修改next指针"><a href="#思路2-修改next指针" class="headerlink" title="思路2-修改next指针"></a>思路2-修改next指针</h2><blockquote>
+<p>遍历整个链表，每遍历到一个对象，将其next指针指向自己。<br>过程中遇到next为NULL, 说明其中没有环，返回false。<br>过程中遇到next指向自己, 说明其中有环，返回true。</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode *next;</span></span><br><span class="line"><span class="comment"> *     ListNode(int x) : val(x), next(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">hasCycle</span><span class="params">(ListNode *head)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(head == <span class="literal">NULL</span> || head-&gt;next == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        ListNode *nextp=head;</span><br><span class="line">        <span class="keyword">while</span>(head != head-&gt;next)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(head-&gt;next == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            nextp = head-&gt;next; </span><br><span class="line">            head-&gt;next = head;</span><br><span class="line">            head = nextp;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>需要说明的是这种方法会改变原来链表的结构，实际中并不可取。</p>
+<h1 id="环形链表II"><a href="#环形链表II" class="headerlink" title="环形链表II"></a>环形链表II</h1><blockquote>
+<p>题目描述：给定一个链表，判断链表中是否有环，如果有环，返回进入环的第一个节点，如果无环，返回空。<br>题目要求：尽量不使用额外空间，不允许修改链表。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200410205723.png"><br><strong>思路分析</strong></p>
+</blockquote>
+<ol>
+<li>先用环形链表I的方法，判断链表中是否有环，如果有环，得到fast指针和slow指针的位置。</li>
+<li>再使slow指针指向head, fast指针指向第一步slow和fast的相遇节点地址。</li>
+<li>使fast和slow均以一步(.next)的方式向前走，相遇的地方即是需要返回的节点。</li>
+</ol>
+<p><strong>注</strong> 第三步的证明可以看Leetcode官方题解。<br><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200410205814.png"></p>
+<blockquote>
+<p>2*(F+a) = F + n*(a+b) + a –&gt; F = (n-1)(a+b) + b –&gt; <strong>F = b</strong></p>
+</blockquote>
+<p><strong>AC代码</strong></p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode *next;</span></span><br><span class="line"><span class="comment"> *     ListNode(int x) : val(x), next(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">ListNode *<span class="title">detectCycle</span><span class="params">(ListNode *head)</span> </span>&#123; </span><br><span class="line">       <span class="keyword">if</span>(head == <span class="literal">NULL</span> || head-&gt;next == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">        ListNode *fast = head, *slow = head;</span><br><span class="line">        <span class="keyword">while</span>(fast-&gt;next != <span class="literal">NULL</span> &amp;&amp; fast-&gt;next-&gt;next != <span class="literal">NULL</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            fast = fast-&gt;next-&gt;next;</span><br><span class="line">            slow = slow-&gt;next;</span><br><span class="line">            <span class="keyword">if</span>(fast == slow) <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(!(fast-&gt;next != <span class="literal">NULL</span> &amp;&amp;fast-&gt;next-&gt;next != <span class="literal">NULL</span>)) <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">        </span><br><span class="line">        slow = head;</span><br><span class="line">        <span class="keyword">while</span>(fast != slow)</span><br><span class="line">        &#123;</span><br><span class="line">            fast = fast-&gt;next;</span><br><span class="line">            slow = slow-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> fast;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h1 id="寻找重复数"><a href="#寻找重复数" class="headerlink" title="寻找重复数"></a>寻找重复数</h1><pre>
+比如包含8个整数的数组，元素都在1-7之间。我们发现数组的下标的范围是0-6，如果把数组中每个元素的值看做记录的是下一个数的地址，那么就会构成一个链表。而且此链表必定有环。而且环的入口节点的下标就是重复的元素。
+</pre>
+
+<p>所以可以利用快慢指针来做</p>
+<p><strong>AC代码:</strong></p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">findDuplicate</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> fast=nums[<span class="number">0</span>],slow=nums[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            fast = nums[nums[fast]];</span><br><span class="line">            slow = nums[slow];</span><br><span class="line">            <span class="keyword">if</span>(fast == slow) <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        fast=nums[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">while</span>(fast != slow)</span><br><span class="line">        &#123;</span><br><span class="line">            fast = nums[fast];</span><br><span class="line">            slow = nums[slow];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> fast;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>链表</tag>
+      </tags>
   </entry>
   <entry>
     <title>浪潮AIStation-jupyterlab配置</title>
@@ -4399,56 +4413,42 @@ docker部署
       </tags>
   </entry>
   <entry>
-    <title>环形链表</title>
-    <url>/posts/45daaf11/</url>
+    <title>解决Unix-like、Windows系统之间文本换行符不同的问题</title>
+    <url>/posts/8af9e030/</url>
     <content><![CDATA[<blockquote>
-<p>LeetCode题目环形链表集合<br><a href="https://leetcode-cn.com/problems/linked-list-cycle/">环形链表I</a><br><a href="https://leetcode-cn.com/problems/linked-list-cycle-ii/">环形链表II</a></p>
+<p>参考博客 :point_right: <a href="https://sphenginx.github.io/2014/12/24/CRLF-in-Unix-like_Windows-os/">网址</a></p>
+</blockquote>
 <span id="more"></span>
-</blockquote>
-<h1 id="环形链表I"><a href="#环形链表I" class="headerlink" title="环形链表I"></a>环形链表I</h1><blockquote>
-<p>题目描述：给定一个链表，判断链表中是否有环。<br>样例输入：head = [3,2,0,-4]<br>输出：true<br><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200410205711.png"></p>
-</blockquote>
-<h2 id="思路1-快慢指针"><a href="#思路1-快慢指针" class="headerlink" title="思路1-快慢指针"></a>思路1-快慢指针</h2><blockquote>
-<p>从给定的头指针开始，设立两个快慢指针，快指针fast每次走两步(fast-&gt;next-&gt;next),慢指针slow每次走一步(slow-&gt;next)，如果存在环，最终必定相遇。<br>如果fast和slow指针走的过程中遇到NULL,说明其中没有环,返回false。<br>如果fast和slow指针相遇(不全为空),说明其中有环,返回true。</p>
-</blockquote>
-<p><strong>AC代码:</strong></p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode *next;</span></span><br><span class="line"><span class="comment"> *     ListNode(int x) : val(x), next(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">hasCycle</span><span class="params">(ListNode *head)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(head == <span class="literal">NULL</span> || head-&gt;next == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        ListNode *fast = head, *slow = head;</span><br><span class="line">        <span class="keyword">while</span>(fast-&gt;next != <span class="literal">NULL</span> &amp;&amp; fast-&gt;next-&gt;next != <span class="literal">NULL</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            fast = fast-&gt;next-&gt;next;</span><br><span class="line">            slow = slow-&gt;next;</span><br><span class="line">            <span class="keyword">if</span>(fast == slow) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h2 id="思路2-修改next指针"><a href="#思路2-修改next指针" class="headerlink" title="思路2-修改next指针"></a>思路2-修改next指针</h2><blockquote>
-<p>遍历整个链表，每遍历到一个对象，将其next指针指向自己。<br>过程中遇到next为NULL, 说明其中没有环，返回false。<br>过程中遇到next指向自己, 说明其中有环，返回true。</p>
-</blockquote>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode *next;</span></span><br><span class="line"><span class="comment"> *     ListNode(int x) : val(x), next(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">hasCycle</span><span class="params">(ListNode *head)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(head == <span class="literal">NULL</span> || head-&gt;next == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        ListNode *nextp=head;</span><br><span class="line">        <span class="keyword">while</span>(head != head-&gt;next)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(head-&gt;next == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            nextp = head-&gt;next; </span><br><span class="line">            head-&gt;next = head;</span><br><span class="line">            head = nextp;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>需要说明的是这种方法会改变原来链表的结构，实际中并不可取。</p>
-<h1 id="环形链表II"><a href="#环形链表II" class="headerlink" title="环形链表II"></a>环形链表II</h1><blockquote>
-<p>题目描述：给定一个链表，判断链表中是否有环，如果有环，返回进入环的第一个节点，如果无环，返回空。<br>题目要求：尽量不使用额外空间，不允许修改链表。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200410205723.png"><br><strong>思路分析</strong></p>
-</blockquote>
-<ol>
-<li>先用环形链表I的方法，判断链表中是否有环，如果有环，得到fast指针和slow指针的位置。</li>
-<li>再使slow指针指向head, fast指针指向第一步slow和fast的相遇节点地址。</li>
-<li>使fast和slow均以一步(.next)的方式向前走，相遇的地方即是需要返回的节点。</li>
-</ol>
-<p><strong>注</strong> 第三步的证明可以看Leetcode官方题解。<br><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200410205814.png"></p>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>\r是回车符,\n是换行符，各个系统的换行标志：</p>
 <blockquote>
-<p>2*(F+a) = F + n*(a+b) + a –&gt; F = (n-1)(a+b) + b –&gt; <strong>F = b</strong></p>
+<p>win 用 \r\n<br>linux/unix 用 \n<br>Mac OS 用 \r</p>
 </blockquote>
-<p><strong>AC代码</strong></p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode *next;</span></span><br><span class="line"><span class="comment"> *     ListNode(int x) : val(x), next(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">ListNode *<span class="title">detectCycle</span><span class="params">(ListNode *head)</span> </span>&#123; </span><br><span class="line">       <span class="keyword">if</span>(head == <span class="literal">NULL</span> || head-&gt;next == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">        ListNode *fast = head, *slow = head;</span><br><span class="line">        <span class="keyword">while</span>(fast-&gt;next != <span class="literal">NULL</span> &amp;&amp; fast-&gt;next-&gt;next != <span class="literal">NULL</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            fast = fast-&gt;next-&gt;next;</span><br><span class="line">            slow = slow-&gt;next;</span><br><span class="line">            <span class="keyword">if</span>(fast == slow) <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(!(fast-&gt;next != <span class="literal">NULL</span> &amp;&amp;fast-&gt;next-&gt;next != <span class="literal">NULL</span>)) <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">        </span><br><span class="line">        slow = head;</span><br><span class="line">        <span class="keyword">while</span>(fast != slow)</span><br><span class="line">        &#123;</span><br><span class="line">            fast = fast-&gt;next;</span><br><span class="line">            slow = slow-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> fast;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<h1 id="寻找重复数"><a href="#寻找重复数" class="headerlink" title="寻找重复数"></a>寻找重复数</h1><pre>
-比如包含8个整数的数组，元素都在1-7之间。我们发现数组的下标的范围是0-6，如果把数组中每个元素的值看做记录的是下一个数的地址，那么就会构成一个链表。而且此链表必定有环。而且环的入口节点的下标就是重复的元素。
-</pre>
-
-<p>所以可以利用快慢指针来做</p>
-<p><strong>AC代码:</strong></p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">findDuplicate</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> fast=nums[<span class="number">0</span>],slow=nums[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            fast = nums[nums[fast]];</span><br><span class="line">            slow = nums[slow];</span><br><span class="line">            <span class="keyword">if</span>(fast == slow) <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        fast=nums[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">while</span>(fast != slow)</span><br><span class="line">        &#123;</span><br><span class="line">            fast = nums[fast];</span><br><span class="line">            slow = nums[slow];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> fast;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>]]></content>
+<p>CR用符号’\r’表示, 十进制ASCII代码是13, 十六进制代码为OxOD<br>LF使用’\n’符号表示, ASCII代码是10, 十六制为0x0A<br>所以：<br>Windows下用的是OAOD，即CR&amp;LF，<br>linux/unix用的是OA，即LF<br>MacOS用的是OD，即CR</p>
+<h2 id="CRLF来历"><a href="#CRLF来历" class="headerlink" title="CRLF来历"></a>CRLF来历</h2><p>计算机还没有出现之前，有一种叫做电传打字机（Teletype Model 33）的玩意，每秒钟可以打10个字符。但是它有一个问题，就是打完一行换行的时候，要用去0.2秒，正好可以打两个字符。要是在这0.2秒里面，又有新的字符传过来，那么这个字符将丢失。</p>
+<p>于是，研制人员想了个办法解决这个问题，就是在每行后面加两个表示结束的字符。一个叫做“回车”，告诉打字机把打印头定位在左边界；另一个叫做“换行”，告诉打字机把纸向下移一行。这就是“换行”和“回车”的来历，从它们的英语名字上也可以看出一二。</p>
+<p>后来，计算机发明了，这两个概念也就被般到了计算机上。那时，存储器很贵，一些科学家认为在每行结尾加两个字符太浪费了，加一个就可以。于是，就出现了分歧。Unix 系统里，每行结尾只有“&lt;换行&gt;”，即“\n”；Windows系统里面，每行结尾是“&lt;回车&gt;&lt;换行&gt;”，即“ \r\n”；Mac系统里，每行结尾是“&lt;回车&gt;”。一个直接后果是，Unix/Mac系统下的文件在Windows里打开的话，所有文字会变成一行；而Windows里的文件在Unix/Mac下打开的话，在每行的结尾可能会多出一个^M符号。</p>
+<h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><h3 id="问题一：文本类型文件互转"><a href="#问题一：文本类型文件互转" class="headerlink" title="问题一：文本类型文件互转"></a>问题一：文本类型文件互转</h3><blockquote>
+<p>包括 <code>txt</code> <code>sh</code>等文件</p>
+</blockquote>
+<p><strong>方法一</strong><br>使用<code>notepad++</code>中的格式转换功能，见图</p>
+<p><img src="https://cdn.jsdelivr.net/gh/welloderx/blog-img@master/2020-04/20200415172001.png"></p>
+<p><strong>方法二</strong><br>针对<code>sh</code>文件，可以使用vim工具<br>在vim模式下，输入<code>set ff</code>发现文件类型为<code>format=dos</code><br>在vim模式下，可以使用<code>set ff=unix</code>改变format为<code>unix</code></p>
+<h3 id="问题二：doc文档乱码"><a href="#问题二：doc文档乱码" class="headerlink" title="问题二：doc文档乱码"></a>问题二：doc文档乱码</h3><blockquote>
+<p>Windows下编写的doc文档，在Linux下查看（用Open Office）一般都会乱码</p>
+</blockquote>
+<ul>
+<li>  解决方法：先用Open Office打开，然后再全选，把字体设置为SYSong18030，OK中文简体和繁体都显示正常了。</li>
+</ul>
+<h3 id="问题三：FTP传文件时乱码"><a href="#问题三：FTP传文件时乱码" class="headerlink" title="问题三：FTP传文件时乱码"></a>问题三：FTP传文件时乱码</h3><blockquote>
+<p>在不同平台间使用FTP软件传送文件时, 在ascii文本模式传输模式下, 一些FTP客户端程序会自动对换行格式进行转换，经过这种传输的文件字节数可能会发生变化”)问题四：在不同平台间使用FTP软件传送文件时, 在ascii文本模式传输模式下, 一些FTP客户端程序会自动对换行格式进行转换，经过这种传输的文件字节数可能会发生变化</p>
+</blockquote>
+<ul>
+<li>  解决方法：如果你不想ftp修改原文件, 可以使用bin模式(二进制模式)传输文本。</li>
+</ul>
+]]></content>
       <categories>
-        <category>算法</category>
+        <category>linux</category>
       </categories>
-      <tags>
-        <tag>链表</tag>
-      </tags>
   </entry>
   <entry>
     <title>linux学习05 - linux环境变量与文件查找</title>
